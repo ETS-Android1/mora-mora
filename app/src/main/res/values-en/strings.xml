@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="your_language">Your language:</string>
+    <string name="language_you_want_to_learn">Language you want to learn:</string>
+    <string name="topic_name">Topic Name:</string>
+    <string name="image_file_name">Image File Name</string>
+    <string name="short_info">Short Info</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Change">Change</string>
+    <string name="could_not_rename">Could not rename directory!</string>
+</resources>

@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">"   "Mora Mora</string>
+    <string name="action_settings">Settings</string>
+    <string name="ndreky_button">Ndreky-Nochmal</string>
+    <string name="help">Help!</string>
+    <string name="sektion_1_1_mbola_tsara">Sektion 1.1 Mbola Tsara!</string>
+    <string name="backwards">Afara</string>
+    <string name="forward">Aloha</string>
+    <string name="header">Section 1.</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="type_your_answer">Type your answer!</string>
+    <string name="your_language">Your language:</string>
+    <string name="language_you_want_to_learn">Language you want to learn:</string>
+    <string name="topic_name">Topic Name:</string>
+    <string name="image_file_name">Image File Name</string>
+    <string name="short_info">Short Info</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Add">Add</string>
+    <string name="Change">Change</string>
+    <string name="could_not_rename">Could not rename directory!</string>
+
+    <string name="APP_KEY">edmvozytadjrfgk</string>
+    <string name="CloudNotAvaiable">No Cloud Access!</string>
+    <string name="InternetConnectionOn">Is your internet connection on?</string>
+    <string name="chat_message">Chat Message</string>
+    <string name="explain_write_permission_reques">You need to grant write permission to store downloaded files!</string>
+    <string name="choose_source_for_the_topic_picture">Topic picture source:</string>
+</resources>

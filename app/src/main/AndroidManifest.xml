@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.hendrik.mianamalaga">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/gecko_ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/gecko_ic_launcher"
+        android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ActivityCloud"
+            android:parentActivityName=".ActivityTopicChoice">
+        </activity>
+        <activity android:name=".ActivityNextCloud"
+            android:parentActivityName=".ActivityTopicChoice">
+        </activity>
+        <activity android:name=".ActivityLanguageChoice">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityLogIntoCloud"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".ActivityTopicChoice">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hendrik.mianamalaga.ActivityTopicChoice" />
+        </activity>
+        <activity
+            android:name=".ActivityTopicChoice"
+            android:parentActivityName=".ActivityLanguageChoice">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hendrik.mianamalaga.ActivityLanguageChoice" />
+        </activity>
+        <activity
+            android:name=".ActivityConversation"
+            android:parentActivityName=".ActivityTopicChoice" />
+
+        <!-- Dropbox AuthActivity -->
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <intent-filter>
+
+                <!-- Insert your app key after “db-  ...” -->
+                <data android:scheme="db-edmvozytadjrfgk" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

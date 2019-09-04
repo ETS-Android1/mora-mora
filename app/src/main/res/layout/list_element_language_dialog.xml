@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_language_choice"
+    android:layout_width="fill_parent"
+    android:layout_height="40dp"
+    android:padding="6dip"
+    android:id="@+id/language_listView_element_layout">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="textStart"
+        android:layout_gravity="start"
+        android:textSize="15dp"
+        android:typeface="monospace"
+        android:id="@+id/language_listView_element_textView"/>
+
+</LinearLayout>
