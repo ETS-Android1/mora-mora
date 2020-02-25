@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import android.os.AsyncTask;
 
@@ -10,7 +10,7 @@ import com.dropbox.core.v2.files.ListFolderResult;
 /**
  * Async task to list items in a folder
  */
-class TaskListFolder extends AsyncTask<String, Void, ListFolderResult> {
+public class TaskListFolder extends AsyncTask<String, Void, ListFolderResult> {
 
     private final DbxClientV2 mDbxClient;
     private final Callback mCallback;

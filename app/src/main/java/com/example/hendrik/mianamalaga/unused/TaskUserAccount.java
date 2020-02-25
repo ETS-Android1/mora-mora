@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import android.os.AsyncTask;
 
@@ -17,7 +17,7 @@ public class TaskUserAccount extends AsyncTask<Void, Void, FullAccount> {
         void onError(Exception error);
     }
 
-    TaskUserAccount(DbxClientV2 dbxClient, TaskDelegate delegate){
+    public TaskUserAccount(DbxClientV2 dbxClient, TaskDelegate delegate){
         this.dbxClient = dbxClient;
         this.delegate = delegate;
     }

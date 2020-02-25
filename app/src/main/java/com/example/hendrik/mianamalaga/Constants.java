@@ -1,12 +1,20 @@
 package com.example.hendrik.mianamalaga;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
+import com.example.hendrik.mianamalaga.activities.ActivityConversation;
 
 public class Constants {
     /*
     The following is the log tag used to debug the application
      */
     public static final String TAG = ActivityConversation.class.getSimpleName();
+
+    /*
+    Naming conventions for shared preference
+     */
+    public static final String KnownLanguage = "KnownLanguage";
+    public static final String ConversationListCount = "ConversationListCount";
 
     /*
     Naming conventions for intents
@@ -50,15 +58,16 @@ public class Constants {
     Dropbox access keys
      */
 
-    public static final String CloudAccesTokenName = "access-token";
-    public static final String CloudAccessToken = "8Muxz4-eeQAAAAAAAAAAGwznwnI4lX9TmSgASCO53mjqcBpDF-bVQN4wwBWB-4DS";
+    public static final String OldCloudAccesTokenName = "access-token";
     public static final String SharedPreference = "com.example.hendrik.mianamalaga";
 
     /*
     NextCloud acces keys
      */
-    public static final String UserName = "hendric";
     public static final String Separator = ";";
+    public static final String Root_path = "/";
+
+    public static final String TimeStampOfLastRemove = "TimeStampOfLastRemove";
 
     /*
     Intent variables

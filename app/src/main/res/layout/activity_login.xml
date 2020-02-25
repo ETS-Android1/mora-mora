@@ -7,20 +7,20 @@
     android:backgroundTint="#f0f0f0"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:layout_alignParentTop="true">
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/my_app_bar_height"
             android:background="@color/color_main_light"
             app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleMarginStart="24dp"/>
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:layout_width="match_parent"

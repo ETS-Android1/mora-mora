@@ -1,6 +1,8 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.container;
 
 import android.os.Environment;
+
+import com.example.hendrik.mianamalaga.Constants;
 
 public class ChatMessage {
     private String mChatMessage;

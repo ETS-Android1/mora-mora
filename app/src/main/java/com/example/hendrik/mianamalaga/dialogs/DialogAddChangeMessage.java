@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.activities.ActivityConversation;
 
 import java.io.File;

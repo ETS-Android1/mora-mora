@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga.Tasks;
+package com.example.hendrik.mianamalaga.tasks;
 
 import android.app.Activity;
 import android.content.Context;

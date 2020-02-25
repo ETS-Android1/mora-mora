@@ -1,8 +1,9 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.adapter;
 
 import android.content.Context;
 import android.net.Uri;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hendrik.mianamalaga.R;
+import com.example.hendrik.mianamalaga.container.Topic;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +57,7 @@ public class AdapterTopic extends RecyclerView.Adapter<AdapterTopic.TopicViewHol
         public TextView mMoreButton;
         public RelativeLayout mDetailsLayout;
         public TextView mSizeTextView;
+        public TextView mAuthorName;
 
         TopicViewHolder(View baseView){
             super(baseView);
@@ -64,6 +68,7 @@ public class AdapterTopic extends RecyclerView.Adapter<AdapterTopic.TopicViewHol
             mMoreButton = baseView.findViewById(R.id.topic_listView_element_more);
             mDetailsLayout = baseView.findViewById(R.id.topic_listView_element_long_layout);
             mSizeTextView = baseView.findViewById(R.id.topic_listView_element_size);
+            mAuthorName = baseView.findViewById(R.id.topic_listView_element_author_name);
             mBaseView = baseView;
         }
 
@@ -137,6 +142,7 @@ public class AdapterTopic extends RecyclerView.Adapter<AdapterTopic.TopicViewHol
         });
 
         viewHolder.mSizeTextView.setText( topic.getFolderSize()/1000000 + " MB");
+        viewHolder.mAuthorName.setText( topic.getAuthor() );
 
     }
 

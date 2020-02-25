@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.utilities;
 
 import android.content.Context;
 import androidx.recyclerview.widget.LinearLayoutManager;

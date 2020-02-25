@@ -12,7 +12,7 @@
         android:title="Help" />
     <item android:id="@+id/toolbar_editor_mode"
         android:icon="@drawable/ic_build"
-        android:title="Editor mode"
+        android:title="Editing mode"
         android:checkable="true"/>
     </group>
 

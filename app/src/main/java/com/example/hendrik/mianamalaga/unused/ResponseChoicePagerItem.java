@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import com.example.hendrik.mianamalaga.fragments.FragmentPageResponse;
 

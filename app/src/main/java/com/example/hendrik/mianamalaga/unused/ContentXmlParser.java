@@ -1,6 +1,10 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import android.util.Xml;
+
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.container.Content;
+import com.example.hendrik.mianamalaga.container.Topic;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -58,7 +62,7 @@ public class ContentXmlParser {
     Topic readInfo(XmlPullParser parser) throws XmlPullParserException, IOException {
         Topic topic = new Topic();
 
-        parser.require(XmlPullParser.START_TAG,namespace,Constants.InfoNameSpace);
+        parser.require(XmlPullParser.START_TAG,namespace, Constants.InfoNameSpace);
         while(parser.next() != XmlPullParser.END_TAG){
             if(parser.getEventType() != XmlPullParser.START_TAG){
                 continue;

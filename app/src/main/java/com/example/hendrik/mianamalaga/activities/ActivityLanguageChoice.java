@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -12,7 +12,14 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.hendrik.mianamalaga.activities.ActivitySettings;
+import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.adapter.AdapterLanguageChoice;
+import com.example.hendrik.mianamalaga.adapter.AdapterLanguageSpinner;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.dialogs.DialogAddLanguage;
+import com.example.hendrik.mianamalaga.utilities.LayoutManagerCenterZoom;
+import com.example.hendrik.mianamalaga.R;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -43,7 +50,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.hendrik.mianamalaga.IOUtils.sortLocales;
+import static com.example.hendrik.mianamalaga.utilities.Utils.sortLocales;
 
 
 
@@ -116,7 +123,9 @@ public class ActivityLanguageChoice extends AppCompatActivity {
             switch (menuItem.getItemId()) {
 
                 case R.id.toolbar_help:
-                    //showHelp();
+                    DialogHelp helpDialog = DialogHelp.newInstance(getString( R.string.ActivityLanguageChoiceHelpText) );
+                    helpDialog.show( getSupportFragmentManager(), Constants.TAG );
+                    mDrawerLayout.closeDrawers();
                     return true;
                 case R.id.toolbar_editor_mode:
                     if( menuItem.isChecked() ){
@@ -241,7 +250,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
         mLanguageAdapter.notifyDataSetChanged();
 
         File languageFullPathFile = new File( mApplicationDirectory, locale.getLanguage() );
-        IOUtils.deleteFolder( languageFullPathFile );
+        Utils.deleteFolder( languageFullPathFile );
         languageFullPathFile.delete();
     }
 
@@ -261,7 +270,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
             mKnownLocalesArrayList.add( locale );
         }
 
-        IOUtils.sortLocales(mKnownLocalesArrayList);
+        Utils.sortLocales(mKnownLocalesArrayList);
         SharedPreferences sharedPrefs = getSharedPreferences(Constants.SharedPreference, Context.MODE_PRIVATE);
         String knownLanguageLocaleLanguage = sharedPrefs.getString(Constants.KnownLanguage, Locale.getDefault().getLanguage() );
 
@@ -322,12 +331,12 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
     private void clearTemporaryFolder() {
 
-        if( !IOUtils.prepareFileStructure(mApplicationDirectory.toString()) ){
+        if( !Utils.prepareFileStructure(mApplicationDirectory.toString()) ){
             Toast.makeText(this, "Failed to create directories!", Toast.LENGTH_SHORT).show();
         }
 
         if( mTemporaryDirectory != null && mTemporaryDirectory.exists()) {
-            IOUtils.deleteFolder(mTemporaryDirectory);
+            Utils.deleteFolder(mTemporaryDirectory);
         }
     }
 

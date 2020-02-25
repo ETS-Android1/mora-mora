@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.adapter;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.ViewGroup;
+
+import com.example.hendrik.mianamalaga.fragments.FragmentPageResponse;
 
 import java.util.ArrayList;
 import java.util.List;

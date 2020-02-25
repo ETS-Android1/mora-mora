@@ -1,8 +1,10 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.dialogs;
 
 import android.content.Context;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.hendrik.mianamalaga.dialogs.DialogFilePickerAdapter;
 
 import java.io.File;
 

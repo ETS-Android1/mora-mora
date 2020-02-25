@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga.Tasks;
+package com.example.hendrik.mianamalaga.tasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.hendrik.mianamalaga.Constants;
-import com.example.hendrik.mianamalaga.IOUtils;
+import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
@@ -57,7 +57,7 @@ public class UploadFileAsyncTask extends AsyncTask<Object, Void, RemoteOperation
             String regexString = ".+/" + Constants.MoraMora;
             String remotePathWithName = fileToUpload.getAbsolutePath().replaceAll(regexString, "");
 
-            String mimeType = IOUtils.getMimeType(fileToUpload);
+            String mimeType = Utils.getMimeType(fileToUpload);
 
             Long timeStampLong = fileToUpload.lastModified() / 1000;
             String timeStamp = timeStampLong.toString();

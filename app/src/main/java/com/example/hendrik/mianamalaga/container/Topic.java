@@ -1,4 +1,6 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.container;
+
+import com.example.hendrik.mianamalaga.Constants;
 
 public class Topic {
 

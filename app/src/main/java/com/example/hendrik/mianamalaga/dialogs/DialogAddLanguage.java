@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.activities.ActivityLanguageChoice;
 import com.example.hendrik.mianamalaga.adapter.AdapterLanguageChoice;
 
@@ -57,7 +59,7 @@ public class DialogAddLanguage extends AppCompatDialogFragment {
             mKnownLocalesArrayList.add( locale );
         }
 
-        IOUtils.sortLocales( mKnownLocalesArrayList );
+        Utils.sortLocales( mKnownLocalesArrayList );
 
         mLanguageAdapter = new AdapterLanguageChoice( mKnownLocalesArrayList, R.layout.list_element_language_dialog );
         mLanguageAdapter.setOnItemClickListener((position, viewHolder) -> {

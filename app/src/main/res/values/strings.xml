@@ -37,4 +37,35 @@
     <string name="chat_message">Chat Message</string>
     <string name="explain_write_permission_reques">You need to grant write permission to store downloaded files!</string>
     <string name="choose_source_for_the_topic_picture">Topic picture source:</string>
+
+    <string name="cloudUrlCustom">CloudUrlCustom</string>
+    <string name="cloudUserNameCustom">CloudUserNameCustom</string>
+    <string name="cloudPasswordCustom">CloudPasswordCustom</string>
+    <string name="lessonUserName">LessonUserName</string>
+    <string name="ActivityLanguageChoiceHelpText">Mora Mora is in very early development still. The present version does not contain any lessons you can use to learn languages.\n\n
+                                                    You can still use Mora Mora to create your own lessons and sharing them through your own nextcloud storage cloud. If you want to share your
+                                                    lessons with the world, pleas contact the team: mora.mora@gmx.net.\n\n
+                                                    Use the scroll view to select the language you want to learn. In the top right corner you can select the language you already know good
+                                                    enough e.g. your mother tongue. This is the language the dialogs will be translated into.\n\n
+                                                    You can click on "Editing mode" in the drawer you just closed to add more languages and thereby contribute to enlarge the content data of Mora Mora.
+                                                    </string>
+
+    <string name="ActivityTopicChoiceHelpText">Mora Mora is in very early development still. The present version does not contain any lessons you can use to learn languages.\n\n
+                                                This is where you offline lessons are available. There are stored on your device. If you haven\'t downloaded any lessons yet you can create your own by
+                                                opening the drawer and clicking on - Editing mode - . With the help of the appearing buttons you can create a new topic.\n\n
+                                                You can also try to find lessons online. Use the drawer and click on - Login - .
+                                                    </string>
+
+    <string name="ActivitySettingsHelpText">Mora Mora is in very early development still. The present version almost does not contain any lessons you can use to learn languages.\n\n
+                                            You can create lessons using Mora Mora and share them by contacting the team under: mora.mora@gmx.net\n\n
+                                            There is also a telegram chat group Mora-Mora.\n\n
+                                            The source code of the application as well as the most recent binary are available at: https://github.com/hendric-git/mora-mora
+                                            </string>
+    <string name="preference_customCloud_summary">The custom cloud is your own nextcloud cloud or the cloud of someone who gave you the credentials. Currently only the nextcloud interface is implemented so no other cloud storage providers are supported. You can get free cloud storage from several nextcloud providers.</string>
+    <string name="preference_defaultCloud_summary">The default cloud is the main repository for language lessons. You only have read access to it, so you won\'t be able to change the content or add your own lessons. Right now almost no lessons are present.</string>
+    <string name="preference_enableCloudSharing_summry">This gives the world access to your custom cloud. An access token of your cloud will be stored in the default cloud. Make sure that you don\'t have any sensible data stored on that cloud</string>
+    <string name="preference_cloudUrl_summary">After creating a nextcloud storage account the provider will give you an URL like:\n\nhttps://yourusername.nextcloud.de</string>
+    <string name="prefrence_userName_summary">The user name of you nextcloud account.</string>
+    <string name="preference_nextcloudPassword_summary">The password of your nextcloud storage account. That password won\'t be stored but the access token (one way hash of your user name and password).</string>
+    <string name="preference_lessonUserName_summary">When you create a lesson an author name is automatically added. You can leave that blank or set a name in case you want some feedback from other users.</string>
 </resources>

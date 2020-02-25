@@ -1,4 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="cloud_category"
+        app:title="Cloud and Sharing Options">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="useDefaultCloud"
+            app:title="Use default cloud"
+            android:summary="@string/preference_defaultCloud_summary"/>
+
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:isPreferenceVisible="false"
+            app:key="useCustomCloud"
+            app:title="Use custom cloud"
+            android:summary="@string/preference_customCloud_summary"/>
+
+        <SwitchPreferenceCompat
+            app:isPreferenceVisible="false"
+            app:key="enableCloudSharing"
+            app:title="Enable cloud sharing"
+            android:summary="@string/preference_enableCloudSharing_summry"/>
+
+        <EditTextPreference
+            app:isPreferenceVisible="false"
+            app:key="@string/cloudUrlCustom"
+            app:title="Your Nextcloud url"
+            android:summary="@string/preference_cloudUrl_summary"/>
+
+        <EditTextPreference
+            app:isPreferenceVisible="false"
+            app:key="@string/cloudUserNameCustom"
+            app:title="Your Nextcloud username"
+            android:summary="@string/prefrence_userName_summary"/>
+
+        <EditTextPreference
+            app:isPreferenceVisible="false"
+            app:key="@string/cloudPasswordCustom"
+            app:title="Your Nextcloud password"
+            android:summary="@string/preference_nextcloudPassword_summary"/>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:key="user_category"
+        app:title="User Options">
+
+        <EditTextPreference
+            app:isPreferenceVisible="true"
+            app:key="@string/lessonUserName"
+            app:title="User Name"
+            android:summary="@string/preference_lessonUserName_summary"/>
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import android.util.Log;
 
 import android.webkit.MimeTypeMap;
 
+import com.example.hendrik.mianamalaga.Constants;
 import com.example.hendrik.mianamalaga.container.ChatContent;
 import com.example.hendrik.mianamalaga.container.Topic;
 import com.google.gson.Gson;

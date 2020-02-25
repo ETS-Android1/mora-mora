@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.activities;
 
 
 import android.content.Context;
@@ -12,6 +12,10 @@ import android.widget.Button;
 
 
 import com.dropbox.core.android.Auth;
+import com.example.hendrik.mianamalaga.BuildConfig;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.R;
 
 import java.io.File;
 
@@ -47,7 +51,7 @@ public class ActivityLogIntoCloud extends AppCompatActivity {
             String temporaryDirectory = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
             mTemporaryDirecotry = new File(temporaryDirectory);
 
-            if( !IOUtils.prepareFileStructure(mAppDirectoryPathString) ){
+            if( !Utils.prepareFileStructure(mAppDirectoryPathString) ){
                 finish();
             }
         }
@@ -59,7 +63,7 @@ public class ActivityLogIntoCloud extends AppCompatActivity {
                                                             // TODO one should be able to reset that token in Preference Activity
 
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreference, Context.MODE_PRIVATE);
-        accessToken = prefs.getString(Constants.CloudAccesTokenName, null);
+        accessToken = prefs.getString(Constants.OldCloudAccesTokenName, null);
 
         if ( accessToken == null) {
 
@@ -81,7 +85,7 @@ public class ActivityLogIntoCloud extends AppCompatActivity {
             }
 
             if( accessToken != null)
-                prefs.edit().putString(Constants.CloudAccesTokenName, accessToken).apply();
+                prefs.edit().putString(Constants.OldCloudAccesTokenName, accessToken).apply();
         }
 
         if (accessToken != null) {

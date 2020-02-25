@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga.Activities;
+package com.example.hendrik.mianamalaga.activities;
 
 
 import android.app.ProgressDialog;
@@ -9,7 +9,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import com.example.hendrik.mianamalaga.Tasks.RemoveFileAsyncTask;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.tasks.RemoveFileAsyncTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -34,21 +36,18 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dropbox.core.v2.users.FullAccount;
-import com.example.hendrik.mianamalaga.ActivityLogIntoCloud;
-import com.example.hendrik.mianamalaga.ActivityTopicChoice;
-import com.example.hendrik.mianamalaga.AdapterCloudLanguage;
-import com.example.hendrik.mianamalaga.AdapterTopic;
+import com.example.hendrik.mianamalaga.adapter.AdapterCloudLanguage;
+import com.example.hendrik.mianamalaga.adapter.AdapterTopic;
 import com.example.hendrik.mianamalaga.BuildConfig;
 import com.example.hendrik.mianamalaga.Constants;
-import com.example.hendrik.mianamalaga.IOUtils;
-import com.example.hendrik.mianamalaga.LanguageElement;
+import com.example.hendrik.mianamalaga.container.LanguageElement;
 import com.example.hendrik.mianamalaga.R;
-import com.example.hendrik.mianamalaga.Tasks.AuthenticatorAsyncTask;
-import com.example.hendrik.mianamalaga.Tasks.CreateFolderAsyncTask;
-import com.example.hendrik.mianamalaga.Tasks.DownloadFileAsyncTask;
-import com.example.hendrik.mianamalaga.Tasks.ListFolderAsyncTask;
-import com.example.hendrik.mianamalaga.Tasks.UploadFileAsyncTask;
-import com.example.hendrik.mianamalaga.Topic;
+import com.example.hendrik.mianamalaga.tasks.AuthenticatorAsyncTask;
+import com.example.hendrik.mianamalaga.tasks.CreateFolderAsyncTask;
+import com.example.hendrik.mianamalaga.tasks.DownloadFileAsyncTask;
+import com.example.hendrik.mianamalaga.tasks.ListFolderAsyncTask;
+import com.example.hendrik.mianamalaga.tasks.UploadFileAsyncTask;
+import com.example.hendrik.mianamalaga.container.Topic;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.UserInfo;
@@ -104,6 +103,9 @@ public class ActivityNextCloud extends AppCompatActivity {
     private CreateFolderAsyncTask mCreateFolderTask;
     private RemoveFileAsyncTask mRemoveTask;
 
+    private SharedPreferences mSharedPreferences;
+    private String mServerUri;
+
     private enum Status{
         DISPLAY_UNKNOWN_LANGUAGE,
         DISPLAY_KNOWN_LANGUAGE,
@@ -119,6 +121,9 @@ public class ActivityNextCloud extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud);
         mIsDownLoadMode = true;
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+
         setupUi();
         setupToolbar();
         getIntents();
@@ -172,7 +177,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             String temporaryDirectoryPath = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
             mTemporaryDirectory = new File(temporaryDirectoryPath);
 
-            if (!IOUtils.prepareFileStructure(AppDirectoryPathString)) {
+            if (!Utils.prepareFileStructure(AppDirectoryPathString)) {
                 finish();
             }
         }
@@ -187,7 +192,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             viewHolder.mIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_upload));
             viewHolder.mIconImageView.setVisibility(View.VISIBLE);
             viewHolder.mBaseView.setBackgroundColor(Color.LTGRAY);
-            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, IOUtils.convertTopicName(topic.getName()) ).toString()));
+            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, Utils.convertTopicName(topic.getName()) ).toString()));
         } else {
 
             viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
@@ -231,7 +236,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                     mProgressDialog.dismiss();
                 }
             });
-            Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, relativeTopicDirectory.toString().toLowerCase() };
+            Object[] params = { mServerUri, ownCloudCredentials, relativeTopicDirectory.toString().toLowerCase() };
             mListFolderTask.execute(params);
         }
     }
@@ -243,14 +248,14 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (remoteFiles != null) {
 
             for (RemoteFile remoteFile : remoteFiles) {
-                String remoteFileName = IOUtils.getNameFromPath(remoteFile.getRemotePath());
+                String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
                 if (!remoteFileName.equals(Constants.InfoFileName) && !remoteFileName.equals(Constants.TopicPictureFileName))
                     mTotalSize += remoteFile.getSize();
             }
 
             for (RemoteFile remoteFile : remoteFiles) {
 
-                String remoteFileName = IOUtils.getNameFromPath(remoteFile.getRemotePath());
+                String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
                 if (!remoteFileName.equals(Constants.InfoFileName) && !remoteFileName.equals(Constants.TopicPictureFileName)) {
 
                     mDownloadFileTask = new DownloadFileAsyncTask(this, UNUSED_FILE_NUMBER, (result, fileNumber, fileSize) -> {
@@ -262,7 +267,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                             handleError(result, "An Error occurred during download!");
                         }
                     });
-                    Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, remoteFile, mTemporaryDirectory};
+                    Object[] params = { mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory};
                     mDownloadFileTask.execute(params);
                 }
             }
@@ -318,13 +323,13 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     private boolean tokenExists() {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreference, Context.MODE_PRIVATE);
-        String accessToken = prefs.getString(Constants.CloudAccesTokenName, null);
+        String accessToken = prefs.getString(Constants.OldCloudAccesTokenName, null);
         return accessToken != null;
     }
 
     private String retrieveAccessToken() {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreference, Context.MODE_PRIVATE);              //check if ACCESS_TOKEN is stored on previous app launches
-        String accessToken = prefs.getString(Constants.CloudAccesTokenName, null);
+        String accessToken = prefs.getString(Constants.OldCloudAccesTokenName, null);
         if (accessToken == null) {
             Log.d(Constants.TAG, "No token found");
             return null;
@@ -336,12 +341,12 @@ public class ActivityNextCloud extends AppCompatActivity {
 
 
     protected void getUserAccount() {
-        Log.e(Constants.TAG,"Entering getUserAccount");
+
         if (mAccessToken == null)
             return;
 
             mAuthTask = new AuthenticatorAsyncTask(this, result -> updateNextCloudUI(result));
-            Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials};
+            Object[] params = { mServerUri, ownCloudCredentials};
             mAuthTask.execute(params);
 
     }
@@ -370,10 +375,40 @@ public class ActivityNextCloud extends AppCompatActivity {
     }
 
     public OwnCloudCredentials buildCredentials(String credentialsString){
-        String[] credentialStringArray = credentialsString.split(Constants.Separator);
-        String username = credentialStringArray[0];
-        String password = credentialStringArray[1];
-        return OwnCloudCredentialsFactory.newBasicCredentials(username, password);
+
+        Boolean isDefaultCLoud = mSharedPreferences.getBoolean("useDefaultCloud", true);
+
+	//TODO try with Nextcloud credentials as they permit the use of access token
+	// The output of that function must be NextCloudCredentials but it should be compatible with OwnCloudClient
+	/*
+	// Set basic credentials
+  	client.setCredentials(
+      	NextcloudCredentialsFactory.newBasicCredentials(username, password)
+  	);
+  	// Set bearer access token
+  	String nextCloudAccessToken = BuildConfig.NEXTCLOUD_ACCES_TOKEN;
+  	client.setCredentials(
+      	NextcloudCredentialsFactory.newBearerCredentials( nextCloudAccessToken )
+  	);
+  	// Set SAML2 session token
+  	client.setCredentials(
+      	NextcloudCredentialsFactory.newSamlSsoCredentials(cookie)
+  	);
+	*/
+
+
+        if ( isDefaultCLoud ) {
+            mServerUri = BuildConfig.NEXTCLOUD_SERVER_URI;
+            String[] credentialStringArray = credentialsString.split(Constants.Separator);
+            String username = credentialStringArray[0];
+            String password = credentialStringArray[1];
+            return OwnCloudCredentialsFactory.newBasicCredentials(username, password);
+        } else {
+            mServerUri = mSharedPreferences.getString( getResources().getString( R.string.cloudUrlCustom ), "");
+            String username = mSharedPreferences.getString( getResources().getString(R.string.cloudUserNameCustom ), "");
+            String password = mSharedPreferences.getString( getResources().getString( R.string.cloudPasswordCustom ), "");
+            return OwnCloudCredentialsFactory.newBasicCredentials(username, password);
+        }
     }
 
 
@@ -395,53 +430,67 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (mAccessToken == null)
             return;
 
-        mTotalSize = calculateTotalFileSize( mTopicDirectoriesToUpload );
+        Boolean isDefaultCLoud = mSharedPreferences.getBoolean("useDefaultCloud", true);
 
-        if( mTotalSize > 0 ){
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("Uploading files. Please wait...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.setMax(100);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.show();
-        } else {
-            //TODO undefined dialog
-        }
-        mAccomplishedSize = 0;
+        if( !isDefaultCLoud ) {
 
-        for (File topicDirectory : mTopicDirectoriesToUpload.values()) {
-            if (topicDirectory != null) {
-                mCreateFolderTask = new CreateFolderAsyncTask(this, topicDirectory, (result, folder ) -> {
-                    mCreateFolderTask = null;
-                    if( result.isSuccess() || result.getCode().equals(RemoteOperationResult.ResultCode.FOLDER_ALREADY_EXISTS )){
-                        File[] topicFiles = folder.listFiles();
-                        if (topicFiles != null) {
-                            for (File file : topicFiles) {
-                                if (file != null) {
 
-                                    Log.d(Constants.TAG, "Uploading file: " + file.getAbsolutePath());
+            mTotalSize = calculateTotalFileSize(mTopicDirectoriesToUpload);
 
-                                    mUploadFileTask = new UploadFileAsyncTask(this, (uploadResult, fileSize) -> {
-                                        if( uploadResult.isSuccess() ) {
-                                            publishProgress(fileSize);
-                                        } else {
-                                            handleError(uploadResult, "Failed to upload file!");
-                                            mProgressDialog.dismiss();
-                                        }
-                                    });
-                                    Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, file };
-                                    mUploadFileTask.execute(params);
+            if (mTotalSize > 0) {
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setMessage("Uploading files. Please wait...");
+                mProgressDialog.setIndeterminate(false);
+                mProgressDialog.setMax(100);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mProgressDialog.setCancelable(true);
+                mProgressDialog.show();
+            } else {
+                //TODO undefined dialog
+            }
+            mAccomplishedSize = 0;
+
+            for (File topicDirectory : mTopicDirectoriesToUpload.values()) {
+                if (topicDirectory != null) {
+                    mCreateFolderTask = new CreateFolderAsyncTask(this, topicDirectory, (result, folder) -> {
+                        mCreateFolderTask = null;
+                        if (result.isSuccess() || result.getCode().equals(RemoteOperationResult.ResultCode.FOLDER_ALREADY_EXISTS)) {
+                            File[] topicFiles = folder.listFiles();
+                            if (topicFiles != null) {
+                                for (File file : topicFiles) {
+                                    if (file != null) {
+
+                                        Log.d(Constants.TAG, "Uploading file: " + file.getAbsolutePath());
+
+                                        mUploadFileTask = new UploadFileAsyncTask(this, (uploadResult, fileSize) -> {
+                                            if (uploadResult.isSuccess()) {
+                                                publishProgress(fileSize);
+                                            } else {
+                                                handleError(uploadResult, "Failed to upload file!");
+                                                mProgressDialog.dismiss();
+                                            }
+                                        });
+                                        Object[] params = {mServerUri, ownCloudCredentials, file};
+                                        mUploadFileTask.execute(params);
+                                    }
                                 }
                             }
+                        } else {
+                            handleError(result, "Failed to create folder!");
                         }
-                    } else {
-                        handleError( result, "Failed to create folder!");
-                    }
-                });
-                Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials };
-                mCreateFolderTask.execute(params);
+                    });
+                    Object[] params = {mServerUri, ownCloudCredentials};
+                    mCreateFolderTask.execute(params);
+                }
             }
+
+        } else {
+            Snackbar snackbar = Snackbar
+                    .make(mMainLayout, "For uploads use a custom cloud!", Snackbar.LENGTH_LONG)
+                    .setAction("Change cloud?", view -> {
+                        startActivity( new Intent(this, ActivitySettings.class));
+                    });
+            snackbar.show();
         }
 
     }
@@ -495,6 +544,9 @@ public class ActivityNextCloud extends AppCompatActivity {
             case R.id.toolbar_menu:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.toolbar_settings:
+                startActivity( new Intent(this, ActivitySettings.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -543,7 +595,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     private void switchToUploadMode() {
         mTopicHomeArrayList = new ArrayList<>();
-        IOUtils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
+        Utils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
 
 
         mAdapterHome = new AdapterTopic(this, mTopicHomeArrayList);
@@ -578,7 +630,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                         handleError( result, "Failed to list folder!");
                     }
                 });
-                Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, path};
+                Object[] params = { mServerUri, ownCloudCredentials, path};
                 mListFolderTask.execute(params);
 
 
@@ -603,7 +655,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                         RemoteFile remoteFile = files.get(topicNumber);
 
                         if (remoteFile != null) {
-                            String remoteFileName = IOUtils.getNameFromPath( remoteFile.getRemotePath() );
+                            String remoteFileName = Utils.getNameFromPath( remoteFile.getRemotePath() );
                             Log.e(Constants.TAG," New Download Task for : " + remoteFileName );
                             if ( remoteFileName.equals(Constants.InfoFileName) || remoteFileName.equals(Constants.InfoFileNameNew) || remoteFileName.equals(Constants.TopicPictureFileName)) {
                                 File destinationDirectory = mTemporaryDirectory;
@@ -623,7 +675,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                     }
 
                                 });
-                                Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, remoteFile, destinationDirectory };
+                                Object[] params = { mServerUri, ownCloudCredentials, remoteFile, destinationDirectory };
                                 mDownloadFileTask.execute(params);
                             }
                         }
@@ -634,7 +686,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 handleError(result, "An error occurred!");
             }
         });
-        Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, pathLower };
+        Object[] params = { mServerUri, ownCloudCredentials, pathLower };
         mListFolderTask.execute(params);
 
 
@@ -651,7 +703,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             if (languageToLearnDirectory.isDirectory()) {
                 File[] knownLanguageDirectories = languageToLearnDirectory.listFiles();
                 for (File knownLanguageDirectory : knownLanguageDirectories) {
-                    IOUtils.getTopicListFromFiles(knownLanguageDirectory, mTopicCloudArrayList, true);
+                    Utils.getTopicListFromFiles(knownLanguageDirectory, mTopicCloudArrayList, true);
                 }
             }
         }
@@ -663,7 +715,12 @@ public class ActivityNextCloud extends AppCompatActivity {
         });
 
         mAdapterTopicCloud.setOnItemLongClickListener((position, viewHolder) -> {
-            removeTopicFromCloud( viewHolder );
+            if( mSharedPreferences.getBoolean("useDefaultCloud", true) ) {
+                Snackbar snackbar = Snackbar.make(mMainLayout, "You can only remove topics from your own cloud!", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            } else {
+                removeTopicFromCloud(viewHolder);
+            }
             return false;
         });
 
@@ -705,7 +762,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                             snackbar.show();
                         }
                     });
-                    Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, remotePath};
+                    Object[] params = { mServerUri, ownCloudCredentials, remotePath};
                     mListFolderTask.execute(params);
 
         });
@@ -725,7 +782,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 setupRecyclerView();
                 mCloudFolderArrayList.clear();
                 for( RemoteFile remoteFile : remoteList ){
-                    String languageName = IOUtils.getNameFromPath( remoteFile.getRemotePath() );
+                    String languageName = Utils.getNameFromPath( remoteFile.getRemotePath() );
                     LanguageElement languageElement = new LanguageElement( remoteFile, languageName , true );
                     mCloudFolderArrayList.add( languageElement );
                 }
@@ -736,7 +793,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
                 mCloudFolderArrayList.clear();
                 for( RemoteFile remoteFile : remoteList ){
-                    String languageName = IOUtils.getNameFromPath( remoteFile.getRemotePath() );
+                    String languageName = Utils.getNameFromPath( remoteFile.getRemotePath() );
                     LanguageElement languageElement = new LanguageElement( remoteFile, languageName , false );
                     mCloudFolderArrayList.add( languageElement );
                 }
@@ -748,7 +805,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             case DISPLAY_TOPICS:
 
-                IOUtils.deleteFolder(mTemporaryDirectory);
+                Utils.deleteFolder(mTemporaryDirectory);
 
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage("Downloading topics. Please wait...");
@@ -843,7 +900,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                 }
                                 mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
                             });
-                            Object[] params = {BuildConfig.NEXTCLOUD_SERVER_URI, ownCloudCredentials, new File( topicCloudPath )};
+                            Object[] params = { mServerUri, ownCloudCredentials, new File( topicCloudPath )};
                             mRemoveTask.execute(params);
                         });
 

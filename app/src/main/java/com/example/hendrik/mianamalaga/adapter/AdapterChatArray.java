@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.container.ChatContent;
+import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.activities.ActivityConversation;
 
 import java.io.File;
@@ -107,7 +110,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
    //         viewHolder.mUserVideoView.setVideoPath(mediaPath);
             viewHolder.mBaseView.setTag(chatContent.getMediaFileNames());
 
-            if (IOUtils.isVideoFile(mediaPath)) {
+            if (Utils.isVideoFile(mediaPath)) {
                 Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mediaPath,
                         MediaStore.Images.Thumbnails.MINI_KIND);
 
@@ -115,7 +118,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
                         .load(thumb)
                         .apply(new RequestOptions().override(300, 300))
                         .into(viewHolder.mUserImageView);
-            } else if (IOUtils.isImageFile( chatContent.getImageFileName() )){
+            } else if (Utils.isImageFile( chatContent.getImageFileName() )){
 
                 File imageFile = new File( mResourceDirectory, chatContent.getImageFileName());
 
@@ -141,7 +144,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
             String mediaPath = new File(mResourceDirectory, chatContent.getMediaFileNames()[0]).getPath();
             viewHolder.mBaseView.setTag(chatContent.getMediaFileNames());
 
-            if (IOUtils.isVideoFile( mediaPath )) {
+            if (Utils.isVideoFile( mediaPath )) {
                 Bitmap thumb = ThumbnailUtils.createVideoThumbnail(mediaPath,
                         MediaStore.Images.Thumbnails.MINI_KIND);
 
@@ -151,7 +154,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
                         .apply(new RequestOptions().override(300, 300))
                         .into(viewHolder.mAgentImageView);
 
-            } else if (IOUtils.isImageFile( chatContent.getImageFileName() )){
+            } else if (Utils.isImageFile( chatContent.getImageFileName() )){
 
                 File imageFile = new File( mResourceDirectory, chatContent.getImageFileName());
 

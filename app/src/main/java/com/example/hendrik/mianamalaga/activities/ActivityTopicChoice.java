@@ -1,14 +1,23 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.activities;
 
 import android.Manifest;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import com.example.hendrik.mianamalaga.activities.ActivityConversation;
+import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.adapter.AdapterTopic;
+import com.example.hendrik.mianamalaga.container.ChatContent;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.dialogs.DialogAddTopic;
+import com.example.hendrik.mianamalaga.fragments.FragmentVideoCamera;
+import com.example.hendrik.mianamalaga.R;
+import com.example.hendrik.mianamalaga.container.Topic;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,6 +30,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -191,23 +201,23 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                         switch (item) {
 
                             case "Author":
-                                IOUtils.sortTopicsByAuthor(mTopicArrayList);
+                                Utils.sortTopicsByAuthor(mTopicArrayList);
                                 break;
 
                             case "Difficulty":
-                                IOUtils.sortTopicsByDifficulty(mTopicArrayList);
+                                Utils.sortTopicsByDifficulty(mTopicArrayList);
                                 break;
 
                             case "Name":
-                                IOUtils.sortTopicsByName(mTopicArrayList);
+                                Utils.sortTopicsByName(mTopicArrayList);
                                 break;
 
                             case "Popularity":
-                                IOUtils.sortTopicsByPopularity(mTopicArrayList);
+                                Utils.sortTopicsByPopularity(mTopicArrayList);
                                 break;
 
                             case "Size":
-                                IOUtils.sortTopicsBySize(mTopicArrayList);
+                                Utils.sortTopicsBySize(mTopicArrayList);
                                 break;
 
                         }
@@ -252,7 +262,9 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                     checkPermissionAndOpenLoginActivity();
                     return true;
                 case R.id.toolbar_help:
-                    //showHelp();
+                    DialogHelp helpDialog = DialogHelp.newInstance(getString( R.string.ActivityTopicChoiceHelpText) );
+                    helpDialog.show( getSupportFragmentManager(), Constants.TAG );
+                    mDrawerLayout.closeDrawers();
                     return true;
                 case R.id.toolbar_editor_mode:
                     if(menuItem.isChecked()){
@@ -283,7 +295,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         mAdapter.setOnItemClickListener((position, viewHolder) -> {             // TODO
             Topic topic = mTopicArrayList.get(position);
-            String resourceDirectory = File.separatorChar + IOUtils.convertTopicName( topic.getName() ) + File.separatorChar;
+            String resourceDirectory = File.separatorChar + Utils.convertTopicName( topic.getName() ) + File.separatorChar;
             startConversation(resourceDirectory);
         });
 
@@ -292,7 +304,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                 Topic topic = mTopicArrayList.get(position);
                 topic.setPosition(position);
                 DialogAddTopic dialogAddTopic = DialogAddTopic.newInstance(topic);
-                dialogAddTopic.show(getSupportFragmentManager(),Constants.TAG);
+                dialogAddTopic.show(getSupportFragmentManager(), Constants.TAG);
             } else {
                 Toast.makeText(mContext, "Enable editor mode to edit topics!", Toast.LENGTH_LONG).show();
             }
@@ -303,7 +315,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
     private void getDataFromDisk() {
         if( hasExternalStorageAccessPermission() ){
-            IOUtils.getTopicListFromFiles(mApplicationDirectory, mTopicArrayList, false );
+            Utils.getTopicListFromFiles(mApplicationDirectory, mTopicArrayList, false );
 
             File[] temporaryLanguageToLearnDirectories = mTemporaryDirectory.listFiles();
             for( File temporaryLanguageToLeanDirectory : temporaryLanguageToLearnDirectories ){
@@ -311,7 +323,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                     File[] knownLanguageDirectories = temporaryLanguageToLeanDirectory.listFiles();
                     for( File knownLanguageDirectory : knownLanguageDirectories ){
                         if( knownLanguageDirectory.isDirectory() ){
-                            IOUtils.getTopicListFromFiles(knownLanguageDirectory, mTopicArrayList, false );
+                            Utils.getTopicListFromFiles(knownLanguageDirectory, mTopicArrayList, false );
                         }
                     }
                 }
@@ -334,7 +346,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             mApplicationDirectory = new File(fullDirectoryString);
             mTemporaryDirectory = new File(fullTemporaryDirectory);
 
-            if( !IOUtils.prepareFileStructure(mApplicationDirectory.toString()) ){
+            if( !Utils.prepareFileStructure(mApplicationDirectory.toString()) ){
                 finish();
             }
         }
@@ -372,7 +384,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         mAdapter.notifyItemRemoved(position);
         mAdapter.notifyDataSetChanged();
 
-        File topicFullPathFile = new File(mApplicationDirectory, IOUtils.convertTopicName( topic.getName() ) );
+        File topicFullPathFile = new File(mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
         File[] topicFiles = topicFullPathFile.listFiles();
         for (File file : topicFiles){
             file.delete();
@@ -422,6 +434,9 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         switch (item.getItemId()) {
             case R.id.toolbar_menu:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.toolbar_settings:
+                startActivity( new Intent(this, ActivitySettings.class));
                 return true;
         }
 
@@ -504,7 +519,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         if( !isDirectoryEmpty( mTemporaryDirectory ) )
             mSaveFab.show();
 
-        mNewTopicFab.setOnClickListener(view -> showChangeTopicDialog());
+        mNewTopicFab.setOnClickListener(view -> showAddTopicDialog());
         mSaveFab.setOnClickListener(view -> saveTopicsToFilePressed());
     }
 
@@ -520,9 +535,13 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         return false;
     }
 
-    private void showChangeTopicDialog() {
+    private void showAddTopicDialog() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+        String userName = sharedPreferences.getString(getResources().getString(R.string.lessonUserName), "anonymous");
+
         Topic topic = new Topic();
         topic.setPosition(mTopicArrayList.size() + 1);
+        topic.setAuthor( userName );
         DialogAddTopic dialogAddTopic = DialogAddTopic.newInstance(topic);
         dialogAddTopic.show(getSupportFragmentManager(),Constants.TAG);
     }
@@ -557,25 +576,25 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         for (File topicDirectory : topicDirectories) {
             if (topicDirectory.isDirectory()) {
-                fileHashMap.put( IOUtils.convertTopicName( topicDirectory.getName() ),topicDirectory );
+                fileHashMap.put( Utils.convertTopicName( topicDirectory.getName() ),topicDirectory );
             }
         }
 
         for (int index = 0; index < mTopicArrayList.size(); index++){
             Topic topic = mTopicArrayList.get(index);
-            File topicDirectory = fileHashMap.get( IOUtils.convertTopicName( topic.getName() ) );
+            File topicDirectory = fileHashMap.get( Utils.convertTopicName( topic.getName() ) );
 
             if( topicDirectory == null ){
-                String topicDirectoryName = IOUtils.convertTopicName( topic.getName() );
+                String topicDirectoryName = Utils.convertTopicName( topic.getName() );
                 File newTopicDirectory = new File( mApplicationDirectory, topicDirectoryName);
                 if (!newTopicDirectory.exists())
                     newTopicDirectory.mkdir();
             }
 
             //File resourceFile = new File(topicDirectory, Constants.InfoFileName);                   //TODO remove that line if everything is ready
-            //IOUtils.writeTopicToFile( resourceFile, topic);                                         //TODO remove that line if everything is ready
+            //Utils.writeTopicToFile( resourceFile, topic);                                         //TODO remove that line if everything is ready
             File topicInfoFile = new File(topicDirectory, Constants.InfoFileNameNew);
-            IOUtils.writeTopicToNewFile( topicInfoFile, topic);
+            Utils.writeTopicToNewFile( topicInfoFile, topic);
         }
 
         copyTemporaryFolder();
@@ -595,7 +614,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                 for( File topicDirectory : topicDirectories ) {
                     if ( new File(topicDirectory, Constants.ChatContentFileName).exists() ) {
                         Log.e(Constants.TAG, "Copying: " + topicDirectory.toString());
-                        IOUtils.copyFileOrDirectory(topicDirectory.toString(), mApplicationDirectory.toString());
+                        Utils.copyFileOrDirectory(topicDirectory.toString(), mApplicationDirectory.toString());
                     }
                 }
             }
@@ -607,7 +626,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     private void clearTemporaryFolder() {
         //
         // 89Log.e(Constants.TAG,"Deleting temp folder!");
-        IOUtils.deleteFolder(mTemporaryDirectory);
+        Utils.deleteFolder(mTemporaryDirectory);
     }
 
 
@@ -623,7 +642,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             Topic oldTopic = mTopicArrayList.get(position);
             if (!topic.getName().toLowerCase().equals(oldTopic.getName().toLowerCase() ) ){
                 File oldFolder = new File( mApplicationDirectory, oldTopic.getName().trim().replaceAll("\\s", "_"));
-                File newFolder = new File( mApplicationDirectory, IOUtils.convertTopicName( topic.getName() ) );
+                File newFolder = new File( mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
                 try {
                     oldFolder.renameTo(newFolder);
                 } catch (NullPointerException e){
@@ -636,21 +655,21 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             mAdapter.notifyDataSetChanged();
 
         } else {
-            File resourceDirectory = new File(mApplicationDirectory, IOUtils.convertTopicName( topic.getName() ) );
+            File resourceDirectory = new File(mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
             File imagePath = new File(resourceDirectory, Constants.TopicPictureFileName);
             topic.setImageFileString(imagePath.toString());
 
             File chatContentFile = new File(resourceDirectory, Constants.ChatContentFileName);
             ArrayList<ChatContent> contentList = new ArrayList<>();
             contentList.add(new ChatContent());
-            IOUtils.writeChatContentListToFile(chatContentFile, contentList);
+            Utils.writeChatContentListToFile(chatContentFile, contentList);
             mAdapter.addItem(topic);
         }
 
         if( imageFile != null ){
 
-            File resourceDirectory = new File( mApplicationDirectory, IOUtils.convertTopicName( topic.getName() ) );    //TODO compress image file if size is too big
-            IOUtils.copyFileOrDirectory( imageFile.toString(), resourceDirectory.toString() );
+            File resourceDirectory = new File( mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );    //TODO compress image file if size is too big
+            Utils.copyFileOrDirectory( imageFile.toString(), resourceDirectory.toString() );
 
             File newTopicPictureFile = new File(resourceDirectory, imageFile.getName() );
             File finalTopicPictureFile = new File(resourceDirectory, Constants.TopicPictureFileName);
@@ -665,9 +684,11 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             }
         }
 
-        File relativeResourceFile = new File( IOUtils.convertTopicName( topic.getName() ), Constants.InfoFileName);
+        File relativeResourceFile = new File( Utils.convertTopicName( topic.getName() ), Constants.InfoFileName);
         File resourceFile = new File(mApplicationDirectory, relativeResourceFile.toString());
-        IOUtils.writeTopicToFile( resourceFile, topic);
+        //Utils.writeTopicToFile( resourceFile, topic);
+
+        Utils.writeTopicToNewFile( resourceFile, topic);
 
         mAdapter.notifyItemChanged(position);
     }
@@ -685,7 +706,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             mCameraCardView.setVisibility(View.VISIBLE);
             mCameraFrameLayout.setVisibility(View.VISIBLE);
 
-            File topicDirectory = new File(mApplicationDirectory, IOUtils.convertTopicName(topic.getName()));
+            File topicDirectory = new File(mApplicationDirectory, Utils.convertTopicName(topic.getName()));
             File pictureFile = new File(topicDirectory, Constants.TopicPictureFileName);
             getFragmentManager().beginTransaction()
                     .replace(R.id.activity_topic_choice_camera_container, FragmentVideoCamera.newInstance(pictureFile.toString()))

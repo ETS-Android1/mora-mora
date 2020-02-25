@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.container;
 import com.dropbox.core.v2.files.Metadata;
 import com.owncloud.android.lib.resources.files.model.RemoteFile;
 

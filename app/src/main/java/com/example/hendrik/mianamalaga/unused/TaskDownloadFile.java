@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,7 +17,7 @@ import java.io.OutputStream;
 /**
  * Task to download a file from DropBox and put it in the Downloads folder
  */
-class TaskDownloadFile extends AsyncTask<FileMetadata, Void, File> {
+public class TaskDownloadFile extends AsyncTask<FileMetadata, Void, File> {
 
     private final DbxClientV2 mDbxClient;
     private final Callback mCallback;
@@ -31,7 +31,7 @@ class TaskDownloadFile extends AsyncTask<FileMetadata, Void, File> {
     }
 
 
-    TaskDownloadFile(DbxClientV2 dbxClient, File destinationDirectory, int fileNumber, Callback callback ) {
+    public TaskDownloadFile(DbxClientV2 dbxClient, File destinationDirectory, int fileNumber, Callback callback ) {
         mDbxClient = dbxClient;
         mCallback = callback;
         mDestinationDirectory = destinationDirectory;

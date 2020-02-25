@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.adapter;
 
 import android.content.Context;
 
@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.hendrik.mianamalaga.container.LanguageElement;
+import com.example.hendrik.mianamalaga.R;
 
 import java.util.ArrayList;
 import java.util.Locale;

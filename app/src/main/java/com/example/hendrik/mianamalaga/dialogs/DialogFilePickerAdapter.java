@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.dialogs;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.R;
 
 import java.io.File;
 import java.util.Arrays;
@@ -108,7 +110,7 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
                 filePickerItemViewHolder.mFileName.setText(file.getName());
                 if ( file.isFile() ) {
 
-                    if (IOUtils.isImageFile(file.toString())) {
+                    if (Utils.isImageFile(file.toString())) {
 
                         RequestOptions requestOptions = new RequestOptions()
                                 .override(300, 300);
@@ -118,7 +120,7 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
                                 .apply(requestOptions)
                                 .into(filePickerItemViewHolder.mImageView);
 
-                    } else if (IOUtils.isVideoFile(file.toString())) {
+                    } else if (Utils.isVideoFile(file.toString())) {
 
                         Bitmap thumb = ThumbnailUtils.createVideoThumbnail(file.toString(),
                                 MediaStore.Images.Thumbnails.MINI_KIND);

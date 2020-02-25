@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.container;
 
 public class ChatContent {
     private String[] nativeMessages;

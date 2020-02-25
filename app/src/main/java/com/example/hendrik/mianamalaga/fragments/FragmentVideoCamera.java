@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -21,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.activities.ActivityConversation;
 import com.example.hendrik.mianamalaga.activities.ActivityTopicChoice;
 
@@ -102,9 +105,9 @@ public class FragmentVideoCamera extends Fragment
   //          mLesson = getArguments().getInt("Lesson");
   //          mOutputFilePathString = getArguments().getString("TopicPath");
             String filePathString = getArguments().getString("FullFilePathString");
-            if( IOUtils.isImageFile( filePathString ) ){
+            if( Utils.isImageFile( filePathString ) ){
                 mType = MEDIA_TYPE_IMAGE;
-            } else if ( IOUtils.isVideoFile( filePathString ) ){
+            } else if ( Utils.isVideoFile( filePathString ) ){
                 mType = MEDIA_TYPE_VIDEO;
             } else {
                 finishCameraSession();
@@ -442,7 +445,7 @@ public class FragmentVideoCamera extends Fragment
             Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
             android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
             android.hardware.Camera.getCameraInfo(mCameraId, info);
-            Bitmap bitmap = IOUtils.rotateBitmap(realImage, info.orientation, info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT);
+            Bitmap bitmap = Utils.rotateBitmap(realImage, info.orientation, info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT);
 
             FileOutputStream fos = new FileOutputStream(pictureFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
@@ -468,7 +471,7 @@ public class FragmentVideoCamera extends Fragment
 
     private File createOutputFile(String fullPathString){
 
-        if( !IOUtils.isExternalStorageWritable() ){
+        if( !Utils.isExternalStorageWritable() ){
             Log.e(Constants.TAG, "External Storage is not writable! ");
             finishCameraSession();
         }
@@ -496,7 +499,7 @@ public class FragmentVideoCamera extends Fragment
     private File getOutputMediaFile(int type){
         File TopicDirectory = new File( mOutputFilePathString );
 
-        if( !IOUtils.isExternalStorageWritable() ){
+        if( !Utils.isExternalStorageWritable() ){
             Log.e(Constants.TAG, "External Storage is not writable! ");
             finishCameraSession();
         }

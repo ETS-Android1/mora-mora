@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hendrik.mianamalaga.R;
+import com.example.hendrik.mianamalaga.container.Topic;
 import com.example.hendrik.mianamalaga.activities.ActivityTopicChoice;
 
 import java.io.File;
@@ -31,6 +33,7 @@ public class DialogAddTopic extends AppCompatDialogFragment {
     EditText mShortInfoEditText;
     File mChosenFile;
     int mPosition;
+    String mAuthorName;
 
 
     public static DialogAddTopic newInstance(Topic topic ){
@@ -41,6 +44,7 @@ public class DialogAddTopic extends AppCompatDialogFragment {
         args.putString("Image Path",topic.getImageFileString());
         args.putString("Short Info",topic.getShortInfo());
         args.putInt("Position",topic.getPosition());
+        args.putString("Author Name", topic.getAuthor() );
         dialogAddTopic.setArguments(args);
         return dialogAddTopic;
     }
@@ -56,6 +60,7 @@ public class DialogAddTopic extends AppCompatDialogFragment {
             topicName = getArguments().getString("Topic Name");
             shortInfo = getArguments().getString("Short Info");
             mPosition = getArguments().getInt("Position");
+            mAuthorName = getArguments().getString("Author Name");
         }
 
         mCallingActivity = getActivity();
@@ -87,6 +92,7 @@ public class DialogAddTopic extends AppCompatDialogFragment {
 
         builder.setPositiveButton(R.string.Change, (dialog, which) -> {
             Topic topic = new Topic();
+            topic.setAuthor( mAuthorName );
             if( !mTopicNameEditText.getText().toString().isEmpty() ){                           //TODO remove all special characters of string
                 topic.setName(mTopicNameEditText.getText().toString());
                 topic.setShortInfo(mShortInfoEditText.getText().toString());
@@ -106,6 +112,7 @@ public class DialogAddTopic extends AppCompatDialogFragment {
 
     public void prepareCamera(){
         Topic topic = new Topic();
+        topic.setAuthor( mAuthorName );
         topic.setName(mTopicNameEditText.getText().toString());
         topic.setShortInfo(mShortInfoEditText.getText().toString());
         ((ActivityTopicChoice)mCallingActivity).onDialogAddTopicCameraClick(topic, mPosition);

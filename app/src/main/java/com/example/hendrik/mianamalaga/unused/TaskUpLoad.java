@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.WriteMode;
+import com.example.hendrik.mianamalaga.Constants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +25,7 @@ public class TaskUpLoad extends AsyncTask<Void,Void,File> {
         void onDownloadComplete(File result);
     }
 
-    TaskUpLoad(DbxClientV2 dbxClient, File file, Context context, Callback callback) {
+    public TaskUpLoad(DbxClientV2 dbxClient, File file, Context context, Callback callback) {
         this.dbxClient = dbxClient;
         this.mFile = file;
         this.context = context;

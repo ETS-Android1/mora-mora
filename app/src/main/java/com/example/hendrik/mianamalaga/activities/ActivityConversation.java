@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.activities;
 
 
 import android.Manifest;
@@ -18,6 +18,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.adapter.AdapterChatArray;
+import com.example.hendrik.mianamalaga.adapter.AdapterPageFragment;
+import com.example.hendrik.mianamalaga.container.ChatContent;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.dialogs.DialogAddChangeMessage;
+import com.example.hendrik.mianamalaga.fragments.FragmentPageResponse;
+import com.example.hendrik.mianamalaga.fragments.FragmentVideoCamera;
+import com.example.hendrik.mianamalaga.interfaces.OnUpdateResponseInFragment;
+import com.example.hendrik.mianamalaga.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -159,7 +169,7 @@ public class ActivityConversation extends AppCompatActivity {
 
     private ArrayList<ChatContent> readResourceContentFile(File resourceFile) {  //TODO This is not working when file is in temporary folder . it look at the false place
         //TODO the copy from temp folder to ap folder seems not to work either
-        String chatContentString = IOUtils.readJsonFile(resourceFile);
+        String chatContentString = Utils.readJsonFile(resourceFile);
         Gson gSon = new Gson();
         ChatContent[] chatContentArray = gSon.fromJson(chatContentString, ChatContent[].class);
 
@@ -244,7 +254,7 @@ public class ActivityConversation extends AppCompatActivity {
             mApplicationDirectory = new File(AppDirectoryPathString);
             mTemporaryDirectory = new File(getIntent().getExtras().getString(Constants.FullTemporaryDirectory));
 
-            if (!IOUtils.prepareFileStructure(mApplicationDirectory.toString())) {
+            if (!Utils.prepareFileStructure(mApplicationDirectory.toString())) {
                 finish();
             }
         }
@@ -339,7 +349,7 @@ public class ActivityConversation extends AppCompatActivity {
 
         File resourceDirectory = getResourceDirectory(mResourceDir);                              //TODO change that to show a snackbar
         File chatContentFile = new File(resourceDirectory, Constants.ChatContentFileName);
-        IOUtils.writeChatContentListToFile(chatContentFile, mChatContentArrayList);
+        Utils.writeChatContentListToFile(chatContentFile, mChatContentArrayList);
         Toast.makeText(this, "Conversation is saved!", Toast.LENGTH_SHORT).show();
 
     }
@@ -676,14 +686,14 @@ public class ActivityConversation extends AppCompatActivity {
 
         if (mediaFile != null) {
             File topicDirectory = getResourceDirectory(mResourceDir);                             //TODO compress file if image if too large - if video tell user that file size to large!
-            IOUtils.copyFileOrDirectory(mediaFile.toString(), topicDirectory.toString());
+            Utils.copyFileOrDirectory(mediaFile.toString(), topicDirectory.toString());
 
             File fullMediaFile = new File(topicDirectory, mediaFile.getName());
             File renamedMediaFile = null;
-            if (IOUtils.isImageFile(mediaFile.toString())) {
+            if (Utils.isImageFile(mediaFile.toString())) {
                 renamedMediaFile = new File(topicDirectory, Constants.ImageName + position + ".jpg");
                 mChatContentArrayList.get(position).setImageFileName(renamedMediaFile.getName());
-            } else if (IOUtils.isVideoFile(mediaFile.toString())) {
+            } else if (Utils.isVideoFile(mediaFile.toString())) {
                 renamedMediaFile = new File(topicDirectory, Constants.VideoName + position + ".mp4");
                 mChatContentArrayList.get(position).setMediaFileNames(new String[]{renamedMediaFile.getName()});
                 mChatContentArrayList.get(position).setImageFileName("");
@@ -712,7 +722,7 @@ public class ActivityConversation extends AppCompatActivity {
         File resourceDirectory = getResourceDirectory(mResourceDir);
         File mediaPathFile = new File(resourceDirectory, mediaName);
 
-        if (IOUtils.isAudioFile(mediaName)) {
+        if (Utils.isAudioFile(mediaName)) {
             String reducedMediaName = mediaName.substring(0, mediaName.indexOf("."));               //TODO this is not a very elegant solution maybe
             String positionString = reducedMediaName.replaceAll("[^0-9]", "");
             int position = Integer.parseInt(positionString);
@@ -758,7 +768,7 @@ public class ActivityConversation extends AppCompatActivity {
         mVideoCardView.setVisibility(View.VISIBLE);
         mVideoCardView.setAlpha(0.4f);
 
-        if (IOUtils.isAudioFile(mediaName)) {
+        if (Utils.isAudioFile(mediaName)) {
             mImageView.setVisibility(View.VISIBLE);
             mVideoView.setVisibility(View.VISIBLE);
             mVideoView.setAlpha(0f);

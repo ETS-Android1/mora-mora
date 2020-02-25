@@ -1,4 +1,4 @@
-package com.example.hendrik.mianamalaga;
+package com.example.hendrik.mianamalaga.unused;
 
 
 import android.app.ProgressDialog;
@@ -9,6 +9,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.hendrik.mianamalaga.utilities.Utils;
+import com.example.hendrik.mianamalaga.adapter.AdapterCloudLanguage;
+import com.example.hendrik.mianamalaga.adapter.AdapterTopic;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.container.LanguageElement;
+import com.example.hendrik.mianamalaga.R;
+import com.example.hendrik.mianamalaga.container.Topic;
 import com.example.hendrik.mianamalaga.activities.ActivityLogIntoCloud;
 import com.example.hendrik.mianamalaga.activities.ActivityTopicChoice;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -119,7 +126,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
             String temporaryDirectoryPath = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
             mTemporaryDirectory = new File(temporaryDirectoryPath);
 
-            if (!IOUtils.prepareFileStructure(AppDirectoryPathString)) {
+            if (!Utils.prepareFileStructure(AppDirectoryPathString)) {
                 finish();
             }
         }
@@ -134,7 +141,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
             viewHolder.mIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_upload));
             viewHolder.mIconImageView.setVisibility(View.VISIBLE);
             viewHolder.mBaseView.setBackgroundColor(Color.LTGRAY);
-            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, IOUtils.convertTopicName(topic.getName()) ).toString()));
+            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, Utils.convertTopicName(topic.getName()) ).toString()));
         } else {
 
             viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
@@ -452,7 +459,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
 
     private void switchToUploadMode() {
         mTopicHomeArrayList = new ArrayList<>();
-        IOUtils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
+        Utils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mTopicCloudRecyclerView.setLayoutManager(mLayoutManager);
@@ -493,7 +500,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
 
 
     protected void loadTopicFilesFromCloudFolder(String path) {
-        IOUtils.deleteFolder(mTemporaryDirectory);
+        Utils.deleteFolder(mTemporaryDirectory);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Downloading topics. Please wait...");
@@ -591,7 +598,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
             if (languageToLearnDirectory.isDirectory()) {
                 File[] knownLanguageDirectories = languageToLearnDirectory.listFiles();
                 for (File knownLanguageDirectory : knownLanguageDirectories) {
-                    IOUtils.getTopicListFromFiles(knownLanguageDirectory, mTopicCloudArrayList, true);
+                    Utils.getTopicListFromFiles(knownLanguageDirectory, mTopicCloudArrayList, true);
                 }
             }
         }
