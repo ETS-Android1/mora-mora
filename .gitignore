@@ -34,3 +34,4 @@ tests/test_cases/proguard-project.txt
 
 # Sensible data (added by Hendrik)
 sensitive_data.txt
+some_git_infos.txt
