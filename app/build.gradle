@@ -59,17 +59,27 @@ if (nextCloudAccessToken == noKeyFound) {
 
 // End of reading the sensitive data
 
+def applicationName = '"MoraMora"'
+def temporaryFolderName = '"temporary"'
 
 android {
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.hendrik.mianamalaga"
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "0.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // ApplicationName for internal folder creation naming
+        buildConfigField "String", "APPLICATION_NAME", applicationName
+        resValue "string", "APPLICATION_NAME", applicationName
+
+        buildConfigField "String", "TEMPORARY_FOLDER_NAME", temporaryFolderName
+
 
         // add a Constant Field for sensitive_data
         buildConfigField "String", "NEXT_CLOUD_PASSWORD", nextCloudPassword
@@ -100,6 +110,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        customDebugType {
+            debuggable true
+        }
+
     }
     sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/Activities'] } }
 
@@ -132,6 +146,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'com.dropbox.core:dropbox-core-sdk:3.0.10'
     implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'com.github.nextcloud:android-library:-SNAPSHOT'
+    implementation 'com.github.nextcloud:android-library:2.2.0'
     implementation "androidx.preference:preference:1.1.0"
+    implementation "commons-httpclient:commons-httpclient:3.1@jar"
 }

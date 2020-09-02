@@ -10,6 +10,7 @@ import com.example.hendrik.mianamalaga.Constants;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentials;
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.DownloadFileRemoteOperation;
 import com.owncloud.android.lib.resources.files.model.RemoteFile;
@@ -17,11 +18,12 @@ import com.owncloud.android.lib.resources.files.model.RemoteFile;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
-public class DownloadFileAsyncTask extends AsyncTask<Object, Void, RemoteOperationResult> {
+public class DownloadFileFromCloudAsyncTask extends AsyncTask<Object, Void, RemoteOperationResult> {
 
 
     private WeakReference<Context> mWeakContext;
-    private DownloadFileAsyncTask.OnTaskDownloadListener mListener;
+    private DownloadFileFromCloudAsyncTask.OnTaskDownloadListener mListener;
+    private DownloadFileFromCloudAsyncTask.OnTaskProgressListener mProgressListener;
     private int mFileNumber;
     private long mFileSize;
 
@@ -30,11 +32,19 @@ public class DownloadFileAsyncTask extends AsyncTask<Object, Void, RemoteOperati
         void onTaskDownload(RemoteOperationResult result, int fileNumber, long fileSize);
     }
 
-    public DownloadFileAsyncTask(Activity activity, int fileNumber,  DownloadFileAsyncTask.OnTaskDownloadListener listener){
+    public interface OnTaskProgressListener{
+        void onProgress(long progressRate, long totalTransferredSoFar, long totalToTransfer, String fileAbsoluteName);
+    }
+
+    public DownloadFileFromCloudAsyncTask(Activity activity, int fileNumber, DownloadFileFromCloudAsyncTask.OnTaskDownloadListener listener){
 
         mWeakContext = new WeakReference<>(activity.getApplicationContext());
         mListener = listener;
         mFileNumber = fileNumber;
+    }
+
+    public void addProgressListener(DownloadFileFromCloudAsyncTask.OnTaskProgressListener progressListener){
+        this.mProgressListener = progressListener;
     }
 
 
@@ -70,6 +80,11 @@ public class DownloadFileAsyncTask extends AsyncTask<Object, Void, RemoteOperati
             }
 
             DownloadFileRemoteOperation operation = new DownloadFileRemoteOperation( remoteFilePath.getRemotePath(), destinationFolder.getAbsolutePath());
+            operation.addDatatransferProgressListener((progressRate, totalTransferredSoFar, totalToTransfer, fileAbsoluteName) -> {
+                if( mProgressListener != null ) {
+                    mProgressListener.onProgress( progressRate, totalTransferredSoFar, totalToTransfer, fileAbsoluteName );
+                }
+            });
             result = operation.execute(client);
 
             if (result.isSuccess()) {
@@ -89,7 +104,7 @@ public class DownloadFileAsyncTask extends AsyncTask<Object, Void, RemoteOperati
     protected void onPostExecute(RemoteOperationResult result){
         if (result!= null)
         {
-            DownloadFileAsyncTask.OnTaskDownloadListener listener = mListener;
+            DownloadFileFromCloudAsyncTask.OnTaskDownloadListener listener = mListener;
             if (listener!= null)
             {
                 listener.onTaskDownload(result, mFileNumber, mFileSize );

@@ -6,15 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.tasks.RemoveFileAsyncTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
 
+import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,7 +52,7 @@ import com.example.hendrik.mianamalaga.container.LanguageElement;
 import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.tasks.AuthenticatorAsyncTask;
 import com.example.hendrik.mianamalaga.tasks.CreateFolderAsyncTask;
-import com.example.hendrik.mianamalaga.tasks.DownloadFileAsyncTask;
+import com.example.hendrik.mianamalaga.tasks.DownloadFileFromCloudAsyncTask;
 import com.example.hendrik.mianamalaga.tasks.ListFolderAsyncTask;
 import com.example.hendrik.mianamalaga.tasks.UploadFileAsyncTask;
 import com.example.hendrik.mianamalaga.container.Topic;
@@ -98,7 +106,7 @@ public class ActivityNextCloud extends AppCompatActivity {
     private OwnCloudCredentials ownCloudCredentials;
     private AuthenticatorAsyncTask mAuthTask;
     private ListFolderAsyncTask mListFolderTask;
-    private DownloadFileAsyncTask mDownloadFileTask;
+    private DownloadFileFromCloudAsyncTask mDownloadFileTask;
     private UploadFileAsyncTask mUploadFileTask;
     private CreateFolderAsyncTask mCreateFolderTask;
     private RemoveFileAsyncTask mRemoveTask;
@@ -106,7 +114,7 @@ public class ActivityNextCloud extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     private String mServerUri;
 
-    private enum Status{
+    private enum Status {
         DISPLAY_UNKNOWN_LANGUAGE,
         DISPLAY_KNOWN_LANGUAGE,
         DISPLAY_TOPICS
@@ -122,7 +130,8 @@ public class ActivityNextCloud extends AppCompatActivity {
         setContentView(R.layout.activity_cloud);
         mIsDownLoadMode = true;
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+        Log.e(Constants.TAG,"onCreate ActivityNextcloud!");
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setupUi();
         setupToolbar();
@@ -148,6 +157,16 @@ public class ActivityNextCloud extends AppCompatActivity {
             switchToUploadMode();
 
     }
+/*
+    @Override
+    public void onBackPressed(){
+
+        Intent intent = new Intent(ActivityNextCloud.this, ActivityLanguageChoice.class);
+        Log.d(Constants.TAG, " OnBackPressed Starting language choice activity!");
+        startActivity(intent);
+        finish();
+    }
+*/
 
     private void setupUi() {
         mMainLayout = findViewById(R.id.activity_cloud_main_layout);
@@ -162,11 +181,12 @@ public class ActivityNextCloud extends AppCompatActivity {
         //uploadFab.setOnClickListener(view -> uploadSelectedTopics());
         mUpDownloadFab = findViewById(R.id.cloud_fab_download);
         mUpDownloadFab.setOnClickListener(view -> {
-            if ( mIsDownLoadMode )
+            if (mIsDownLoadMode)
                 downloadSelectedTopics();
             else
                 uploadSelectedTopics();
         });
+        mUpDownloadFab.hide();
 
     }
 
@@ -192,7 +212,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             viewHolder.mIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_upload));
             viewHolder.mIconImageView.setVisibility(View.VISIBLE);
             viewHolder.mBaseView.setBackgroundColor(Color.LTGRAY);
-            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, Utils.convertTopicName(topic.getName()) ).toString()));
+            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, Utils.convertTopicName(topic.getName())).toString()));
         } else {
 
             viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
@@ -208,6 +228,13 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (mAccessToken == null)
             return;
 
+        if( mTopicDirectoriesToDownload.isEmpty() ){
+            Toast.makeText(ActivityNextCloud.this,
+                    "You must select topics \n before you can download them!",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(100);
@@ -222,7 +249,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             mListFolderTask = new ListFolderAsyncTask(this, result -> {
                 mListFolderTask = null;
-                if ( result.isSuccess() ){
+                if (result.isSuccess()) {
                     List<RemoteFile> files = new ArrayList<>();
                     List<Object> resultList = result.getData();
                     resultList.remove(0);
@@ -230,13 +257,13 @@ public class ActivityNextCloud extends AppCompatActivity {
                         files.add((RemoteFile) object);
                     }
                     if (files != null) {
-                        downloadCompleteFolder( files );
+                        downloadCompleteFolder(files);
                     }
                 } else {
                     mProgressDialog.dismiss();
                 }
             });
-            Object[] params = { mServerUri, ownCloudCredentials, relativeTopicDirectory.toString().toLowerCase() };
+            Object[] params = {mServerUri, ownCloudCredentials, relativeTopicDirectory.toString().toLowerCase()};
             mListFolderTask.execute(params);
         }
     }
@@ -249,16 +276,16 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             for (RemoteFile remoteFile : remoteFiles) {
                 String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
-                if (!remoteFileName.equals(Constants.InfoFileName) && !remoteFileName.equals(Constants.TopicPictureFileName))
+                if (!remoteFileName.equals(Constants.InfoFileNameNew) && !remoteFileName.equals(Constants.TopicPictureFileName))
                     mTotalSize += remoteFile.getSize();
             }
 
             for (RemoteFile remoteFile : remoteFiles) {
 
                 String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
-                if (!remoteFileName.equals(Constants.InfoFileName) && !remoteFileName.equals(Constants.TopicPictureFileName)) {
+                if (!remoteFileName.equals(Constants.InfoFileNameNew) && !remoteFileName.equals(Constants.TopicPictureFileName)) {
 
-                    mDownloadFileTask = new DownloadFileAsyncTask(this, UNUSED_FILE_NUMBER, (result, fileNumber, fileSize) -> {
+                    mDownloadFileTask = new DownloadFileFromCloudAsyncTask(this, UNUSED_FILE_NUMBER, (result, fileNumber, fileSize) -> {
                         mDownloadFileTask = null;
                         if (result.isSuccess()) {
                             publishProgress(fileSize);
@@ -267,7 +294,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                             handleError(result, "An Error occurred during download!");
                         }
                     });
-                    Object[] params = { mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory};
+                    Object[] params = {mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory};
                     mDownloadFileTask.execute(params);
                 }
             }
@@ -292,13 +319,13 @@ public class ActivityNextCloud extends AppCompatActivity {
                     Toast.LENGTH_SHORT)
                     .show();
 
-            if( mIsDownLoadMode ) {
+            if (mIsDownLoadMode) {
                 startTopicChoiceActivity();
             }
         }
     }
 
-    private void startTopicChoiceActivity(){
+    private void startTopicChoiceActivity() {
 
         File[] downloadedLanguageToLearnDirectory = mTemporaryDirectory.listFiles();
         File[] downloadedLanguageKnownDirectory = downloadedLanguageToLearnDirectory[0].listFiles();
@@ -315,7 +342,7 @@ public class ActivityNextCloud extends AppCompatActivity {
         intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
         intent.putExtra(Constants.MotherTongue, motherTongueDirectoryName);
         intent.putExtra(Constants.LanguageToLearn, languageDirectoryName);
-        Log.e(Constants.TAG," Starting topic choice!");
+        Log.d(Constants.TAG, " Starting topic choice!");
         startActivity(intent);
         finish();
     }
@@ -345,18 +372,18 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (mAccessToken == null)
             return;
 
-            mAuthTask = new AuthenticatorAsyncTask(this, result -> updateNextCloudUI(result));
-            Object[] params = { mServerUri, ownCloudCredentials};
-            mAuthTask.execute(params);
+        mAuthTask = new AuthenticatorAsyncTask(this, result -> updateNextCloudUI(result));
+        Object[] params = {mServerUri, ownCloudCredentials};
+        mAuthTask.execute(params);
 
     }
 
     private void updateNextCloudUI(RemoteOperationResult result) {
         mAuthTask = null;
 
-        if( result.isSuccess() ){
-            if( result.getLastPermanentLocation() != null ){
-                Log.d(Constants.TAG,"NextCloud server has redirected to: " +  result.getLastPermanentLocation() );
+        if (result.isSuccess()) {
+            if (result.getLastPermanentLocation() != null) {
+                Log.d(Constants.TAG, "NextCloud server has redirected to: " + result.getLastPermanentLocation());
             }
 
             ArrayList<Object> authResultData = result.getData();
@@ -374,12 +401,12 @@ public class ActivityNextCloud extends AppCompatActivity {
         }
     }
 
-    public OwnCloudCredentials buildCredentials(String credentialsString){
+    public OwnCloudCredentials buildCredentials(String credentialsString) {
 
         Boolean isDefaultCLoud = mSharedPreferences.getBoolean("useDefaultCloud", true);
 
-	//TODO try with Nextcloud credentials as they permit the use of access token
-	// The output of that function must be NextCloudCredentials but it should be compatible with OwnCloudClient
+        //TODO try with Nextcloud credentials as they permit the use of access token
+        // The output of that function must be NextCloudCredentials but it should be compatible with OwnCloudClient
 	/*
 	// Set basic credentials
   	client.setCredentials(
@@ -397,20 +424,19 @@ public class ActivityNextCloud extends AppCompatActivity {
 	*/
 
 
-        if ( isDefaultCLoud ) {
+        if (isDefaultCLoud) {
             mServerUri = BuildConfig.NEXTCLOUD_SERVER_URI;
             String[] credentialStringArray = credentialsString.split(Constants.Separator);
             String username = credentialStringArray[0];
             String password = credentialStringArray[1];
             return OwnCloudCredentialsFactory.newBasicCredentials(username, password);
         } else {
-            mServerUri = mSharedPreferences.getString( getResources().getString( R.string.cloudUrlCustom ), "");
-            String username = mSharedPreferences.getString( getResources().getString(R.string.cloudUserNameCustom ), "");
-            String password = mSharedPreferences.getString( getResources().getString( R.string.cloudPasswordCustom ), "");
+            mServerUri = mSharedPreferences.getString(getResources().getString(R.string.cloudUrlCustom), "");
+            String username = mSharedPreferences.getString(getResources().getString(R.string.cloudUserNameCustom), "");
+            String password = mSharedPreferences.getString(getResources().getString(R.string.cloudPasswordCustom), "");
             return OwnCloudCredentialsFactory.newBasicCredentials(username, password);
         }
     }
-
 
 
     private void updateUI(FullAccount account) {
@@ -430,9 +456,17 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (mAccessToken == null)
             return;
 
+        if( mTopicDirectoriesToUpload.isEmpty() ){
+            Toast.makeText(ActivityNextCloud.this,
+                    "You must select topics \n before you can upload them!",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
         Boolean isDefaultCLoud = mSharedPreferences.getBoolean("useDefaultCloud", true);
 
-        if( !isDefaultCLoud ) {
+        if (!isDefaultCLoud) {
 
 
             mTotalSize = calculateTotalFileSize(mTopicDirectoriesToUpload);
@@ -488,7 +522,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             Snackbar snackbar = Snackbar
                     .make(mMainLayout, "For uploads use a custom cloud!", Snackbar.LENGTH_LONG)
                     .setAction("Change cloud?", view -> {
-                        startActivity( new Intent(this, ActivitySettings.class));
+                        startActivity(new Intent(this, ActivitySettings.class));
                     });
             snackbar.show();
         }
@@ -504,11 +538,11 @@ public class ActivityNextCloud extends AppCompatActivity {
                 if (topicFiles != null) {
                     for (File file : topicFiles) {
                         if (file != null) {
-                            try{
+                            try {
                                 totalSize += file.length();
-                            } catch (SecurityException exception ){
-                                Log.e(Constants.TAG," Can't get length of file!");
-                                Log.e(Constants.TAG, exception.getMessage() );
+                            } catch (SecurityException exception) {
+                                Log.e(Constants.TAG, " Can't get length of file!");
+                                Log.e(Constants.TAG, exception.getMessage());
                                 return 0;
                             }
                         }
@@ -528,6 +562,13 @@ public class ActivityNextCloud extends AppCompatActivity {
     }
 
     /*
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }*/
+
+    /*
     The following two functions define the behaviour of the toolbar menu such as jumps
     to other activities for the log into cloud, help and others
      */
@@ -545,7 +586,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.toolbar_settings:
-                startActivity( new Intent(this, ActivitySettings.class));
+                startActivity(new Intent(this, ActivitySettings.class));
                 return true;
         }
 
@@ -589,14 +630,16 @@ public class ActivityNextCloud extends AppCompatActivity {
     }
 
     private void switchToDownLoadMode() {
-        loadAvailableLanguages("");
+        mUpDownloadFab.hide();
         mUpDownloadFab.setImageResource(R.drawable.ic_cloud_download);
+        loadAvailableLanguages("");
     }
 
     private void switchToUploadMode() {
         mTopicHomeArrayList = new ArrayList<>();
         Utils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
 
+        mUpDownloadFab.show();
 
         mAdapterHome = new AdapterTopic(this, mTopicHomeArrayList);
         mAdapterHome.setOnItemClickListener((position, viewHolder) -> {
@@ -613,80 +656,168 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     private void loadAvailableLanguages(String path) {
 
-                mListFolderTask = new ListFolderAsyncTask(this, result -> {
-                    mListFolderTask = null;
+        mListFolderTask = new ListFolderAsyncTask(this, result -> {
+            mListFolderTask = null;
 
-                    if( result.isSuccess() ) {
-                        List<RemoteFile> files = new ArrayList<>();
-                        List<Object> resultList = result.getData();
-                        resultList.remove(0);
-                        for (Object object : resultList ) {
-                            files.add((RemoteFile) object);
-                        }
-                        if (files != null) {
-                            handleLoadedData( files, UNUSED_POSITION );
-                        }
-                    } else {
-                        handleError( result, "Failed to list folder!");
+            if (result.isSuccess()) {
+                List<RemoteFile> files = new ArrayList<>();
+                List<Object> resultList = result.getData();
+                resultList.remove(0);
+                for (Object object : resultList) {
+                    if (isNoApplicationFile(object)) {
+                        files.add((RemoteFile) object);
                     }
-                });
-                Object[] params = { mServerUri, ownCloudCredentials, path};
-                mListFolderTask.execute(params);
+                }
+                if (files != null) {
+                    handleLoadedData(files, UNUSED_POSITION);
+                }
+            } else {
+                handleError(result, "Failed to list folder!");
+            }
+        });
+        Object[] params = {mServerUri, ownCloudCredentials, path};
+        mListFolderTask.execute(params);
 
 
     }
 
+    private boolean isNoApplicationFile(Object object) {
+        RemoteFile remoteFile = (RemoteFile) object;
+        String remoteFileName = remoteFile.getRemotePath();
+        String[] fileNameArray = remoteFileName.split("\\.");
+
+        if (fileNameArray.length > 1 && fileNameArray[fileNameArray.length - 1].equals("apk")) {      //TODO verify if this is working with an apk file
+
+            if (Character.isDigit(fileNameArray[0].charAt(fileNameArray[0].length() - 1))) {
+                int currentVersionCode = BuildConfig.VERSION_CODE;
+                int cloudDeposedVersionCode = Integer.parseInt(fileNameArray[0].replaceAll("[^0-9]", ""));
+
+                if (cloudDeposedVersionCode > currentVersionCode) {
+                    Snackbar snackbar = Snackbar
+                            .make(mMainLayout, "A new version of the app is available!", Snackbar.LENGTH_LONG)
+                            .setAction("Download", view -> {
+                                downloadApplicationFile(remoteFile);
+                            });
+                    snackbar.show();
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void downloadApplicationFile(RemoteFile remoteFile) {
+
+        mAccomplishedSize = 0;
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMessage("Downloading application file. Please wait...");
+        mProgressDialog.setMax(100);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+
+        if (remoteFile != null) {
+            mTotalSize = remoteFile.getSize();
+
+            File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
+            if( !cacheFolder.exists() ){
+                cacheFolder.mkdir();
+            }
+
+            mDownloadFileTask = new DownloadFileFromCloudAsyncTask(this, UNUSED_FILE_NUMBER, (result, fileNumber, fileSize) -> {
+                mDownloadFileTask = null;
+                if (result.isSuccess()) {
+                    mProgressDialog.dismiss();
+                    String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
+
+
+                    File apkFile = new File( cacheFolder, remoteFileName);
+                    Intent intent;
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Uri apkUri = FileProvider.getUriForFile( getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileprovider", apkFile);
+                        intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+                        intent.setData(apkUri);
+                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } else {
+                        Uri apkUri = Uri.fromFile( apkFile );
+                        intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    }
+
+                    if (intent.resolveActivityInfo(this.getPackageManager(), 0) != null){
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Can't find a suitable application for installation!",Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    mProgressDialog.dismiss();
+                    handleError(result, "An Error occurred during download!");
+                }
+            });
+
+            mDownloadFileTask.addProgressListener(( progressRate, totalTransferredSoFar, totalToTransfer, fileAbsoluteName ) -> {
+                final long percentage = (totalToTransfer > 0 ? totalTransferredSoFar * 100 / totalToTransfer : 0);
+                mProgressDialog.setProgress((int) percentage);
+            });
+            Object[] params = {mServerUri, ownCloudCredentials, remoteFile, cacheFolder};
+            mDownloadFileTask.execute(params);
+        }
+    }
 
 
     private void diveIntoTopicFolderAndDownloadNecessaryFiles(String pathLower) {
 
-
         mListFolderTask = new ListFolderAsyncTask(this, result -> {
             mListFolderTask = null;
-            if( result.isSuccess() ) {
+            if (result.isSuccess()) {
                 List<RemoteFile> files = new ArrayList<>();
                 List<Object> resultList = result.getData();
                 resultList.remove(0);
-                for (Object object : resultList ) {
+                for (Object object : resultList) {
                     files.add((RemoteFile) object);
                 }
                 if (files != null) {
-                    for (int topicNumber = 0; topicNumber < files.size(); topicNumber++) {
-                        RemoteFile remoteFile = files.get(topicNumber);
+                    for (int topicFileNumber = 0; topicFileNumber < files.size(); topicFileNumber++) {
+                        RemoteFile remoteFile = files.get(topicFileNumber);
 
                         if (remoteFile != null) {
-                            String remoteFileName = Utils.getNameFromPath( remoteFile.getRemotePath() );
-                            Log.e(Constants.TAG," New Download Task for : " + remoteFileName );
-                            if ( remoteFileName.equals(Constants.InfoFileName) || remoteFileName.equals(Constants.InfoFileNameNew) || remoteFileName.equals(Constants.TopicPictureFileName)) {
-                                File destinationDirectory = mTemporaryDirectory;
-                                mDownloadFileTask = new DownloadFileAsyncTask(this, topicNumber, (result1, fileNumber, fileSize) -> {
-                                    if (result.isSuccess()){
-                                       mDownloadFileTask = null;
+                            String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
+                            Log.d(Constants.TAG, " New Download Task for : " + remoteFileName);
+                            if ( remoteFileName.equals(Constants.InfoFileNameNew) || remoteFileName.equals(Constants.TopicPictureFileName)) {
+                                mDownloadFileTask = new DownloadFileFromCloudAsyncTask(this, topicFileNumber, (result1, fileNumber, fileSize) -> {
+                                    if (result.isSuccess()) {
+                                        mDownloadFileTask = null;
                                         mFilesDownloaded++;
-                                        mProgressDialog.setProgress(mFilesDownloaded);
-                                        if (mFilesDownloaded == mFilesToDownLoad)
-                                            mProgressDialog.dismiss();
                                         Log.d(Constants.TAG, "Download finished :" + mFilesDownloaded + " of " + mFilesToDownLoad);
+                                        mProgressDialog.setProgress(mFilesDownloaded);
+
                                         if (mFilesDownloaded == mFilesToDownLoad) {
+                                            mProgressDialog.dismiss();
                                             setupTopicCloudRecyclerView();
                                         }
+
                                     } else {
                                         handleError(result, "An error occurred!");
                                     }
 
                                 });
-                                Object[] params = { mServerUri, ownCloudCredentials, remoteFile, destinationDirectory };
+                                Object[] params = {mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory};
                                 mDownloadFileTask.execute(params);
                             }
                         }
                     }
-
                 }
             } else {
                 handleError(result, "An error occurred!");
             }
         });
-        Object[] params = { mServerUri, ownCloudCredentials, pathLower };
+        Object[] params = {mServerUri, ownCloudCredentials, pathLower};
         mListFolderTask.execute(params);
 
 
@@ -715,7 +846,7 @@ public class ActivityNextCloud extends AppCompatActivity {
         });
 
         mAdapterTopicCloud.setOnItemLongClickListener((position, viewHolder) -> {
-            if( mSharedPreferences.getBoolean("useDefaultCloud", true) ) {
+            if (mSharedPreferences.getBoolean("useDefaultCloud", true)) {
                 Snackbar snackbar = Snackbar.make(mMainLayout, "You can only remove topics from your own cloud!", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
@@ -731,39 +862,42 @@ public class ActivityNextCloud extends AppCompatActivity {
     }
 
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
 
         mCloudFolderArrayList = new ArrayList<>();
         mAdapterCloud = new AdapterCloudLanguage(this, mCloudFolderArrayList);
 
         mAdapterCloud.setOnItemClickListener((position, viewHolder) -> {
+
+            Toast.makeText(getApplicationContext(),"Be patient ... i am processing! ",Toast.LENGTH_SHORT ).show();
+
             LanguageElement languageElement = mCloudFolderArrayList.get(position);
 
-                    String remotePath = languageElement.getRemoteFile().getRemotePath();
-                    mListFolderTask = new ListFolderAsyncTask(this, result -> {
-                        mListFolderTask = null;
-                        if( result.isSuccess() ) {
-                            List<RemoteFile> files = new ArrayList<>();
-                            List<Object> resultList = result.getData();
-                            resultList.remove(0);                                               // First element is parent folder - remove it from list
-                            for (Object object : resultList ) {
-                                files.add((RemoteFile) object);
-                            }
-                            if (files != null) {
-                                handleLoadedData( files, position + 1 );
-                            }
-                        } else {
-                            Log.e(Constants.TAG, "Failed to list folder " + remotePath );
-                            Snackbar snackbar = Snackbar
-                                    .make(mMainLayout, "An error occurred !", Snackbar.LENGTH_LONG)
-                                    .setAction("Retry", view -> {
-                                        recreate();
-                                    });
-                            snackbar.show();
-                        }
-                    });
-                    Object[] params = { mServerUri, ownCloudCredentials, remotePath};
-                    mListFolderTask.execute(params);
+            String remotePath = languageElement.getRemoteFile().getRemotePath();
+            mListFolderTask = new ListFolderAsyncTask(this, result -> {
+                mListFolderTask = null;
+                if (result.isSuccess()) {
+                    List<RemoteFile> files = new ArrayList<>();
+                    List<Object> resultList = result.getData();
+                    resultList.remove(0);                                               // First element is parent folder - remove it from list
+                    for (Object object : resultList) {
+                        files.add((RemoteFile) object);
+                    }
+                    if (files != null) {
+                        handleLoadedData(files, position + 1);
+                    }
+                } else {
+                    Log.e(Constants.TAG, "Failed to list folder " + remotePath);
+                    Snackbar snackbar = Snackbar
+                            .make(mMainLayout, "An error occurred !", Snackbar.LENGTH_LONG)
+                            .setAction("Retry", view -> {
+                                recreate();
+                            });
+                    snackbar.show();
+                }
+            });
+            Object[] params = {mServerUri, ownCloudCredentials, remotePath};
+            mListFolderTask.execute(params);
 
         });
 
@@ -776,15 +910,15 @@ public class ActivityNextCloud extends AppCompatActivity {
         List<RemoteFile> remoteList = new ArrayList<>(resultList);
 
 
-        switch( status ){
+        switch (status) {
             case DISPLAY_UNKNOWN_LANGUAGE:
 
                 setupRecyclerView();
                 mCloudFolderArrayList.clear();
-                for( RemoteFile remoteFile : remoteList ){
-                    String languageName = Utils.getNameFromPath( remoteFile.getRemotePath() );
-                    LanguageElement languageElement = new LanguageElement( remoteFile, languageName , true );
-                    mCloudFolderArrayList.add( languageElement );
+                for (RemoteFile remoteFile : remoteList) {
+                    String languageName = Utils.getNameFromPath(remoteFile.getRemotePath());
+                    LanguageElement languageElement = new LanguageElement(remoteFile, languageName, true);
+                    mCloudFolderArrayList.add(languageElement);
                 }
                 status = Status.DISPLAY_KNOWN_LANGUAGE;
                 break;
@@ -792,10 +926,10 @@ public class ActivityNextCloud extends AppCompatActivity {
             case DISPLAY_KNOWN_LANGUAGE:
 
                 mCloudFolderArrayList.clear();
-                for( RemoteFile remoteFile : remoteList ){
-                    String languageName = Utils.getNameFromPath( remoteFile.getRemotePath() );
-                    LanguageElement languageElement = new LanguageElement( remoteFile, languageName , false );
-                    mCloudFolderArrayList.add( languageElement );
+                for (RemoteFile remoteFile : remoteList) {
+                    String languageName = Utils.getNameFromPath(remoteFile.getRemotePath());
+                    LanguageElement languageElement = new LanguageElement(remoteFile, languageName, false);
+                    mCloudFolderArrayList.add(languageElement);
                 }
                 mTopicCloudRecyclerView.removeAllViews();
                 mAdapterCloud.notifyItemChanged(position);
@@ -807,6 +941,8 @@ public class ActivityNextCloud extends AppCompatActivity {
 
                 Utils.deleteFolder(mTemporaryDirectory);
 
+                mUpDownloadFab.show();
+
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage("Downloading topics. Please wait...");
                 mProgressDialog.setIndeterminate(false);
@@ -815,15 +951,14 @@ public class ActivityNextCloud extends AppCompatActivity {
                 mProgressDialog.setCancelable(true);
                 mProgressDialog.show();
 
-                mFilesToDownLoad = remoteList.size()*2;
+                mFilesToDownLoad = remoteList.size() * 2;
                 mProgressDialog.setMax(mFilesToDownLoad);
                 for (int topicNumber = 0; topicNumber < remoteList.size(); topicNumber++) {
                     RemoteFile remoteFile = remoteList.get(topicNumber);
-                    diveIntoTopicFolderAndDownloadNecessaryFiles( remoteFile.getRemotePath() );
+                    diveIntoTopicFolderAndDownloadNecessaryFiles(remoteFile.getRemotePath());
                 }
                 break;
         }
-
     }
 
 
@@ -857,7 +992,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         if (viewHolder.mIconImageView.getVisibility() == View.INVISIBLE) {
 
-            mUpDownloadFab.setImageResource( R.drawable.ic_delete_forever );
+            mUpDownloadFab.setImageResource(R.drawable.ic_delete_forever);
 
             viewHolder.mIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete_forever));
             viewHolder.mIconImageView.setVisibility(View.VISIBLE);
@@ -875,32 +1010,32 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             int hoursSinceLastTopicRemoval = 0;
             try {
-                Date dateOfLastTopicRemoval = simpleDateFormat.parse( timeStampOfLastRemoval );
-                long milliSeconds = Math.abs( systemDate.getTime() - dateOfLastTopicRemoval.getTime() );
-                hoursSinceLastTopicRemoval = (int) (milliSeconds /(1000 * 60 * 60));
-            } catch (Exception exception ){
-                Log.e(Constants.TAG," Exception when parsing time of last removal : " + exception.getMessage() );
+                Date dateOfLastTopicRemoval = simpleDateFormat.parse(timeStampOfLastRemoval);
+                long milliSeconds = Math.abs(systemDate.getTime() - dateOfLastTopicRemoval.getTime());
+                hoursSinceLastTopicRemoval = (int) (milliSeconds / (1000 * 60 * 60));
+            } catch (Exception exception) {
+                Log.e(Constants.TAG, " Exception when parsing time of last removal : " + exception.getMessage());
             }
 
-            if ( hoursSinceLastTopicRemoval >= 24 || timeStampOfLastRemoval == null ){
+            if (hoursSinceLastTopicRemoval >= 24 || timeStampOfLastRemoval == null) {
                 Snackbar snackbar = Snackbar
                         .make(mMainLayout, "Do you really want to remove that topic from cloud storage?", Snackbar.LENGTH_LONG)
                         .setAction("Remove", view -> {
                             mRemoveTask = new RemoveFileAsyncTask(this, result -> {
                                 mRemoveTask = null;
-                                if( result.isSuccess() ){
+                                if (result.isSuccess()) {
 
-                                    mAdapterTopicCloud.remove( position );
-                                    String systemDateString = simpleDateFormat.format( systemDate );
+                                    mAdapterTopicCloud.remove(position);
+                                    String systemDateString = simpleDateFormat.format(systemDate);
                                     SharedPreferences.Editor prefEditor = prefs.edit();
-                                    prefEditor.putString(Constants.TimeStampOfLastRemove, systemDateString );
+                                    prefEditor.putString(Constants.TimeStampOfLastRemove, systemDateString);
                                     prefEditor.apply();
                                 } else {
                                     handleError(result, "Failed to remove topic!");
                                 }
                                 mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
                             });
-                            Object[] params = { mServerUri, ownCloudCredentials, new File( topicCloudPath )};
+                            Object[] params = {mServerUri, ownCloudCredentials, new File(topicCloudPath)};
                             mRemoveTask.execute(params);
                         });
 
@@ -908,7 +1043,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         super.onDismissed(transientBottomBar, event);
-                        if (event == DISMISS_EVENT_TIMEOUT){
+                        if (event == DISMISS_EVENT_TIMEOUT) {
                             mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
                         }
                     }
@@ -916,7 +1051,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 snackbar.show();
             } else {
                 int hoursToWait = 24 - hoursSinceLastTopicRemoval;
-                Snackbar.make(mMainLayout, "You have to wait " + hoursToWait + " hour until you can remove that topic!", Snackbar.LENGTH_LONG ).show();
+                Snackbar.make(mMainLayout, "You have to wait " + hoursToWait + " hour until you can remove that topic!", Snackbar.LENGTH_LONG).show();
                 viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
                 viewHolder.mBaseView.setBackgroundColor(Color.TRANSPARENT);
                 mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
@@ -943,8 +1078,8 @@ public class ActivityNextCloud extends AppCompatActivity {
         }
     }
 
-    private void handleError(RemoteOperationResult result, String message ){
-        Log.e(Constants.TAG, message + result.toString() );
+    private void handleError(RemoteOperationResult result, String message) {
+        Log.e(Constants.TAG, message + result.toString());
         Snackbar snackbar = Snackbar
                 .make(mMainLayout, message, Snackbar.LENGTH_LONG)
                 .setAction("Retry", view -> {
@@ -952,8 +1087,6 @@ public class ActivityNextCloud extends AppCompatActivity {
                 });
         snackbar.show();
     }
-
-
 
 
 }

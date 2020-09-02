@@ -5,6 +5,8 @@
     <color name="colorAccent">#D81B60</color>
     <color name="color_main">#ff6b40</color>
     <color name="color_main_light">#ffc107</color>
+    <color name="color_toolbar">#D9B751</color>
     <color name="test_color">#f2d5d739</color>
     <color name="test_color_dark">#f2a0a219</color>
+    <color name="spinner_color">#f2d5d739</color>
 </resources>

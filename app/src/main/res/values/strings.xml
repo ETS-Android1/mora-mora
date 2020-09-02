@@ -42,12 +42,19 @@
     <string name="cloudUserNameCustom">CloudUserNameCustom</string>
     <string name="cloudPasswordCustom">CloudPasswordCustom</string>
     <string name="lessonUserName">LessonUserName</string>
-    <string name="ActivityLanguageChoiceHelpText">Mora Mora is in very early development still. The present version does not contain any lessons you can use to learn languages.\n\n
-                                                    You can still use Mora Mora to create your own lessons and sharing them through your own nextcloud storage cloud. If you want to share your
-                                                    lessons with the world, pleas contact the team: mora.mora@gmx.net.\n\n
+    <string name="ActivityLanguageChoiceHelpText">Mora Mora is in very early development still. The present version only contains one single example lesson (fr-de) you can use to learn that language.\n\n
+                                                    You can still use Mora Mora to create your own lessons and share them through your own nextcloud storage cloud. If you want to share your
+                                                    lessons with the world, please contact the team: mora.mora@gmx.net.\n\n
                                                     Use the scroll view to select the language you want to learn. In the top right corner you can select the language you already know good
                                                     enough e.g. your mother tongue. This is the language the dialogs will be translated into.\n\n
-                                                    You can click on "Editing mode" in the drawer you just closed to add more languages and thereby contribute to enlarge the content data of Mora Mora.
+                                                    You can click on "Editing mode" in the drawer you just closed to add more languages and thereby contribute to enlarge the content data of Mora Mora.\n\n
+                                                    The source code of Mora Mora can be found under: https://github.com/hendric-git/mora-mora
+                                                    </string>
+
+    <string name="ApplicationInstallProblemHelpText">There was a problem when trying to install the downloaded apk file. Please try to install the new Mora Mora version manually.\n\n
+                                                      Use your preferred file explorer and open the location:\n\\n
+                                                      Device storage -> MoraMora -> temporary \n\n
+                                                      and click on the apk file to finish the installation process.\n\n
                                                     </string>
 
     <string name="ActivityTopicChoiceHelpText">Mora Mora is in very early development still. The present version does not contain any lessons you can use to learn languages.\n\n
@@ -68,4 +75,7 @@
     <string name="prefrence_userName_summary">The user name of you nextcloud account.</string>
     <string name="preference_nextcloudPassword_summary">The password of your nextcloud storage account. That password won\'t be stored but the access token (one way hash of your user name and password).</string>
     <string name="preference_lessonUserName_summary">When you create a lesson an author name is automatically added. You can leave that blank or set a name in case you want some feedback from other users.</string>
+    <string name="can_t_reach_the_cloud_please_wait">Can\'t reach the cloud!...Please wait!</string>
+    <string name="back_ground_picture">BackgroundPicture</string>
+    <string name="background_pic_summary">This is the background viisible throughout your aéntire application</string>
 </resources>

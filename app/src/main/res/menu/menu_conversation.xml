@@ -5,7 +5,7 @@
 
         <item android:id="@+id/toolbar_login"
             android:icon="@drawable/ic_cloud_login"
-            android:title="Login"
+            android:title="Access cloud"
             app:showAsAction="never"/>
         <item android:id="@+id/toolbar_help"
             android:icon="@drawable/ic_help"
@@ -17,6 +17,9 @@
         <item android:id="@+id/toolbar_restart"
             android:icon="@drawable/ic_refresh"
             android:title="Restart"/>
+        <item android:id="@+id/toolbar_dictionary"
+            android:icon="@drawable/ic_dvr"
+            android:title="Dictionary"/>
     </group>
 
 </menu>

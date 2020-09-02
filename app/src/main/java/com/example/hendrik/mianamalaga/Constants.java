@@ -22,6 +22,7 @@ public class Constants {
     public static final String LanguageToLearn = "LanguageToLearn";
     public static final String MotherTongue = "MotherTongue";
     public static final String FullTemporaryDirectory = "FullTemporaryDirectory";
+    public static final String RelativeResourceDirectory = "RelativeResourceDirectory";
 
     /*
     File name conventions. Special file names are used to store specific data
@@ -30,11 +31,13 @@ public class Constants {
     public static final String InfoFileNameNew = "info.txt";
     public static final String ChatContentFileName = "chatContent.txt";
     public static final String TopicPictureFileName = "topic_picture.jpg";
-    public static final String TemporaryFolder = "temporary";
+    //public static final String TemporaryFolder = "temporary";
+    public static final String TemporaryFolder = BuildConfig.TEMPORARY_FOLDER_NAME;
     public static final String VideoName = "video_";
     public static final String AudioName = "audio_";
     public static final String ImageName = "image_";
-    public static final String MoraMora = "MoraMora";
+    //public static final String MoraMora = "MoraMora";
+    public static final String MoraMora = BuildConfig.APPLICATION_NAME;
 
     /*
     These three constants are xml tags used inside of the info.xml file (one in each conversation
@@ -73,4 +76,9 @@ public class Constants {
     Intent variables
      */
     public static final String EditMode = "EditMode";
+
+    /*
+    Database related stuff
+     */
+    public static final String DatabaseName = "Mora-Mora-Dictionary.db";
 }

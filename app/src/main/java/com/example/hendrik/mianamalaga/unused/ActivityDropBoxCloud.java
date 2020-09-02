@@ -188,7 +188,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
 
         for (Metadata listEntry : list) {
             if (listEntry instanceof FileMetadata) {
-                if (!listEntry.getName().equals(Constants.InfoFileName) && !listEntry.getName().equals(Constants.TopicPictureFileName))
+                if (!listEntry.getName().equals(Constants.InfoFileNameNew) && !listEntry.getName().equals(Constants.TopicPictureFileName))
                     mTotalSize += ((FileMetadata) listEntry).getSize();
             }
         }
@@ -201,7 +201,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
             }
 
             if (listFile != null) {
-                if (!listFile.getName().equals(Constants.InfoFileName) && !listFile.getName().equals(Constants.TopicPictureFileName)) {
+                if (!listFile.getName().equals(Constants.InfoFileNameNew) && !listFile.getName().equals(Constants.TopicPictureFileName)) {
 
                     new TaskDownloadFile(DropBoxClient.getClient(mAccessToken), mTemporaryDirectory, 0, new TaskDownloadFile.Callback() {  //fileNumber is not used - file length is used instead
                         @Override
@@ -555,7 +555,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
                     }
 
                     if (listFile != null) {
-                        if (listFile.getName().equals(Constants.InfoFileName) || listFile.getName().equals(Constants.TopicPictureFileName)) {
+                        if (listFile.getName().equals(Constants.InfoFileNameNew) || listFile.getName().equals(Constants.TopicPictureFileName)) {
                             File destinationDirectory = mTemporaryDirectory;
                             new TaskDownloadFile(DropBoxClient.getClient(mAccessToken), destinationDirectory, topicNumber, new TaskDownloadFile.Callback() {
                                 @Override

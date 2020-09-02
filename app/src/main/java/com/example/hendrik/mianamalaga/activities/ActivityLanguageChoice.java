@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +14,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.hendrik.mianamalaga.BuildConfig;
 import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.adapter.AdapterLanguageChoice;
@@ -26,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +49,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -56,6 +64,8 @@ import static com.example.hendrik.mianamalaga.utilities.Utils.sortLocales;
 
 public class ActivityLanguageChoice extends AppCompatActivity {
 
+    private final String FILLER = "/unused";
+
     private ConstraintLayout mMainLayout;
     private Spinner mKnownLanguageSpinner;
     private ArrayList<Locale> mPresentLocalesArrayList;
@@ -66,9 +76,9 @@ public class ActivityLanguageChoice extends AppCompatActivity {
     private AdapterLanguageChoice mLanguageAdapter;
     private LayoutManagerCenterZoom mLayoutManager;
     private Locale mLanguageToLearn;
-    private String mKnownLanguage;
+    //private String mKnownLanguage;
     private Locale mKnownLanguageLocale;
-    private static File mApplicationDirectory;
+    private static File mApplicationDirectory = null;
     private static File mTemporaryDirectory;
     private boolean  mHasWriteExternalStoragePermission;
     private boolean mEditMode;
@@ -76,6 +86,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context mContext;
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    private static final int PERMISSION_REQUEST_INTERNET = 3;
 
 
 
@@ -84,6 +95,10 @@ public class ActivityLanguageChoice extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_choice);
+
+        mApplicationDirectory = Environment.getExternalStoragePublicDirectory(Constants.MoraMora);
+        mTemporaryDirectory = new File( mApplicationDirectory, Constants.TemporaryFolder);
+
         setupActionBar();
         setupFab();
 
@@ -93,25 +108,24 @@ public class ActivityLanguageChoice extends AppCompatActivity {
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.item_animation_slide_from_right);
         mMainLayout.setLayoutAnimation(animationController);
 
+        if ( !hasExternalStorageAccessPermission() ) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            mHasWriteExternalStoragePermission = true;
+        }
+
         setupKnownLanguageSpinner();
-        mApplicationDirectory = Environment.getExternalStoragePublicDirectory(Constants.MoraMora);
-        mTemporaryDirectory = new File( mApplicationDirectory, Constants.TemporaryFolder);
         prepareBasicData();
         mPresentLocalesArrayList = getLanguagesFromDisk();
         addSomeEmptyRows( mPresentLocalesArrayList );
 
         setupLanguageRecyclerView();
 
-
-        if ( !hasExternalStorageAccess() ) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-        } else {
-            mHasWriteExternalStoragePermission = true;
-        }
-
         setupNavigationDrawer();
 
         clearTemporaryFolder();
+
+
 
     }
 
@@ -127,6 +141,16 @@ public class ActivityLanguageChoice extends AppCompatActivity {
                     helpDialog.show( getSupportFragmentManager(), Constants.TAG );
                     mDrawerLayout.closeDrawers();
                     return true;
+/*
+                case R.id.toolbar_login:
+                    //checkPermissionAndOpenLoginActivity();
+                    mDrawerLayout.closeDrawers();
+                    Toast.makeText(mContext , "That functionality is not yet \n" +
+                                                    "implemented. Choose a language \n" +
+                                                    "and access cloud from the next \n" +
+                                                    " screen (activity) !", Toast.LENGTH_LONG).show();
+                    return true;
+*/
                 case R.id.toolbar_editor_mode:
                     if( menuItem.isChecked() ){
                         menuItem.setChecked(false);
@@ -134,7 +158,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
                         mFabAddLanguage.hide();
 
                     } else {
-                        if( hasExternalStorageAccess() ){
+                        if( hasExternalStorageAccessPermission() ){
                             menuItem.setChecked(true);
                             mEditMode = true;
                             mFabAddLanguage.show();
@@ -142,6 +166,16 @@ public class ActivityLanguageChoice extends AppCompatActivity {
                     }
                     mDrawerLayout.closeDrawers();
                     return true;
+
+                case R.id.toolbar_dictionary:
+                    Intent intent = new Intent(this, ActivityDictionary.class);
+                    intent.putExtra("EditMode", mEditMode);
+                    intent.putExtra( Constants.FullTemporaryDirectory, mTemporaryDirectory.toString() );
+                    intent.putExtra( Constants.RelativeResourceDirectory, mKnownLanguageLocale.getLanguage() + FILLER );
+                    intent.putExtra( Constants.MoraMora, mApplicationDirectory.toString() );
+                    startActivity(intent);
+                    return true;
+
                 default:
                     return false;
             }
@@ -173,23 +207,24 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
 
     private void setupLanguageRecyclerView(){
-        mLanguageRecyclerView = findViewById(R.id.language_choice_recyclerView);
-        mLayoutManager = new LayoutManagerCenterZoom(this);
+        mLanguageRecyclerView = findViewById(R.id.language_choice_recyclerView);                    // TODO that variable can be local
+        mLayoutManager = new LayoutManagerCenterZoom(this);                                // TODO that variable can be local
         mLanguageRecyclerView.setLayoutManager(mLayoutManager);
         mLanguageRecyclerView.scrollToPosition(4);
         mLanguageAdapter = new AdapterLanguageChoice( mPresentLocalesArrayList, R.layout.list_element_language );
         mLanguageAdapter.setOnItemClickListener((position, viewHolder) -> {
 
-            mLanguageRecyclerView.animate()
-                    .translationX( -mLanguageRecyclerView.getWidth() )
-                    .setDuration(400);
-
             getLanguage(position);
 
-            new Handler().postDelayed(() -> {
-                startTopicChoiceActivity();
-            }, 300);
+            if( !mLanguageToLearn.getDisplayLanguage().isEmpty() ) {
+                mLanguageRecyclerView.animate()
+                        .translationX( -mLanguageRecyclerView.getWidth() )
+                        .setDuration(400);
 
+                new Handler().postDelayed(() -> {
+                    startTopicChoiceActivity();
+                }, 300);
+            }
 
         });
         mLanguageRecyclerView.setAdapter(mLanguageAdapter);
@@ -256,7 +291,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
     private void setupKnownLanguageSpinner(){
         mKnownLanguageSpinner = findViewById(R.id.language_choice_spinner);
-        mKnownLocalesArrayList = new ArrayList<>();
+        mKnownLocalesArrayList = new ArrayList<>();                                                 // TODO this can be ArrayList<Locale> mKnownLocalesArrayList = new ArrayList<>();
 
 
         String[] languages = Locale.getISOLanguages();
@@ -272,10 +307,11 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
         Utils.sortLocales(mKnownLocalesArrayList);
         SharedPreferences sharedPrefs = getSharedPreferences(Constants.SharedPreference, Context.MODE_PRIVATE);
-        String knownLanguageLocaleLanguage = sharedPrefs.getString(Constants.KnownLanguage, Locale.getDefault().getLanguage() );
+        //String knownLanguageLocaleLanguage = sharedPrefs.getString(Constants.KnownLanguage, Locale.getDefault().getLanguage() );
+        String knownLanguageLocaleLanguage = sharedPrefs.getString(Constants.KnownLanguage, "de" );     // TODO should be fr for base language maybe (files in assets folder)
 
         mKnownLanguageLocale = new Locale( knownLanguageLocaleLanguage );
-        mKnownLanguage = mKnownLanguageLocale.getDisplayLanguage();
+        //mKnownLanguage = mKnownLanguageLocale.getDisplayLanguage();
         int defaultPosition = findLocalePosition( mKnownLanguageLocale, mKnownLocalesArrayList);
 
         AdapterLanguageSpinner spinnerAdapter = new AdapterLanguageSpinner(this, android.R.layout.simple_spinner_item, R.id.list_element_language_spinner_text_view, mKnownLocalesArrayList);
@@ -301,7 +337,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
     private int findLocalePosition(Locale locale, ArrayList<Locale> localesArrayList) {
 
-        if( mKnownLocalesArrayList != null){
+        if( mKnownLocalesArrayList != null){                                                        // TODO this can be localesArrayList
             for( int index = 0; index < localesArrayList.size(); index++ ){
                 Locale localeOfList = localesArrayList.get(index);
                 if( localeOfList.getDisplayLanguage().equals( locale.getDisplayLanguage() ))
@@ -331,17 +367,44 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
     private void clearTemporaryFolder() {
 
-        if( !Utils.prepareFileStructure(mApplicationDirectory.toString()) ){
-            Toast.makeText(this, "Failed to create directories!", Toast.LENGTH_SHORT).show();
-        }
+        if( hasExternalStorageAccessPermission() ) {
 
-        if( mTemporaryDirectory != null && mTemporaryDirectory.exists()) {
-            Utils.deleteFolder(mTemporaryDirectory);
+            if (!Utils.prepareFileStructure(mApplicationDirectory.toString())) {
+                Toast.makeText(this, "Failed to create directories!", Toast.LENGTH_SHORT).show();
+            }
+
+            if (mTemporaryDirectory != null && mTemporaryDirectory.exists()) {
+                Utils.deleteFolder(mTemporaryDirectory);
+            }
+
+            File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
+            if (cacheFolder != null && cacheFolder.exists()) {
+                Utils.deleteFolder(cacheFolder);
+            }
         }
     }
 
-    private boolean hasExternalStorageAccess(){
+    private void checkPermissionAndOpenLoginActivity() {
+        if ( hasExternalStorageAccessPermission() ){
+            if( hasInternetPermission() ){
+                Intent intent = new Intent(this, ActivityLogIntoCloud.class);
+                intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
+                intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
+                startActivity(intent);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSION_REQUEST_INTERNET);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    private boolean hasExternalStorageAccessPermission(){
         return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)  == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean hasInternetPermission(){
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -354,6 +417,11 @@ public class ActivityLanguageChoice extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "The application needs write permissions!", Toast.LENGTH_SHORT).show();
                 }
+                return;
+            }
+            case PERMISSION_REQUEST_INTERNET: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    checkPermissionAndOpenLoginActivity();
                 return;
             }
         }
@@ -466,8 +534,19 @@ public class ActivityLanguageChoice extends AppCompatActivity {
     }
 
     private void prepareBasicData(){
-        if( hasExternalStorageAccess() ) {
+        if( hasExternalStorageAccessPermission() ) {
+
             if (mApplicationDirectory != null) {
+                if( !mApplicationDirectory.exists() ){
+                    mApplicationDirectory.mkdir();
+                }
+
+                if ( mApplicationDirectory.list().length == 0 ){
+                    Log.d(Constants.TAG, "First run of the application. Directories will be freshly created! ");
+                    copyLessonFilesFromAssetsFolder("fr");
+                }
+
+                /*
                 String[] iso639Minus1LanguageCodes = {"mg","fr","de","en","it","pt","ru","zh"};
                 for (String iso639Language : iso639Minus1LanguageCodes) {
                     File languageToLearnDirectory = new File(mApplicationDirectory, iso639Language);
@@ -478,7 +557,7 @@ public class ActivityLanguageChoice extends AppCompatActivity {
                     if( !motherTongueDirectory.exists() )
                         motherTongueDirectory.mkdir();
                 }
-
+*/
                 if( mTemporaryDirectory != null ){
                     if( !mTemporaryDirectory.exists() )
                         mTemporaryDirectory.mkdir();
@@ -488,10 +567,59 @@ public class ActivityLanguageChoice extends AppCompatActivity {
             } else {
                 Log.e(Constants.TAG, "ApplicationDirectory was not yet initialized!");
             }
+
+
         } else {
             Snackbar snackbar = Snackbar
                     .make( mMainLayout, "Can't copy basic data! I have no permission!", Snackbar.LENGTH_LONG);
             snackbar.show();
+        }
+    }
+
+
+
+    private void copyLessonFilesFromAssetsFolder(String path) {
+        AssetManager assetManager = this.getAssets();
+        String assets[] = null;
+        try {
+            assets = assetManager.list(path);
+            if (assets.length == 0) {
+                copyFileFromAssetsFolder(path);
+            } else {
+                File dir = new File( mApplicationDirectory, path );
+
+                if (!dir.exists())
+                    dir.mkdir();
+                for (int i = 0; i < assets.length; ++i) {
+                    copyLessonFilesFromAssetsFolder(path + "/" + assets[i]);
+                }
+            }
+        } catch (IOException ex) {
+            Log.e(Constants.TAG, "I/O Exception", ex);
+        }
+    }
+
+    private void copyFileFromAssetsFolder(String filename) {
+        AssetManager assetManager = this.getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            String newFileName = mApplicationDirectory.toString() + "/" + filename;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
         }
     }
 

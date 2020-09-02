@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -156,88 +157,6 @@ public class Utils {
 
 
 
-
-
-
-    /*
-    Function to build an xml String out of the data stored in the List<Content>
-     */
-/*
-    private static String writeContentListToXmlString(List<Content> messages){
-        XmlSerializer serializer = Xml.newSerializer();
-        StringWriter writer = new StringWriter();
-        try {
-            serializer.setOutput(writer);
-            serializer.startDocument("UTF-8", true);
-            serializer.startTag("", "messages");
-            serializer.attribute("", "number", String.valueOf(messages.size()));
-            for (Content msg: messages){
-                serializer.startTag("", "entry");
-                serializer.startTag("","originalText");
-                serializer.text(msg.getOriginalText());
-                serializer.endTag("","originalText");
-                serializer.startTag("","translationText");
-                serializer.text(msg.getTranslationText());
-                serializer.endTag("","translationText");
-                serializer.startTag("","responseText");
-                serializer.text(msg.getResponseText());
-                serializer.endTag("","responseText");
-                serializer.startTag("","responseTranslationText");
-                serializer.text(msg.getResponseTranslationText());
-                serializer.endTag("","responseTranslationText");
-                serializer.startTag("","audioFile");
-                serializer.text(msg.getAudioFile());
-                serializer.endTag("","audioFile");
-                serializer.startTag("","videoFile");
-                serializer.text(msg.getVideoFileName());
-                serializer.endTag("","videoFile");
-                serializer.startTag("","jumpIndex");
-                serializer.text(String.valueOf(msg.getJumpIndex()));
-                serializer.endTag("","jumpIndex");
-                serializer.endTag("", "entry");
-            }
-            serializer.endTag("", "messages");
-            serializer.endDocument();
-            return writer.toString();
-        } catch (Exception e) {
-            //throw new RuntimeException(e);
-            Log.e(Constants.TAG,"Can't convert ArrayList to String! ");
-            Log.e(Constants.TAG, e.getMessage());
-            return null;
-        }
-    }
-*/
-
-     /*
-    That function takes an instance of Topic created in the ActivityTopicChoice where the topic short info
-    and an image were stored as an argument and writes an xml (info.xml) )file to the external storage
-    (SD card or virtual SD card). The file corresponds to the name of the topic filename
-     */
-/*
-    public static void writeTopicToFile(File file, Topic topic){
-        if( isExternalStorageWritable() ){
-             try {
-                FileOutputStream stream = new FileOutputStream(file);
-                String info = writeTopicToXmlString(topic);
-                stream.write(info.getBytes());
-                Log.e(Constants.TAG, "File created in " + file.getAbsolutePath());
-                stream.flush();
-                stream.close();
-            } catch (IOException e){
-                Log.e(Constants.TAG, "IO exception while writing file!");
-                Log.e(Constants.TAG, e.getMessage());
-            }
-        } else {
-            if (isExternalStorageReadable()){
-                Log.e(Constants.TAG, "External Storage is only readable!");
-                //TODO throw exception
-            } else {
-                Log.e(Constants.TAG, "External Storage is not available!");
-            }
-        }
-
-    }
-*/
     public static void writeTopicToNewFile(File file, Topic topic){
         if( isExternalStorageWritable() ){
             try {
@@ -263,40 +182,6 @@ public class Utils {
 
     }
 
-
-
-    /*
-    Function to build an xml String out of the data stored in an Topic instance
-     */
-/*
-    private static String writeTopicToXmlString(Topic topic){
-        XmlSerializer serializer = Xml.newSerializer();
-        StringWriter writer = new StringWriter();
-        try {
-            serializer.setOutput(writer);
-            serializer.startDocument("UTF-8", true);
-            serializer.startTag("", Constants.InfoNameSpace);
-            serializer.startTag("", Constants.InfoTopicNameTag);
-            serializer.text(topic.getName());
-            serializer.endTag("",Constants.InfoTopicNameTag);
-            serializer.startTag("", Constants.InfoTopicImageTag);
-            serializer.text(topic.getImageName());
-            serializer.endTag("",Constants.InfoTopicImageTag);
-            serializer.startTag("",Constants.InfoShortInfoTag);
-            serializer.text(topic.getShortInfo());
-            serializer.endTag("",Constants.InfoShortInfoTag);
-            serializer.endTag("", Constants.InfoNameSpace);
-            serializer.endDocument();
-            return writer.toString();
-        } catch (Exception e) {
-            //throw new RuntimeException(e);
-            Log.e(Constants.TAG,"Can't convert Topic ArrayList to String! ");
-            Log.e(Constants.TAG, e.getMessage());
-            return null;
-        }
-    }
-
-*/
 
 
     /*
@@ -330,20 +215,7 @@ public class Utils {
                                     topic.setImageFileString(topicDirectory.getAbsolutePath() + File.separatorChar + imageName);
                                     topic.setFolderSize( getFolderSize( topicDirectory.getAbsoluteFile() ) );
                                     topicHashMap.put(topic.getName(), topic);
-                                } /*else {                                                                                // TODO can removed after topic conversion
-                                    Topic topic;
-                                    try {
-                                        FileInputStream stream = new FileInputStream(oldResourceFile);
-                                        ContentXmlParser parser = new ContentXmlParser();
-                                        topic = parser.parseInfo(stream);
-                                        String imageName = topic.getImageName();
-                                        topic.setImageFileString(topicDirectory.getAbsolutePath() + File.separatorChar + imageName);
-                                        topicHashMap.put(topic.getName(), topic);
-                                    } catch (IOException | XmlPullParserException e) {
-                                        Log.e(Constants.TAG, "IO exception while writing file!");
-                                        Log.e(Constants.TAG, e.getMessage());
-                                    }
-                                }  */
+                                }
                             }
                         }
                     }
@@ -380,24 +252,7 @@ public class Utils {
         }
     }
 
-    /*
-        public static void removeTopicsWithoutContent(ArrayList<Topic> topicArrayList, Context context){
-            ArrayList<Topic> topicsToRemove = new ArrayList<>();
-            for( Topic topic : topicArrayList){
-                String imageFileString = topic.getImageFileString();
-                File topicDirectory = new File(imageFileString).getParentFile();
-                File contentFile = new File(topicDirectory, Constants.ChatContentFileName);
-                if(!contentFile.exists()){
-                    topicsToRemove.add(topic);
-                }
-    
-            }
-    
-            for (Topic topicToRemove : topicsToRemove){
-                topicArrayList.remove(topicToRemove);
-            }
-        }
-    */
+
     public static void deleteFolder(File folder){
         File [] files = folder.listFiles();
         for(File file : files){
@@ -410,7 +265,7 @@ public class Utils {
 
     public static void copyFileOrDirectory(String srcDir, String dstDir) {
 
-        Log.e(Constants.TAG,"copyFile  Copying src:" + srcDir + " Dest: " + dstDir );
+        Log.d(Constants.TAG,"copyFile  Copying src:" + srcDir + " Dest: " + dstDir );
         try {
             File src = new File(srcDir);
             File dst = new File(dstDir, src.getName());
@@ -426,7 +281,6 @@ public class Utils {
 
                 }
             } else {
-                Log.e(Constants.TAG,"Loesch: Copy file: " + src.toString() );
                 copyFile(src, dst);
             }
         } catch (Exception e) {
@@ -438,9 +292,15 @@ public class Utils {
         if (!destFile.getParentFile().exists())
             destFile.getParentFile().mkdirs();
 
-        if (!destFile.exists()) {
-            destFile.createNewFile();
+        try {
+            if (!destFile.exists()) {
+                destFile.createNewFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(Constants.TAG," Could not create file: " + destFile.toString() );
         }
+
 
         FileChannel source = null;
         FileChannel destination = null;
@@ -473,22 +333,13 @@ public class Utils {
                 return false;
             }
         }
-/*
-        File temporaryDirectory = new File(applicationDirectory, Constants.TemporaryFolder);
 
-        if( !temporaryDirectory.exists() ){
-            if( !temporaryDirectory.mkdir() ){
-                Log.e(Constants.TAG, "Failed to create temporary directory:  " + temporaryDirectory.toString());
-                return false;
-            }
-        }
-*/
         return true;
     }
 
 
     public static boolean isImageFile(String filePath){
-        return (filePath.endsWith(".jpg")||filePath.endsWith(".jpeg"));
+        return (filePath.endsWith(".jpg")||filePath.endsWith(".jpeg")||filePath.endsWith(".png"));
     }
 
     public static boolean isVideoFile(String filePath){
@@ -621,6 +472,21 @@ public class Utils {
             }
         }
         return uniqueID;
+    }
+
+    public static  byte[] convertFileToByteArray( String path ) throws IOException {
+
+        FileInputStream fis = new FileInputStream( path );
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        byte[] byteArray = new byte[1024];
+
+        for (int readNum; (readNum = fis.read( byteArray )) != -1;) {
+            byteOutputStream.write(byteArray, 0, readNum);
+        }
+
+        byte[] bytes = byteOutputStream.toByteArray();
+
+        return bytes;
     }
 
 }

@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        app:key="version_number"
+        app:title="Version number: ">
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         app:key="cloud_category"
         app:title="Cloud and Sharing Options">
 
@@ -42,6 +48,7 @@
             app:isPreferenceVisible="false"
             app:key="@string/cloudPasswordCustom"
             app:title="Your Nextcloud password"
+            android:inputType="textVisiblePassword"
             android:summary="@string/preference_nextcloudPassword_summary"/>
 
     </PreferenceCategory>

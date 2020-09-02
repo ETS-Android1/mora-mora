@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar_cloud"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/my_app_bar_height"
-                android:background="@color/color_main_light"
+                android:background="@color/color_toolbar"
                 app:titleMarginStart="24dp"
                 app:titleTextAppearance="@style/Toolbar.TitleText" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="?attr/actionBarSize"
-                android:text="Can't reach the cloud!" />
+                android:text="@string/can_t_reach_the_cloud_please_wait" />
 
         </LinearLayout>
 

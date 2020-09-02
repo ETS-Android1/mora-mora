@@ -23,7 +23,7 @@
             android:id="@+id/toolbar_conversation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/my_app_bar_height"
-            android:background="@color/color_main_light"
+            android:background="@color/color_toolbar"
             app:titleMarginStart="24dp"
             app:titleTextAppearance="@style/Toolbar.TitleText"/>
     </com.google.android.material.appbar.AppBarLayout>
@@ -43,8 +43,9 @@
 
         <VideoView
             android:id="@+id/conversation_video_view"
-            android:layout_width="270dp"
-            android:layout_height="270dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:keepScreenOn="true"
@@ -53,8 +54,8 @@
 
         <ImageView
             android:id="@+id/conversation_video_image_view"
-            android:layout_width="190dp"
-            android:layout_height="190dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:keepScreenOn="true"

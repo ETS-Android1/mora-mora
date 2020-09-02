@@ -38,6 +38,7 @@ public class ActivitySettings extends AppCompatActivity {
             if ( mToolbar != null ) {
                 setSupportActionBar(mToolbar);
                 getSupportActionBar().setIcon(R.drawable.ic_gecko_top_view_shape);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         }
     }

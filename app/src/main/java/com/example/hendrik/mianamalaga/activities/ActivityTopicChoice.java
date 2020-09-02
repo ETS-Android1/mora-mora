@@ -408,7 +408,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         Intent intent = new Intent(this, ActivityConversation.class);
 
         intent.putExtra(Constants.EditMode, mEditMode);
-        intent.putExtra("ResourceDir",resourceDirectory);
+        intent.putExtra(Constants.RelativeResourceDirectory,resourceDirectory);
         intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
         intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
         startActivity(intent);
@@ -469,11 +469,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    checkPermissionAndOpenLoginActivity();
-                return;
-            }
+            case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE:
             case PERMISSION_REQUEST_INTERNET: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     checkPermissionAndOpenLoginActivity();
@@ -605,16 +601,21 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     private void copyTemporaryFolder() {
 
         File[]  languageToLearnDirectories = mTemporaryDirectory.listFiles();
-        Log.e(Constants.TAG,"Entering copyTempFolder! "+ mTemporaryDirectory.toString() );
 
-        for( File languageToLearnDirectory :  languageToLearnDirectories){
-            File[] languagesKnownDirectories = languageToLearnDirectory.listFiles();
-            for( File languagesKnownDirectory : languagesKnownDirectories) {
-                File[] topicDirectories = languagesKnownDirectory.listFiles();
-                for( File topicDirectory : topicDirectories ) {
-                    if ( new File(topicDirectory, Constants.ChatContentFileName).exists() ) {
-                        Log.e(Constants.TAG, "Copying: " + topicDirectory.toString());
-                        Utils.copyFileOrDirectory(topicDirectory.toString(), mApplicationDirectory.toString());
+        if( languageToLearnDirectories != null  ) {
+            for (File languageToLearnDirectory : languageToLearnDirectories) {
+                File[] languagesKnownDirectories = languageToLearnDirectory.listFiles();
+                if (languagesKnownDirectories != null) {
+                    for (File languagesKnownDirectory : languagesKnownDirectories) {
+                        File[] topicDirectories = languagesKnownDirectory.listFiles();
+                        if (topicDirectories != null) {
+                            for (File topicDirectory : topicDirectories) {
+                                if (new File(topicDirectory, Constants.ChatContentFileName).exists()) {
+                                    Log.d(Constants.TAG, "Copying: " + topicDirectory.toString());
+                                    Utils.copyFileOrDirectory(topicDirectory.toString(), mApplicationDirectory.toString());
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -684,7 +685,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             }
         }
 
-        File relativeResourceFile = new File( Utils.convertTopicName( topic.getName() ), Constants.InfoFileName);
+        File relativeResourceFile = new File( Utils.convertTopicName( topic.getName() ), Constants.InfoFileNameNew);
         File resourceFile = new File(mApplicationDirectory, relativeResourceFile.toString());
         //Utils.writeTopicToFile( resourceFile, topic);
 

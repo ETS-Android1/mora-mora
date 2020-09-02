@@ -164,7 +164,6 @@ public class ActivityConversation extends AppCompatActivity {
 
         }
 
-
     }
 
     private ArrayList<ChatContent> readResourceContentFile(File resourceFile) {  //TODO This is not working when file is in temporary folder . it look at the false place
@@ -208,6 +207,15 @@ public class ActivityConversation extends AppCompatActivity {
                     prepare_section();
 
                     return true;
+
+                case R.id.toolbar_dictionary:
+                    Intent intent = new Intent(this, ActivityDictionary.class);
+                    intent.putExtra("EditMode", mEditMode);
+                    intent.putExtra( Constants.FullTemporaryDirectory, mTemporaryDirectory.toString() );
+                    intent.putExtra( Constants.RelativeResourceDirectory, mResourceDir );
+                    intent.putExtra( Constants.MoraMora, mApplicationDirectory.toString() );
+                    startActivity(intent);
+                    return true;
                 default:
                     return false;
             }
@@ -248,8 +256,8 @@ public class ActivityConversation extends AppCompatActivity {
 
     private void getIntents() {
         if (getIntent().getExtras() != null) {
-            mEditMode = getIntent().getExtras().getBoolean(Constants.EditMode);
-            mResourceDir = getIntent().getExtras().getString("ResourceDir").toLowerCase();
+            mEditMode = getIntent().getExtras().getBoolean( Constants.EditMode );
+            mResourceDir = getIntent().getExtras().getString( Constants.RelativeResourceDirectory).toLowerCase();
             String AppDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
             mApplicationDirectory = new File(AppDirectoryPathString);
             mTemporaryDirectory = new File(getIntent().getExtras().getString(Constants.FullTemporaryDirectory));
@@ -511,7 +519,7 @@ public class ActivityConversation extends AppCompatActivity {
     }
 
     private File getResourceDirectory(String ResourceDir) {
-        return new File(mApplicationDirectory, ResourceDir);
+        return new File( mApplicationDirectory, ResourceDir );
     }
 
 
@@ -699,14 +707,16 @@ public class ActivityConversation extends AppCompatActivity {
                 mChatContentArrayList.get(position).setImageFileName("");
             }
 
+            if (  renamedMediaFile != null ) {
 
-            if (renamedMediaFile.exists()) {
-                renamedMediaFile.delete();
-            }
-            try {
-                fullMediaFile.renameTo(renamedMediaFile);
-            } catch (NullPointerException e) {
-                Log.e(Constants.TAG, getString(R.string.could_not_rename));
+                if (renamedMediaFile.exists()) {
+                    renamedMediaFile.delete();
+                }
+                try {
+                    fullMediaFile.renameTo(renamedMediaFile);
+                } catch (NullPointerException e) {
+                    Log.e(Constants.TAG, getString(R.string.could_not_rename));
+                }
             }
         }
 
@@ -899,8 +909,9 @@ public class ActivityConversation extends AppCompatActivity {
     }
 
 
-}
 
+
+}
 
 
 

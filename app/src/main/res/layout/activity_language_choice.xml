@@ -27,7 +27,7 @@
             android:id="@+id/toolbar_language_choice"
             android:layout_width="match_parent"
             android:layout_height="@dimen/my_app_bar_height"
-            android:background="@color/color_main_light"
+            android:background="@color/color_toolbar"
             app:titleMarginStart="24dp"
             app:titleTextAppearance="@style/Toolbar.TitleText" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -53,10 +53,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:background="@color/test_color"
+                android:background="@color/spinner_color"
                 android:padding="4dp"
                 android:text="Your language: "
                 android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                 android:textColor="@android:color/white"
                 android:layout_weight="0.8"
@@ -64,7 +65,7 @@
 
             <Spinner
                 android:id="@+id/language_choice_spinner"
-                android:background="@color/test_color"
+                android:background="@color/spinner_color"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
             </Spinner>

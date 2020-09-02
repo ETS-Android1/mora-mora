@@ -26,7 +26,7 @@
 
         <ImageView
             android:id="@+id/agent_image_view"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_width="wrap_content"
             android:scaleType="fitXY"
             android:src="@drawable/lemur"
@@ -96,7 +96,7 @@
             <ImageView
                 android:id="@+id/user_image_view"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"

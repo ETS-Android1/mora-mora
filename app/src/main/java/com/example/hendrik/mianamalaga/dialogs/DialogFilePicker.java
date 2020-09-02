@@ -18,7 +18,7 @@ public class DialogFilePicker  {
         void onFileSelected(File file);
     }
 
-    DialogFilePicker(@NonNull Context context){
+    public DialogFilePicker(@NonNull Context context){
         mDialog = new AlertDialog.Builder( context ).create();
         mFileRecyclerView = new DialogFilePickerRecyclerView(context);
         mDialog.setView(mFileRecyclerView);
