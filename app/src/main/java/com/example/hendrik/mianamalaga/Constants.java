@@ -31,12 +31,11 @@ public class Constants {
     public static final String InfoFileNameNew = "info.txt";
     public static final String ChatContentFileName = "chatContent.txt";
     public static final String TopicPictureFileName = "topic_picture.jpg";
-    //public static final String TemporaryFolder = "temporary";
     public static final String TemporaryFolder = BuildConfig.TEMPORARY_FOLDER_NAME;
     public static final String VideoName = "video_";
     public static final String AudioName = "audio_";
     public static final String ImageName = "image_";
-    //public static final String MoraMora = "MoraMora";
+    public static final String BackgroundImageName = "BackgroundImage.jpeg";
     public static final String MoraMora = BuildConfig.APPLICATION_NAME;
 
     /*

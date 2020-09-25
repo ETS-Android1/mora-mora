@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,14 +31,15 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
 
     private List<File> mFileList;
     private File mSelectedFile;
-    private File mRootDirectoy;
+    private File mRootDirectory;
     private Context mContext;
     private DialogFilePickerRecyclerView mFilePickerRecyclerView;
 
     DialogFilePickerAdapter(DialogFilePickerRecyclerView view){
         mFilePickerRecyclerView = view;
         mContext = view.getContext();
-        mRootDirectoy = Environment.getExternalStoragePublicDirectory("");
+        //mRootDirectory = Environment.getExternalStoragePublicDirectory("");
+        mRootDirectory = mContext.getExternalFilesDir("");
         mFileList = new LinkedList<>();
     }
 
@@ -75,7 +75,7 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
     }
 
     public void go(){
-        listFiles(mRootDirectoy);
+        listFiles(mRootDirectory);
     }
 
     private void listFiles(File directory){
@@ -85,7 +85,7 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
             mFileList = new LinkedList<>(Arrays.asList(files));
             Collections.sort(mFileList);
 
-            if( directory.getParentFile() != mRootDirectoy)
+            if( directory.getParentFile() != mRootDirectory)
                 mFileList.add(0, directory.getParentFile());
         }
         notifyDataSetChanged();
@@ -103,7 +103,7 @@ public class DialogFilePickerAdapter extends RecyclerView.Adapter<DialogFilePick
     public void onBindViewHolder(@NonNull FilePickerItemViewHolder filePickerItemViewHolder, int position) {
         File file = mFileList.get(position);
         if (file != null){
-            if(position == 0  && file != mRootDirectoy ){
+            if(position == 0  && file != mRootDirectory){
                 filePickerItemViewHolder.mFileName.setText("..");
                 filePickerItemViewHolder.mImageView.setImageResource(R.drawable.ic_folder);         //TODO this could be a folder with an arrow or something else more clarifying
             } else {

@@ -26,11 +26,12 @@
 
         <ImageView
             android:id="@+id/agent_image_view"
-            android:layout_height="80dp"
-            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_width="90dp"
             android:scaleType="fitXY"
             android:src="@drawable/lemur"
             android:baselineAlignBottom="true"
+            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true">
         </ImageView>
 
@@ -95,11 +96,11 @@
 
             <ImageView
                 android:id="@+id/user_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/lemur">
             </ImageView>
 

@@ -53,7 +53,11 @@
         </activity>
         <activity
             android:name=".activities.ActivityConversation"
-            android:parentActivityName=".activities.ActivityTopicChoice" />
+            android:parentActivityName=".activities.ActivityTopicChoice">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.hendrik.mianamalaga.activities.ActivityTopicChoice" />
+        </activity>
 
         <!-- Dropbox AuthActivity -->
         <activity
@@ -76,6 +80,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
+            android:enabled="true"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"

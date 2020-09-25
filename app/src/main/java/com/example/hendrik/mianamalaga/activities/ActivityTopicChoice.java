@@ -56,11 +56,11 @@ import java.util.HashMap;
 
 //TODO - the app crashes when VideoFragment is running and one presses the back button
 // TODO - when creating a topic add getUserId String to topic to be able to block creator in case of abuse
-// TODO - convert topic.xml to JSON to make it more flexible - was it already done?
+
 // TODO - make it possible that a user can like or dislike a topic once - when the topic is going to be uploaded ...
 //  download latest topic file and compare both to prevent abusive actions (difference in like or dislike is only one, ...)
 
-// TODO you already jump back to topicChoiceActivity when you think you are done, but actually you need to wait till the downloads are finished
+
 
 public class ActivityTopicChoice extends AppCompatActivity  {
 
@@ -657,6 +657,14 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         } else {
             File resourceDirectory = new File(mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
+
+            if( resourceDirectory.exists() ){                                                       // TODO That modification has not yet been tested
+                Snackbar snackbar = Snackbar
+                        .make(mMainLayout, "A topic with that name already exists!", Snackbar.LENGTH_LONG);
+                snackbar.show();
+                return;
+            }
+
             File imagePath = new File(resourceDirectory, Constants.TopicPictureFileName);
             topic.setImageFileString(imagePath.toString());
 
@@ -687,7 +695,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         File relativeResourceFile = new File( Utils.convertTopicName( topic.getName() ), Constants.InfoFileNameNew);
         File resourceFile = new File(mApplicationDirectory, relativeResourceFile.toString());
-        //Utils.writeTopicToFile( resourceFile, topic);
 
         Utils.writeTopicToNewFile( resourceFile, topic);
 

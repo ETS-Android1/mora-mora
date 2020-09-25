@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -722,10 +724,6 @@ public class ActivityNextCloud extends AppCompatActivity {
         if (remoteFile != null) {
             mTotalSize = remoteFile.getSize();
 
-            File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
-            if( !cacheFolder.exists() ){
-                cacheFolder.mkdir();
-            }
 
             mDownloadFileTask = new DownloadFileFromCloudAsyncTask(this, UNUSED_FILE_NUMBER, (result, fileNumber, fileSize) -> {
                 mDownloadFileTask = null;
@@ -734,15 +732,24 @@ public class ActivityNextCloud extends AppCompatActivity {
                     String remoteFileName = Utils.getNameFromPath(remoteFile.getRemotePath());
 
 
-                    File apkFile = new File( cacheFolder, remoteFileName);
+                    //File apkFile = new File( cacheFolder, remoteFileName);
+                    File apkFile = new File( mTemporaryDirectory, remoteFileName);
                     Intent intent;
 
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri apkUri = FileProvider.getUriForFile( getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileprovider", apkFile);
+                        Context context = getApplicationContext();
+                        Uri apkUri = FileProvider.getUriForFile( context, BuildConfig.APPLICATION_ID + ".fileprovider", apkFile);
                         intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
                         intent.setData(apkUri);
-                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        //intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities( intent, PackageManager.MATCH_DEFAULT_ONLY);
+                        for (ResolveInfo resolveInfo : resInfoList) {
+                            String packageName = resolveInfo.activityInfo.packageName;
+                            context.grantUriPermission( packageName, apkUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        }
+
                     } else {
                         Uri apkUri = Uri.fromFile( apkFile );
                         intent = new Intent(Intent.ACTION_VIEW);
@@ -765,7 +772,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 final long percentage = (totalToTransfer > 0 ? totalTransferredSoFar * 100 / totalToTransfer : 0);
                 mProgressDialog.setProgress((int) percentage);
             });
-            Object[] params = {mServerUri, ownCloudCredentials, remoteFile, cacheFolder};
+            Object[] params = {mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory };
             mDownloadFileTask.execute(params);
         }
     }

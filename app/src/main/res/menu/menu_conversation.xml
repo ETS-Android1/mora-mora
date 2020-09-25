@@ -20,6 +20,9 @@
         <item android:id="@+id/toolbar_dictionary"
             android:icon="@drawable/ic_dvr"
             android:title="Dictionary"/>
+        <item android:id="@+id/toolbar_background_image"
+            android:icon="@drawable/ic_image"
+            android:title="Background Image"/>
     </group>
 
 </menu>

@@ -9,14 +9,14 @@ public class ChatMessage {
     private boolean mUser;
     private boolean mOriginal;
     private int mLesson;
-    private String mMediaAbsolutePath;
+    //private String mMediaAbsolutePath;
 
     public ChatMessage(String chatMessage, boolean user, boolean original, int mLesson){
         this.mChatMessage = chatMessage;
         this.mUser = user;
         this.mOriginal = original;
         this.mLesson = mLesson;
-        this.mMediaAbsolutePath = Environment.getExternalStoragePublicDirectory( Constants.MoraMora ).getAbsolutePath();
+        //this.mMediaAbsolutePath = Environment.getExternalStoragePublicDirectory( Constants.MoraMora ).getAbsolutePath();
     }
 
     public String getMessage(){
@@ -43,6 +43,7 @@ public class ChatMessage {
         return mLesson;
     }
 
+    /*
     public void setMediaAbsolutePath(String absolutPath){
         this.mMediaAbsolutePath = absolutPath;
     }
@@ -50,6 +51,7 @@ public class ChatMessage {
     public String getMediaAbsolutePath(){
         return mMediaAbsolutePath;
     }
+     */
 }
 
 

@@ -96,7 +96,8 @@ public class ActivityLanguageChoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_choice);
 
-        mApplicationDirectory = Environment.getExternalStoragePublicDirectory(Constants.MoraMora);
+        //mApplicationDirectory = Environment.getExternalStoragePublicDirectory(Constants.MoraMora);
+        mApplicationDirectory = this.getExternalFilesDir(Constants.MoraMora);
         mTemporaryDirectory = new File( mApplicationDirectory, Constants.TemporaryFolder);
 
         setupActionBar();
@@ -125,8 +126,20 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
         clearTemporaryFolder();
 
+        copyOldDataIntoNewFolderCompatFunction();                                                   // TODO Remove after update
 
+    }
 
+    private void copyOldDataIntoNewFolderCompatFunction(){
+        if( Environment.getExternalStoragePublicDirectory(Constants.MoraMora).exists() ){
+            File source = Environment.getExternalStoragePublicDirectory( Constants.MoraMora );
+            File dest = mApplicationDirectory.getParentFile();
+            Utils.copyFileOrDirectory( source.toString() , dest.toString() );
+
+            Utils.deleteFolder(source);
+            source.delete();
+            recreate();
+        }
     }
 
     private void setupNavigationDrawer() {
@@ -375,11 +388,6 @@ public class ActivityLanguageChoice extends AppCompatActivity {
 
             if (mTemporaryDirectory != null && mTemporaryDirectory.exists()) {
                 Utils.deleteFolder(mTemporaryDirectory);
-            }
-
-            File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
-            if (cacheFolder != null && cacheFolder.exists()) {
-                Utils.deleteFolder(cacheFolder);
             }
         }
     }

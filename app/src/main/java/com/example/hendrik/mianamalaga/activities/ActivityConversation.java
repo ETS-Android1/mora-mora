@@ -11,13 +11,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.hendrik.mianamalaga.BuildConfig;
+import com.example.hendrik.mianamalaga.dialogs.DialogFilePicker;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.adapter.AdapterChatArray;
 import com.example.hendrik.mianamalaga.adapter.AdapterPageFragment;
@@ -33,6 +39,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -43,6 +50,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -70,14 +78,18 @@ import com.google.gson.Gson;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+import static java.security.AccessController.getContext;
 
 // TODO If we do have more than one original messages one after the other. The videos must also be played one ofter another ....
 // TODO without user action. One should on the other hand prevent that multiple user messages follow one after another
@@ -145,6 +157,11 @@ public class ActivityConversation extends AppCompatActivity {
 
         mInterfaces = new HashMap<Integer, OnUpdateResponseInFragment>();
 
+        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File backgroundOutputFile = new File( topicDirectory,Constants.BackgroundImageName );
+        if ( backgroundOutputFile.exists() ){
+            mMainLayout.setBackground( Drawable.createFromPath( backgroundOutputFile.toString() ));
+        }
 
         if (mEditMode) {
             prepareEditMode();
@@ -216,11 +233,19 @@ public class ActivityConversation extends AppCompatActivity {
                     intent.putExtra( Constants.MoraMora, mApplicationDirectory.toString() );
                     startActivity(intent);
                     return true;
+
+                case R.id.toolbar_background_image:
+                    mDrawerLayout.closeDrawers();
+                    openFilePickerToChooseBackgroundImageFile();
+                    return true;
+
                 default:
                     return false;
             }
         });
     }
+
+
 
     @Override
     protected void onPause() {
@@ -884,6 +909,7 @@ public class ActivityConversation extends AppCompatActivity {
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             File topicDirectory = getResourceDirectory(mResourceDir);
             File videoFile = new File(topicDirectory, Constants.VideoName + position + ".mp4");
+
             mChatContentArrayList.get(position).setMediaFileNames(new String[]{videoFile.getName()});
             mChatContentArrayList.get(position).setImageFileName("");
 
@@ -892,8 +918,28 @@ public class ActivityConversation extends AppCompatActivity {
                 oldMediaFile.delete();
             }
 
-            Uri videoFileUri = Uri.fromFile(videoFile);
-            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFileUri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                //File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
+                //if( !cacheFolder.exists() ) cacheFolder.mkdir();
+                
+                //File temporaryVideoFile = new File( cacheFolder, videoFile.getName() );
+                //Uri tempVideoFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider",  temporaryVideoFile);
+                Context context = ActivityConversation.this;
+                Uri tempVideoFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider",  videoFile );
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempVideoFileUri);
+
+                List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities( takeVideoIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    context.grantUriPermission(packageName, tempVideoFileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+
+            } else {
+
+                Uri videoFileUri = Uri.fromFile(videoFile);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFileUri);
+            }
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
@@ -901,11 +947,49 @@ public class ActivityConversation extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            /*
             Uri videoUri = intent.getData();
             File videoFile = new File(videoUri.getEncodedPath());
-            Snackbar snackbar = Snackbar.make(mMainLayout, "Video path is: " + videoFile.getAbsolutePath(), Snackbar.LENGTH_LONG);
-            snackbar.show();
+
+            if( videoFile.getParent().endsWith( BuildConfig.TEMPORARY_FOLDER_NAME )){
+                File destinationDirectory = new File( mApplicationDirectory, mResourceDir);
+                File destinationFile = new File( destinationDirectory, videoFile.getName());
+                Log.e(Constants.TAG,"Copying: " + videoFile.toString() + " into: " + destinationFile.toString() );
+                Utils.copyFileOrDirectory( videoFile.toString(), destinationFile.toString() );
+            }
+             */
         }
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    private void openFilePickerToChooseBackgroundImageFile(){
+        DialogFilePicker filePicker = new DialogFilePicker( Objects.requireNonNull( ActivityConversation.this ) );
+        filePicker.setOnFileSelectedListener( this::onFileChosen );
+        filePicker.show();
+    }
+
+    private void onFileChosen(File file) {
+
+        if( !Utils.isImageFile( file.toString() )){
+            Toast.makeText(getApplicationContext(),"Choose an image file instead!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Bitmap realImage = BitmapFactory.decodeFile( file.toString() );
+        Bitmap bitmap = Utils.rotateBitmap(realImage, 90, false );
+
+        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File backgroundOutputFile = new File( topicDirectory,Constants.BackgroundImageName );
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream( backgroundOutputFile );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+
+        mMainLayout.setBackground( Drawable.createFromPath( backgroundOutputFile.toString() ));
     }
 
 
