@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar_cloud"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/my_app_bar_height"
-                android:background="@color/color_toolbar"
+                android:background="@color/primaryColor"
                 app:titleMarginStart="24dp"
                 app:titleTextAppearance="@style/Toolbar.TitleText" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/test_color"
+            android:backgroundTint="@color/secondaryColor"
             android:src="@drawable/ic_cloud_download"
             android:tint="#ffffff"
             app:fabSize="mini"

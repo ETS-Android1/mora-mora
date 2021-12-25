@@ -1,0 +1,167 @@
+<resources>
+    <string name = "app_name"> "" Mora Mora </string>
+    <string name = "action_settings"> Fikirana </string>
+    <string name = "ndreky_button"> Ndreky-Nochmal </string>
+    <string name = "help"> Vonjeo! </string>
+    <string name = "sektion_1_1_mbola_tsara"> Sektion 1.1 Mbola Tsara! </string>
+    <string name = "header"> Fizarana 1. </string>
+    <string name = "title_activity_login"> Midira </string>
+    <!-- Tady mifandraika amin'ny fidirana -->
+    <string name = "prompt_email"> Email </string>
+    <string name = "prompt_password"> Password (tsy voatery) </string>
+    <string name = "action_sign_in"> Midira na misoratra anarana </string>
+    <string name = "action_sign_in_short"> Midira </string>
+    <string name = "error_invalid_email"> Tsy mety ity adiresy mailaka ity </string>
+    <string name = "error_invalid_password"> Fohy loatra ity tenimiafina ity </string>
+    <string name = "error_incorrect_password"> Tsy marina io tenimiafiko </string>
+    <string name = "error_field_required"> Ilaina ity sehatra ity </string>
+
+    <string name = "type_your_answer"> Soraty ny valinteninao! </string>
+    <string name = "language_you_want_to_learn"> Fiteny tianao hianarana: </string>
+    <string name = "topic_name"> anarana lohahevitra: </string>
+    <string name = "image_file_name"> Anaran\'ny fisie sary </string>
+    <string name = "short_info"> Fampahalalana fohy </string>
+    <string name = "Add"> Add </string>
+    <string name = "Change"> Hanova </string>
+    <string name = "could_not_rename"> Tsy afaka nanova anarana ny lahatahiry! </string>
+
+    <string name = "APP_KEY"> edmvozytadjrfgk </string>
+    <string name = "CloudNotAvaiable"> Tsy misy fidirana rahona! </string>
+    <string name = "InternetConnectionOn"> Misy ve ny fifandraisanao amin\'ny Internet? </string>
+    <string name = "chat_message"> Hafatra Chat </string>
+    <string name = "explain_write_permission_reques"> Mila manome alalana amin\'ny fanoratana ianao hitahirizana rakitra alaina! </string>
+
+    <string name = "cloudUrlCustom"> CloudUrlCustom </string>
+    <string name = "cloudUserNameCustom"> CloudUserNameCustom </string>
+    <string name = "cloudPasswordCustom"> CloudPasswordCustom </string>
+    <string name = "ActivityLanguageChoiceHelpText"> Mora Mora dia mbola eo am-pivoarana dieny mbola kely. Ny kinova ankehitriny dia tsy misy afa-tsy lesona iray monja (fr-de) azonao ampiasaina hianarana io fiteny io. \n\n
+                                                    Azonao atao ihany ny mampiasa Mora Mora hamoronana lesona anao manokana ary hizara izany amin\'ny alàlan\'ny rahona fitahirizam-bokatra manaraka anao. Raha te hizara ny anao ianao
+                                                    lesona miaraka amin\'izao tontolo izao, azafady mifandraisa amin\'ny ekipa: mora.mora@gmx.net. \n\n
+                                                    Ampiasao ny fijerena horonana mba hisafidianana ny fiteny tianao hianarana. Eo amin\'ny zorony ambony havanana dia azonao atao ny mifantina ilay fiteny efa fantatrao tsara
+                                                    ampy ohatra fiteninao. Ity no fiteny izay hadika amin\'ny dinika. \ N \ n
+                                                    Azonao atao ny manindry ny "maody fanovana" ao anaty vatasarihana izay nikatonanao fotsiny mba hanampiana fiteny maro kokoa ary handray anjara amin\'izany hanitarana ny angona atin\'ny Mora Mora. \ N \ n
+                                                    Ny kaody loharano Mora Mora dia hita eo ambanin\'ny: https://github.com/hendric-git/mora-mora
+                                                    </string>
+
+    <string name = "ApplicationInstallProblemHelpText"> Nisy olana iray rehefa nanandrana nametraka ny fisie apk nidina. Azafady manandrama mametraka ny kinova Mora Mora vaovao amin\'ny tanana. \n\n
+                                                      Ampiasao ny mpikaroka rakitra tianao ary sokafy ny toerana: \ n \\ n
+                                                      Fitehirizana fitaovana -> MoraMora -> vonjimaika \ n \ n
+                                                      ary kitiho ny rakitra apk hamita ny fizotry ny fametrahana. \ n \ n
+                                                    </string>
+
+    <string name = "ActivityTopicChoiceHelpText"> Mora Mora dia mbola eo am-pivoarana dieny mbola kely. Ny kinova ankehitriny dia tsy misy lesona azonao ampiasaina hianarana fiteny. \n\n
+                                                Eto no misy lesona tsy an-tserasera. Misy voatahiry ao amin\'ny fitaovanao. Raha mbola tsy nisintona lesona ianao dia afaka mamorona samirery amin\'ny alalàn\'ny
+                                                fanokafana ny vatasarihana ary kitiho ny - Mode fanovana -. Noho ny fanampian\'ny bokotra miseho dia afaka mamorona lohahevitra vaovao ianao. \n\n
+                                                Azonao atao koa ny manandrana mitady lesona amin\'ny Internet. Ampiasao ny vatasarihana ary kitiho ny - Login -.
+                                                    </string>
+
+    <string name = "ActivitySettingsHelpText"> Mora Mora dia mbola eo am-pivoarana dieny mbola kely. Saika tsy misy lesona azonao ampiasaina hianarana fiteny ity kinova ankehitriny ity. \n\n
+        Azonao atao ny mamorona lesona amin\'ny alàlan\'ny Mora Mora ary zarao izany amin\'ny alàlan\'ny fifandraisanao amin\'ny ekipa eo ambany: mora.mora@gmx.net \ n \ n
+        Misy koa vondrona fifampiresahana telegram Mora-Mora. \ N \ n
+        Ny kaody loharano an\'ny fampiharana ary koa ny mimari-droa indrindra dia hita ao amin\'ny: https://github.com/hendric-git/mora-mora
+    </string>
+    <string name = "preference_customCloud_summary"> Ny rahona manokana dia ny rahona manaraka anao manokana na ny rahon\'ny olona nanome anao ny mari-pahaizana. Ny interface interface manaraka indray no ampiharina amin\'izao fotoana izao ka tsy misy mpamatsy fitehirizana rahona hafa tohanana. Azonao atao ny mahazo tahiry rahona maimaimpoana avy amin\'ireo mpamatsy fanalahidy manaraka. </string>
+    <string name = "preference_defaultCloud_summary"> Ny rahona misy anao no fitoeran\'ny lesona amin\'ny fiteny. Vao namaky ny fahazoana azy io ianao, ka tsy afaka manova ny atiny ianao na manampy ny lesona ampianarinao. Amin\'izao fotoana izao dia saika tsy misy lesona tonga. </string>
+    <string name = "preference_enableCloudSharing_summry"> Izany dia manome an\'izao tontolo izao fidirana amin\'ny rahona mahazatra anao. Ny mari-pamantarana fidirana amin\'ny rahonao dia hotehirizina ao amin\'ny rahona misy anao. Hamarino tsara fa tsy manana angon-drakitra manan-tsaina voatahiry ao amin\'io rahona io ianao </string>
+    <string name = "preference_cloudUrl_summary"> Rehefa avy namorona kaonty fitahirizana manaraka dia hanome anao URL toa izany ny mpamatsy: \ n \ nhttps: //yourusername.nextcloud.de </string>
+    <string name = "prefrence_userName_summary"> Ny anaran\'ny mpampiasa anao ny kaonty manaraka. </string>
+    <string name = "preference_nextcloudPassword_summary"> Ny teny miafin\'ny kaonty fitahirizam-bokatra manaraka. Tsy ho tehirizina io tenimiafina io fa ny token fampidirana (hasin-dalan\'ny iray amin\'ireo anaran\'ny mpampiasa sy teny miafinao). </string>
+    <string name = "preference_lessonUserName_summary"> Rehefa mamorona lesona ianao dia ampidirina ho azy ny anaran\'ny mpanoratra. Azonao atao ny mamela io banga io na mametraka anarana raha te-hahita valiny avy amin\'ny mpampiasa hafa ianao. </string>
+    <string name = "can_t_reach_the_cloud_please_wait"> Tsy hahatratra ny rahona! ... Andraso azafady! </string>
+    <string name = "back_ground_picture"> BackgroundPicture </string>
+    <string name = "background_pic_summary"> Ity no ivoahana azo alaina mandritra ny fampiharana aéntire anao </string>
+    <string name = "HelpConversation"> \ "Ampiasao ny bokotra hamaliana ireo fanontaniana! \ n \ n
+                                      Azonao atao ny mipaoka ny bubble hijerena ireo dikanteny \ n \ n
+                                      Mba hamerenana ny paompy media dia kitiho ny sary \ n \ n
+                                      Ao amin'ny maody amin'ny lesona Edit dia azonao atao ny manindry ireo lavarangana lava hanovana ny atiny. \ "</string>
+    <string name = "RecordingStopped"> Nijanona ny firaketana! </string>
+    <string name = "Recording"> Fandraisana an-tsoratra! </string>
+    <string name = "Apply"> Ampiharo </string>
+    <string name = "ThatFunctionalityIsUnderDevelopment"> Mbola eo am-pamolavolana io fampiasa io! </string>
+    <string name = "youAlreadyHaveAddedAUserMessage"> Efa nanampy hafatra mpampiasa ianao! </string>
+    <string name = "ContentAdded"> Niampy ny atiny! </string>
+    <string name = "ConversationIsSaved"> Voatahiry ny resaka! </string>
+    <string name = "CongratulationYouDidIt"> Arahabaina !! Vitanao io! </string>
+    <string name = "Bravo"> Bravo !! </string>
+    <string name = "BravoBravoBravoYouGotIt"> Bravo Bravo Bravo Nahazo anao !! </string>
+    <string name = "Ups"> Miakatra !! </string>
+    <string name = "ChooseAnImageFileInstead"> Safidio ny rakitra sary raha tsy izany! </string>
+    <string name = "SelectTheAvailableTranslations"> Safidio ireo fandikan-teny misy! </string>
+    <string name = "EnableEditModeToRemoveLanguages"> Alefaso ny maody fanovana hanala ireo fiteny! </string>
+    <string name = "LanguageFolderIsDeleted"> Voafafa ny lahatahiry fiteny! </string>
+    <string name = "LanguageFolderIsRestored"> Haverina amin\'ny laoniny ny lahatahiry fiteny! </string>
+    <string name = "TheApplicationNeedsWritePermissions"> Mila fahazoan-dàlana hanoratra ny fampiharana! </string>
+    <string name = "SelectTheLanguageToLearn"> Safidio ny fiteny hianarana! </string>
+    <string name = "FailedToCreateDirectories"> Tsy nahavita namorona lahatahiry! </string>
+    <string name = "CantCopyBasicDataIHaveNoPermission"> Tsy afaka mandika ny angona fototra! Tsy mahazo alalana aho! </string>
+    <string name = "YouMustSelectTopicsBeforeYouCanDownloadThem"> Tsy maintsy misafidy lohahevitra ianao \n alohan\'ny ahafahanao misintona azy ireo! </string>
+    <string name = "DownloadingFilesPleaseWait"> Misintona rakitra. Miandrasa azafady ... </string>
+    <string name = "TransactionComplete"> Vita ny fifampiraharahana! </string>
+    <string name = "YouMustSelectTopicsBeforeYouCanUploadThem"> Tsy maintsy misafidy lohahevitra ianao \n alohan\'ny ahafahanao mampakatra azy ireo! </string>
+    <string name = "UploadingFilesPleaseWait"> Mampakatra rakitra. Miandrasa azafady ... </string>
+    <string name = "FailedToUploadFile"> Tsy nahomby nampakatra rakitra! </string>
+    <string name = "FailedToCreateFolder"> Tsy nahomby namorona fampirimana! </string>
+    <string name = "ForUploadsUseaCustomCloud"> Ho an\'ny upload dia ampiasao rahona manokana! </string>
+    <string name = "ChangeCloud"> Hanova rahona? </string>
+    <string name = "SwitchToDownloadMode"> Ampifamadiho ny maody fisintomana </string>
+    <string name = "SwitchToUploadMode"> Mifamadika mba hampidira fomba </string>
+    <string name = "FailedToListFolder"> Tsy nahomby tamin\'ny lisitra folder! </string>
+    <string name = "ANewVersionOfTheAppIsAvailable"> Misy kinova vaovao an\'ny app! </string>
+    <string name = "Download"> Sintomy </string>
+    <string name = "DownloadingApplicationFilePleaseWait"> Fampidinana fisie application. Miandrasa azafady ... </string>
+    <string name = "CantFindaSuitableApplicationForTheInstallationOfApps"> Tsy mahita rindranasa mety amin\'ny fametrahana fampiharana! </string>
+    <string name = "AnErrorOccurredDuringDownload"> Nisy lesoka nitranga nandritra ny fisintomana! </string>
+    <string name = "AnErrorOccurred"> Nisy lesoka nitranga! </string>
+    <string name = "YouCanOnlyRemoveTopicsFromYourOwnCloud"> Ny lohahevitrao ihany no azonao esorina! </string>
+    <string name = "BePatientiAmProcessing"> \ "Mahareta ... manodin-tanana aho! \" </string>
+    <string name = "Retry"> Andramo indray </string>
+    <string name = "DownloadingTopicsPleaseWait"> Fampidinana lohahevitra. Miandrasa azafady ... </string>
+    <string name = "DoYouReallyWantToRemoveThatTopicFromCloudStorage"> Tena te-hanala an\'io lohahevitra io amin\'ny tahiry rahona ve ianao? </string>
+    <string name = "Remove"> Esory </string>
+    <string name = "FailedToRemoveTopic"> Tsy nahavita nanala lohahevitra! </string>
+    <string name = "YouHaveToWait"> \ "Mila miandry ianao \" </string>
+    <string name = "HoursUntilYouCanRemoveThatTopic"> \ "ora mandra-panaisanao io lohahevitra io! \" </string>
+    <string name = "EnableEditorModeToRemoveTopics"> Alefaso ny maody famoahana hanala lohahevitra! </string>
+    <string name = "SearchTopics"> Lohahevitry ny fikarohana </string>
+    <string name = "EnableEditorModeToEditTopics"> Alefaso ny maody famoahana hanovana lohahevitra! </string>
+    <string name = "TopicIsDeleted"> Voafafa ny lohahevitra! </string>
+    <string name = "TopicIsRestored"> Naverina amin\'ny laoniny ny lohahevitra! </string>
+    <string name = "SaveAllTopicsAndClearTemporaryolder"> Tehirizo ny lohahevitra rehetra ary esory ny fampirimana vonjimaika! </string>
+    <string name = "ActionIsUndone"> Foana ny hetsika! </string>
+    <string name = "ATopicWithThatNameAlreadyxists"> Efa misy ny lohahevitra iray misy an\'io anarana io! </string>
+    <string name = "your_language"> Ny fiteninao: </string>
+    <string name = "use_the_following_for_the_cloud_login"> Ampiasao ity manaraka ity raha hiditra ao amin\'ny rahona ianao: </string>
+    <string name = "email_mora_mora_gmx_net"> mailaka: mora.mora@gmx.net </string>
+    <string name = "password"> teny miafina: </string>
+    <string name = "sign_in"> Midira </string>
+    <string name = "add_language"> Manampy fiteny: </string>
+    <string name = "picture_button"> Sary </string>
+    <string name = "pick_file"> Misafidiana fisie </string>
+    <string name = "simple_n_camera"> Tsotra \ n Fakan-tsary </string>
+    <string name = "camera_n_app"> Camera \ n App </string>
+    <string name = "microhone_button"> Microhone </string>
+    <string name = "the_right_answer_is"> Ny valiny mety dia: </string>
+    <string name = "folder_name"> Anaran\'ny fampirimana </string>
+    <string name = "beginner_button"> Beginner </string>
+    <string name = "more_text"> bebe kokoa ... </string>
+    <string name = "author_text"> Mpanoratra: </string>
+    <string name = "size_text"> Size: </string>
+    <string name = "sort_by"> Sivano amin\'ny: </string>
+    <string name = "save_changes_to_disk"> Tehirizo ny fanovana ao anaty disk? </string>
+    <string name = "login_again"> Midira indray </string>
+    <string name = "switch_to_upload"> Switch to Upload </string>
+    <string name = "access_cloud"> Midira rahona </string>
+    <string name = "editing_mode"> Mode fanovana </string>
+    <string name = "restart_menu"> Restart </string>
+    <string name = "dictionary_menu"> Rakibolana </string>
+    <string name = "background_image"> Sarin-tsarimihetsika </string>
+    <string name = "menu_menu"> Menu </string>
+    <string name = "settings_menu"> Fikirana </string>
+    <string name = "help_menu"> Vonjeo </string>
+    <string name = "AfterPressingThatButtonAllLessons"> Rehefa avy nanindry izany bokotra izany ny lesona rehetra voatahiry ao amin\'ny fitaovanao dia ho voafafa ary haverina amin\'ny laoniny ireo lesona misy anao. </string>
+    <string name = "ResetMoraMora"> Reset Mora Mora </string>
+    <string name = "ResettingMoraMora"> Resetting Mora Mora! </string>
+    <string name = "UsingThePlusButtonsYouCanAdd"> Amin\'ny alàlan\'ny bokotra + dia azonao atao ny manampy ny bontolo fitenenana ho an\'ny solosaina sy ny mpampiasa. \n\n
+                                                  Raha te-hanala ilay bubble farany ianao dia ampiasao ny - Button. \n\n
+                                                  Mba ovay ny atin\'ny bubble, ny sary na ny horonan-tsary hanehoana ny paompy lava ao amin\'ny bubble. Hiseho ny fifanakalozan-kevitra iray izay ahafahanao manova izay tianao. </string>
+</resources>

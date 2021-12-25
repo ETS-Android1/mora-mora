@@ -1,3 +1,4 @@
+
 package com.example.hendrik.mianamalaga.activities;
 
 
@@ -24,6 +25,7 @@ import android.os.Bundle;
 
 import com.example.hendrik.mianamalaga.BuildConfig;
 import com.example.hendrik.mianamalaga.dialogs.DialogFilePicker;
+import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.adapter.AdapterChatArray;
 import com.example.hendrik.mianamalaga.adapter.AdapterPageFragment;
@@ -37,6 +39,7 @@ import com.example.hendrik.mianamalaga.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -50,7 +53,6 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -63,17 +65,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 
@@ -89,19 +92,16 @@ import java.util.Objects;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
-import static java.security.AccessController.getContext;
 
 // TODO If we do have more than one original messages one after the other. The videos must also be played one ofter another ....
 // TODO without user action. One should on the other hand prevent that multiple user messages follow one after another
 
-public class ActivityConversation extends AppCompatActivity {
+public class ActivityConversation extends ActivityBase {
 
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 2;
 
     private AdapterPageFragment mPageFragmentAdapter;
-    private static File mApplicationDirectory;
-    private static File mTemporaryDirectory;
     private FrameLayout mVideoFrameLayout;
     private EditText mResponseText;
     private RecyclerView mConversationListView;
@@ -117,10 +117,15 @@ public class ActivityConversation extends AppCompatActivity {
     private VideoView mVideoView;
     private CardView mVideoCardView;
     private CardView mResponsePagerCardView;
+    private TextView mSolutionTextView;
     private ImageView mImageView;
     private Animator mCurrentAnimator;
-    private RelativeLayout mMainLayout;
+    private ConstraintLayout mMainLayout;
     private FloatingActionButton mFabHelp;
+    private Button mButtonA;
+    private Button mButtonB;
+    private Button mButtonC;
+    private boolean mUseButtonChoice = true;
 
     private ArrayList<ChatContent> mChatContentArrayList;
 
@@ -143,6 +148,7 @@ public class ActivityConversation extends AppCompatActivity {
         mVideoCardView = findViewById(R.id.video_view_card_view);
         mImageView = findViewById(R.id.conversation_video_image_view);
         mResponsePagerCardView = findViewById(R.id.pager_card_view);
+        mSolutionTextView = findViewById(R.id.solution_textView);
 
         File resourceDirectory = getResourceDirectory(mResourceDir);
         File resourceChatContentFile = new File(resourceDirectory, Constants.ChatContentFileName);
@@ -152,12 +158,13 @@ public class ActivityConversation extends AppCompatActivity {
         setupConversationListView();
         setupViewPager();
         setupFabs();
+        setupAnswerButtons();
         setupUserInputTextView();
         //  setupUserHelpAudio();
 
         mInterfaces = new HashMap<Integer, OnUpdateResponseInFragment>();
 
-        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File topicDirectory = new File(mFullTopicsDirectory, mResourceDir);
         File backgroundOutputFile = new File( topicDirectory,Constants.BackgroundImageName );
         if ( backgroundOutputFile.exists() ){
             mMainLayout.setBackground( Drawable.createFromPath( backgroundOutputFile.toString() ));
@@ -184,7 +191,7 @@ public class ActivityConversation extends AppCompatActivity {
     }
 
     private ArrayList<ChatContent> readResourceContentFile(File resourceFile) {  //TODO This is not working when file is in temporary folder . it look at the false place
-        //TODO the copy from temp folder to ap folder seems not to work either
+                                                                                 //TODO the copy from temp folder to ap folder seems not to work either
         String chatContentString = Utils.readJsonFile(resourceFile);
         Gson gSon = new Gson();
         ChatContent[] chatContentArray = gSon.fromJson(chatContentString, ChatContent[].class);
@@ -200,16 +207,20 @@ public class ActivityConversation extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.toolbar_login:
-                    //checkPermissionAndOpenLoginActivity();
+                    checkPermissionAndOpenLoginActivity();
                     return true;
                 case R.id.toolbar_help:
-                    //showHelp();
+                    showHelp();
                     return true;
                 case R.id.toolbar_editor_mode:
                     if (menuItem.isChecked()) {
                         menuItem.setChecked(false);
                         mEditMode = false;
                         setupFabs();
+                        mButtonA.setVisibility(View.VISIBLE);
+                        mButtonB.setVisibility(View.VISIBLE);
+                        mButtonC.setVisibility(View.VISIBLE);
+                        mSolutionTextView.setVisibility(View.VISIBLE);
                     } else {
                         menuItem.setChecked(true);
                         mEditMode = true;
@@ -226,12 +237,14 @@ public class ActivityConversation extends AppCompatActivity {
                     return true;
 
                 case R.id.toolbar_dictionary:
+                    Toast.makeText(this, this.getString( R.string.ThatFunctionalityIsUnderDevelopment ),Toast.LENGTH_SHORT).show();
+                    /*
                     Intent intent = new Intent(this, ActivityDictionary.class);
                     intent.putExtra("EditMode", mEditMode);
                     intent.putExtra( Constants.FullTemporaryDirectory, mTemporaryDirectory.toString() );
                     intent.putExtra( Constants.RelativeResourceDirectory, mResourceDir );
                     intent.putExtra( Constants.MoraMora, mApplicationDirectory.toString() );
-                    startActivity(intent);
+                    startActivity(intent);*/
                     return true;
 
                 case R.id.toolbar_background_image:
@@ -274,6 +287,9 @@ public class ActivityConversation extends AppCompatActivity {
             case R.id.toolbar_menu:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.toolbar_settings:
+                startActivity( new Intent(this, ActivitySettings.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -281,13 +297,13 @@ public class ActivityConversation extends AppCompatActivity {
 
     private void getIntents() {
         if (getIntent().getExtras() != null) {
-            mEditMode = getIntent().getExtras().getBoolean( Constants.EditMode );
+            //mEditMode = getIntent().getExtras().getBoolean( Constants.EditMode );
             mResourceDir = getIntent().getExtras().getString( Constants.RelativeResourceDirectory).toLowerCase();
-            String AppDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
-            mApplicationDirectory = new File(AppDirectoryPathString);
-            mTemporaryDirectory = new File(getIntent().getExtras().getString(Constants.FullTemporaryDirectory));
+            //String AppDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
+            //mApplicationDirectory = new File(AppDirectoryPathString);
+            //mTemporaryDirectory = new File(getIntent().getExtras().getString(Constants.FullTemporaryDirectory));
 
-            if (!Utils.prepareFileStructure(mApplicationDirectory.toString())) {
+            if (!Utils.prepareFileStructure(mFullTopicsDirectory.toString())) {
                 finish();
             }
         }
@@ -296,6 +312,10 @@ public class ActivityConversation extends AppCompatActivity {
     private void prepareEditMode() {
         mAdapter.setItemCount(mChatContentArrayList.size());
         mAdapter.notifyDataSetChanged();
+        mButtonA.setVisibility(View.GONE);
+        mButtonB.setVisibility(View.GONE);
+        mButtonC.setVisibility(View.GONE);
+        mSolutionTextView.setVisibility(View.GONE);
     }
 
     /*
@@ -323,7 +343,8 @@ public class ActivityConversation extends AppCompatActivity {
         mResponseText = findViewById(R.id.response_editText);
         mResponseText.setOnEditorActionListener((v, actionId, event) -> {
             if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-                response();
+                String response = mResponseText.getText().toString().toLowerCase().replaceAll("\\W", "");
+                response( response );
             }
             return false;
         });
@@ -341,18 +362,18 @@ public class ActivityConversation extends AppCompatActivity {
         FloatingActionButton fabRemoveMessage = findViewById(R.id.conversation_fab_remove);
         FloatingActionButton fabAddUserMessage = findViewById(R.id.conversation_fab_add_user_message);
 
-        if (!mEditMode) {
+        if (mEditMode) {
+            fabAddOriginalMessage.show();
+            fabRemoveMessage.show();
+            fabAddUserMessage.show();
+            mFabHelp.setOnClickListener(view -> showHelpEditMode());
+            //mFabHelp.setImageResource(R.drawable.ic_file_save);
+        } else {
             fabAddOriginalMessage.hide();
             fabRemoveMessage.hide();
             fabAddUserMessage.hide();
             mFabHelp.setOnClickListener(view -> help());
             mFabHelp.setImageResource(R.drawable.ic_help);
-        } else {
-            fabAddOriginalMessage.show();
-            fabRemoveMessage.show();
-            fabAddUserMessage.show();
-            mFabHelp.setOnClickListener(view -> saveConversationToFile());
-            mFabHelp.setImageResource(R.drawable.ic_file_save);
         }
 
         fabAddOriginalMessage.setOnClickListener(view -> addChatMessage(false));
@@ -364,7 +385,7 @@ public class ActivityConversation extends AppCompatActivity {
         ChatContent chatContent = new ChatContent();
         if (isUser) {
             if (mChatContentArrayList.get(mChatContentArrayList.size() - 1).isUser()) {
-                Toast.makeText(this, "You already have added a user message!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, this.getString( R.string.youAlreadyHaveAddedAUserMessage ), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -375,7 +396,8 @@ public class ActivityConversation extends AppCompatActivity {
         mChatContentArrayList.add(chatContent);
         mAdapter.notifyDataSetChanged();
         prepareEditMode();
-        Toast.makeText(this, "Content added!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, this.getString( R.string.ContentAdded ), Toast.LENGTH_SHORT).show();
+        smoothScrollToPosition( mAdapter.getItemCount() );
     }
 
     private void saveConversationToFile() {
@@ -383,7 +405,7 @@ public class ActivityConversation extends AppCompatActivity {
         File resourceDirectory = getResourceDirectory(mResourceDir);                              //TODO change that to show a snackbar
         File chatContentFile = new File(resourceDirectory, Constants.ChatContentFileName);
         Utils.writeChatContentListToFile(chatContentFile, mChatContentArrayList);
-        Toast.makeText(this, "Conversation is saved!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, this.getString( R.string.ConversationIsSaved ), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -493,43 +515,73 @@ public class ActivityConversation extends AppCompatActivity {
             mResponseText.setText("");
 
             if (nextListPosition < mChatContentArrayList.size()) {
-                String[] responseArray = mChatContentArrayList.get(nextListPosition).getTranslatedMessages();
+                String response = mChatContentArrayList.get(nextListPosition).getTranslatedMessage();
+                mSolutionTextView.setText( response.length() > 2 ? response.substring(2) : response );
 
-                while (responseArray.length > mPageFragmentAdapter.getCount()) {
+                String [] possibleAnswers = mChatContentArrayList.get(nextListPosition).getNativeMessages();
+                if( possibleAnswers.length == 3) {
+                    mButtonA.setText(possibleAnswers[0]);
+                    mButtonB.setText(possibleAnswers[1]);
+                    mButtonC.setText(possibleAnswers[2]);
+                }
+/*
+                while (responseArray.length 1 > mPageFragmentAdapter.getCount()) {
                     mPageFragmentAdapter.addFragment(new FragmentPageResponse(), " ");
                     mPageFragmentAdapter.notifyDataSetChanged();
                 }
 
 
-                for (int position = 0; position < responseArray.length; position++) {
-                    String responseString = mChatContentArrayList.get(nextListPosition).getTranslatedMessages()[position];
+                for (int position = 0; position < responseArray.length-1; position++) {
+                    String responseString = mChatContentArrayList.get(nextListPosition).getTranslatedMessage();[position];
                     if (mInterfaces.get(0) != null) {
                         mInterfaces.get(position).updateResponses(responseString);
                     } else {
                         mResponseCacheList.add(responseString);
                     }
                 }
-
-                RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(this) {
-                    @Override
-                    protected int getVerticalSnapPreference() {
-                        return LinearSmoothScroller.SNAP_TO_END;
-                    }
-
-                    @Override
-                    protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                        return 4 / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, displayMetrics);       // The first number (4) defines the scrolling speed
-                    }
-                };
-
-                smoothScroller.setTargetPosition(currentListPosition);
-                mLayoutManager.startSmoothScroll(smoothScroller);
+*/
+                smoothScrollToPosition( currentListPosition );
             }
 
         } else {
-            Toast.makeText(this, "Congratulation!! You did it!", Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.CongratulationYouDidIt, Toast.LENGTH_LONG);
         }
 
+    }
+
+    private void smoothScrollToPosition(int position){
+        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(this) {
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_END;
+            }
+
+            @Override
+            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                return 4 / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, displayMetrics);       // The first number (4) defines the scrolling speed
+            }
+        };
+
+        smoothScroller.setTargetPosition( position );
+        mLayoutManager.startSmoothScroll(smoothScroller);
+    }
+
+    private void setupAnswerButtons(){
+        mButtonA = findViewById(R.id.buttonA);
+        mButtonB = findViewById(R.id.buttonB);
+        mButtonC = findViewById(R.id.buttonC);
+
+        mButtonA.setOnClickListener(view -> {
+            response("A");
+        });
+
+        mButtonB.setOnClickListener(view -> {
+            response("B");
+        });
+
+        mButtonC.setOnClickListener(view -> {
+            response("C");
+        });
     }
 
     /*
@@ -540,23 +592,49 @@ public class ActivityConversation extends AppCompatActivity {
     */
     private void playMedia(boolean isHelp) {
         String[] mediaNames = mChatContentArrayList.get(mAdapter.getItemCount() - 1).getMediaFileNames();
-        onPlayMediaButtonPressed(mediaNames[0], isHelp);
+        if( !mediaNames[0].isEmpty() ) onPlayMediaButtonPressed(mediaNames[0], isHelp);
     }
 
     private File getResourceDirectory(String ResourceDir) {
-        return new File( mApplicationDirectory, ResourceDir );
+        return new File( mFullTopicsDirectory, ResourceDir );
     }
 
 
-    public void response() {
+    public void response( String response ) {
         int nextListPosition = mAdapter.getItemCount();
 
         if (nextListPosition < mChatContentArrayList.size()) {
 
-            String response = mResponseText.getText().toString().toLowerCase().replaceAll("\\W", "");
-
-            String[] responseArray = mChatContentArrayList.get(nextListPosition).getNativeMessages();
             boolean foundCorrectResponse = false;
+
+            if( mUseButtonChoice ){
+                if( mChatContentArrayList.get(nextListPosition).getTranslatedMessage().startsWith(response) ) foundCorrectResponse = true;
+            } else {
+                String[] responseArray = mChatContentArrayList.get(nextListPosition).getNativeMessages();
+                String rightResponse = responseArray[0].toLowerCase().replaceAll("\\W", "");
+                if (rightResponse.equals( response )) foundCorrectResponse = true;
+            }
+
+            if ( foundCorrectResponse == true ){
+                mAdapter.stepForward();
+
+                if (mAdapter.getItemCount() < mChatContentArrayList.size()) {
+                    prepare_section();
+                    Toast.makeText(this, this.getString( R.string.Bravo ), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, this.getString( R.string.BravoBravoBravoYouGotIt ), Toast.LENGTH_LONG).show();
+                    mFabHelp.hide();
+                    Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.firework);
+                    mVideoView.setVideoURI(videoUri);
+                    startMediaAnimation("something.mp4", false);
+                }
+            } else {
+                Toast.makeText(this, this.getString( R.string.Ups ), Toast.LENGTH_LONG).show();
+            }
+
+
+
+/*
             for (int index = 0; index < responseArray.length; index++) {
                 String rightResponse = responseArray[index].toLowerCase().replaceAll("\\W", "");
                 if (rightResponse.equals(response)) {
@@ -576,7 +654,7 @@ public class ActivityConversation extends AppCompatActivity {
                 }
             }
             if (!foundCorrectResponse)
-                Toast.makeText(this, "Ups!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Ups!!", Toast.LENGTH_LONG).show();*/
         }
     }
 
@@ -609,9 +687,11 @@ public class ActivityConversation extends AppCompatActivity {
 
     protected void showInputDialog(final int position) {
 
-        String[] nativeMessages = mChatContentArrayList.get(position).getNativeMessages();          //TODO this can be multiple messages and should all be passed to the dialog wich must be able to handle that
-        String[] translatedMessages = mChatContentArrayList.get(position).getTranslatedMessages();
-        DialogAddChangeMessage dialog = DialogAddChangeMessage.newInstance(nativeMessages, translatedMessages, position);
+        String[] nativeMessages = mChatContentArrayList.get(position).getNativeMessages();
+        String translatedMessage = mChatContentArrayList.get(position).getTranslatedMessage();
+        String infoText = mChatContentArrayList.get(position).getSupplementalInfoText();
+        boolean isUser = mChatContentArrayList.get(position).isUser();
+        DialogAddChangeMessage dialog = DialogAddChangeMessage.newInstance(nativeMessages, translatedMessage, infoText, position, isUser);
         dialog.show(getSupportFragmentManager(), Constants.TAG);
     }
 
@@ -629,7 +709,7 @@ public class ActivityConversation extends AppCompatActivity {
 
     public void prepareCamera(int position, int mediaType) {
         mVideoFrameLayout.setVisibility(View.VISIBLE);
-        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File topicDirectory = new File(mFullTopicsDirectory, mResourceDir);
 
         File mediaFile;
 
@@ -680,7 +760,7 @@ public class ActivityConversation extends AppCompatActivity {
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
 
-        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File topicDirectory = new File(mFullTopicsDirectory, mResourceDir);
 
         File audioFile = new File(topicDirectory, Constants.AudioName + position + ".m4a");
         mChatContentArrayList.get(position).setMediaFileNames(new String[]{audioFile.getName()});
@@ -712,16 +792,29 @@ public class ActivityConversation extends AppCompatActivity {
         }
     }
 
-    public void onDialogAddChangeMessagePosClick(String nativeMessage, String translatedMessage, int position, File mediaFile) {
+    public void onDialogAddChangeMessagePosClick(String[] nativeMessages, String translatedMessage, String infoText, File mediaFile, int position) {
 
-        mChatContentArrayList.get(position).setNativeMessages(new String[]{nativeMessage});
-        mChatContentArrayList.get(position).setTranslatedMessages(new String[]{translatedMessage});
+        mChatContentArrayList.get(position).setNativeMessages( nativeMessages);
+        mChatContentArrayList.get(position).setTranslatedMessages( translatedMessage );
+        mChatContentArrayList.get(position).setSupplementalInfoText( infoText );
 
         if (mediaFile != null) {
-            File topicDirectory = getResourceDirectory(mResourceDir);                             //TODO compress file if image if too large - if video tell user that file size to large!
-            Utils.copyFileOrDirectory(mediaFile.toString(), topicDirectory.toString());
+            File topicDirectory = getResourceDirectory( mResourceDir );                             //TODO compress file if image if too large - if video tell user that file size to large!
 
-            File fullMediaFile = new File(topicDirectory, mediaFile.getName());
+            Utils.copyFileOrDirectory(mediaFile.toString(), mTemporaryDirectory.toString() );
+            File temporaryMediaFile = new File(mTemporaryDirectory, mediaFile.getName());
+            File renamedTemporaryMediaFile = new File( mTemporaryDirectory, "tempFile" + mediaFile.getName().substring( mediaFile.getName().lastIndexOf(".")) );
+            try {
+                temporaryMediaFile.renameTo( renamedTemporaryMediaFile );
+            } catch (NullPointerException e) {
+                Log.e(Constants.TAG, getString(R.string.could_not_rename));
+            }
+
+            //Utils.copyFileOrDirectory(mediaFile.toString(), topicDirectory.toString());
+            Utils.copyFileOrDirectory(renamedTemporaryMediaFile.toString(), topicDirectory.toString());
+
+            //File fullMediaFile = new File(topicDirectory, mediaFile.getName());
+            File fullMediaFile = new File(topicDirectory, renamedTemporaryMediaFile.getName());
             File renamedMediaFile = null;
             if (Utils.isImageFile(mediaFile.toString())) {
                 renamedMediaFile = new File(topicDirectory, Constants.ImageName + position + ".jpg");
@@ -749,6 +842,8 @@ public class ActivityConversation extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
         mConversationListView.requestFocus();
         mContentChanged = true;
+
+        saveConversationToFile();
     }
 
     public void onPlayMediaButtonPressed(String mediaName, boolean isHelp) {
@@ -836,7 +931,10 @@ public class ActivityConversation extends AppCompatActivity {
                 .with(ObjectAnimator.ofFloat(mVideoCardView, View.SCALE_Y, 0f, 1f))
                 .with(ObjectAnimator.ofFloat(mVideoCardView, View.ALPHA, 1))
                 .with(ObjectAnimator.ofFloat(mConversationListView, View.ALPHA, 0f))
-                .with(ObjectAnimator.ofFloat(mResponsePagerCardView, View.ALPHA, 0f));
+                .with(ObjectAnimator.ofFloat(mResponsePagerCardView, View.ALPHA, 0f))
+                .with(ObjectAnimator.ofFloat(mButtonA, View.ALPHA, 0f))
+                .with(ObjectAnimator.ofFloat(mButtonB, View.ALPHA, 0f))
+                .with(ObjectAnimator.ofFloat(mButtonC, View.ALPHA, 0f));
 
 
         startSet.setDuration(500);
@@ -878,6 +976,9 @@ public class ActivityConversation extends AppCompatActivity {
                     mImageView.setVisibility(View.INVISIBLE);
                     mConversationListView.animate().alpha(1f).setDuration(500);
                     mResponsePagerCardView.animate().alpha(1f).setDuration(500);
+                    mButtonA.animate().alpha(1f).setDuration(500);
+                    mButtonB.animate().alpha(1f).setDuration(500);
+                    mButtonC.animate().alpha(1f).setDuration(500);
                     mCurrentAnimator = null;
 
                     if (isHelp)
@@ -920,11 +1021,6 @@ public class ActivityConversation extends AppCompatActivity {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                //File cacheFolder = new File( Environment.getExternalStorageDirectory(), BuildConfig.APPLICATION_NAME + "/" + BuildConfig.TEMPORARY_FOLDER_NAME );
-                //if( !cacheFolder.exists() ) cacheFolder.mkdir();
-                
-                //File temporaryVideoFile = new File( cacheFolder, videoFile.getName() );
-                //Uri tempVideoFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider",  temporaryVideoFile);
                 Context context = ActivityConversation.this;
                 Uri tempVideoFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider",  videoFile );
                 takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempVideoFileUri);
@@ -971,14 +1067,14 @@ public class ActivityConversation extends AppCompatActivity {
     private void onFileChosen(File file) {
 
         if( !Utils.isImageFile( file.toString() )){
-            Toast.makeText(getApplicationContext(),"Choose an image file instead!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), this.getString( R.string.ChooseAnImageFileInstead ),Toast.LENGTH_SHORT).show();
             return;
         }
 
         Bitmap realImage = BitmapFactory.decodeFile( file.toString() );
         Bitmap bitmap = Utils.rotateBitmap(realImage, 90, false );
 
-        File topicDirectory = new File(mApplicationDirectory, mResourceDir);
+        File topicDirectory = new File(mFullTopicsDirectory, mResourceDir);
         File backgroundOutputFile = new File( topicDirectory,Constants.BackgroundImageName );
 
         FileOutputStream fos = null;
@@ -993,8 +1089,20 @@ public class ActivityConversation extends AppCompatActivity {
     }
 
 
+    public void onSupplementalInfoButtonPressed(String supplementalInfoText) {
+        DialogHelp helpDialog = DialogHelp.newInstance( supplementalInfoText );
+        helpDialog.show( getSupportFragmentManager(), Constants.TAG );
+    }
 
+    void showHelp(){
+        DialogHelp helpDialog = DialogHelp.newInstance( getString(R.string.HelpConversation) ); // TODO explain more and extract string resource
+        helpDialog.show( getSupportFragmentManager(), Constants.TAG );
+    }
 
+    void showHelpEditMode(){
+        DialogHelp helpDialog = DialogHelp.newInstance( getString(R.string.UsingThePlusButtonsYouCanAdd) ); // TODO explain more and extract string resource
+        helpDialog.show( getSupportFragmentManager(), Constants.TAG );
+    }
 }
 
 

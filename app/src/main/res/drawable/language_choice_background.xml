@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
             <gradient
                 android:angle="90"
-                android:startColor="@color/color_main_light"
-                android:endColor="#FFFFFF6F"
+                android:startColor="@color/secondaryLightColor"
+                android:endColor="@color/secondaryDarkColor"
                 android:type="linear" />
         </shape>
     </item>
 </selector>
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:drawable="@android:color/white" />
+<item
+    android:drawable="@mipmap/ic_gecko_black_foreground"
+    android:gravity="center" />
+</layer-list>

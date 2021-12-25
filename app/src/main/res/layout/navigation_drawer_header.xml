@@ -26,9 +26,9 @@
         android:id="@+id/navigation_drawer_label_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sort by: "
+        android:text="@string/sort_by"
         android:textSize="12sp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/secondaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"/>

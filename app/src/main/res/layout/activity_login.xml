@@ -17,7 +17,7 @@
             android:id="@+id/toolbar_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/my_app_bar_height"
-            android:background="@color/color_main_light"
+            android:background="@color/primaryColor"
             app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleMarginStart="24dp"/>
     </com.google.android.material.appbar.AppBarLayout>
@@ -25,29 +25,31 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Use the following for the cloud login:"
+        android:text="@string/use_the_following_for_the_cloud_login"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="email: hendrik.may@gmx.net"
+        android:text="@string/email_mora_mora_gmx_net"
         android:textAlignment="center"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="password: mora-mora"
+        android:text="@string/password"
         android:textAlignment="center"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal" />
 
     <Button
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign in"
+        android:text="@string/sign_in"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="30dp"/>
 

@@ -19,7 +19,8 @@ public class Constants {
     /*
     Naming conventions for intents
      */
-    public static final String LanguageToLearn = "LanguageToLearn";
+    public static final String LanguageToLearnDirectoryName = "LanguageToLearnDirectoryName";
+    public static final String FullTopicDirectoryName = "FullTopicDirectoryName";
     public static final String MotherTongue = "MotherTongue";
     public static final String FullTemporaryDirectory = "FullTemporaryDirectory";
     public static final String RelativeResourceDirectory = "RelativeResourceDirectory";

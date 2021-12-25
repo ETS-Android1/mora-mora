@@ -261,7 +261,7 @@ public class ActivityDropBoxCloud extends AppCompatActivity {
         intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
         intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
         intent.putExtra(Constants.MotherTongue, motherTongueDirectoryName);
-        intent.putExtra(Constants.LanguageToLearn, languageDirectoryName);
+        intent.putExtra(Constants.LanguageToLearnDirectoryName, languageDirectoryName);
         Log.e(Constants.TAG," Starting topic choice!");
         startActivity(intent);
         finish();

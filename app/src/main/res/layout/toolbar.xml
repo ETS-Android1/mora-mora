@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/my_app_bar_height"
-        android:background="@color/color_main_light"
+        android:background="@color/primaryColor"
         app:titleMarginStart="24dp"
         app:titleTextAppearance="@style/Toolbar.TitleText" />
 </com.google.android.material.appbar.AppBarLayout>

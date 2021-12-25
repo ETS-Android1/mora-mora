@@ -11,9 +11,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/gecko_ic_launcher"
+        android:icon="@mipmap/ic_gecko_black_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/gecko_ic_launcher"
+        android:roundIcon="@mipmap/ic_gecko_black_round"
         android:supportsRtl="true"
         android:name="androidx.multidex.MultiDexApplication"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -29,7 +29,11 @@
         <activity android:name=".activities.ActivitySettings"
             android:parentActivityName=".activities.ActivityTopicChoice">
         </activity>
-        <activity android:name=".activities.ActivityLanguageChoice">
+        <activity android:name=".activities.ActivityKnownLanguageSelection"
+            android:parentActivityName=".activities.ActivityLanguageChoice">
+        </activity>
+        <activity android:name=".activities.ActivityLanguageChoice"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +50,7 @@
         </activity>
         <activity
             android:name=".activities.ActivityTopicChoice"
-            android:parentActivityName=".activities.ActivityLanguageChoice">
+            android:parentActivityName=".activities.ActivityKnownLanguageSelection">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.hendrik.mianamalaga.activities.ActivityLanguageChoice" />

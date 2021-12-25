@@ -15,7 +15,7 @@
         android:textColor="@android:color/white"
         android:layout_weight="0.8"
         android:textStyle="bold"
-        android:background="@color/spinner_color"
+        android:background="@color/secondaryColor"
         android:id="@+id/list_element_language_spinner_text_view"/>
 
 </LinearLayout>

@@ -5,14 +5,14 @@
 
     <item android:id="@+id/toolbar_login"
         android:icon="@drawable/ic_cloud_login"
-        android:title="Access cloud"
+        android:title="@string/access_cloud"
         app:showAsAction="never"/>
     <item android:id="@+id/toolbar_help"
         android:icon="@drawable/ic_help"
-        android:title="Help" />
+        android:title="@string/help_menu" />
     <item android:id="@+id/toolbar_editor_mode"
         android:icon="@drawable/ic_build"
-        android:title="Editing mode"
+        android:title="@string/editing_mode"
         android:checkable="true"/>
     </group>
 

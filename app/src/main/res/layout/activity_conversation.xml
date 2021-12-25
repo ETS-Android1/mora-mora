@@ -7,213 +7,271 @@
     android:layout_height="match_parent"
     tools:context=".activities.ActivityConversation">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/conversation_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/language_choice_background">
+    android:background="@drawable/cloud_background">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="6dp">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_conversation"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/my_app_bar_height"
-            android:background="@color/color_toolbar"
-            app:titleMarginStart="24dp"
-            app:titleTextAppearance="@style/Toolbar.TitleText"/>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/video_view_card_view"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:elevation="52dp"
-        android:innerRadius="10dp"
-        android:shape="ring"
-        android:thicknessRatio="1.9"
-        android:visibility="invisible"
-        app:cardCornerRadius="75dp">
-
-        <VideoView
-            android:id="@+id/conversation_video_view"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
-            android:scaleType="fitXY"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:keepScreenOn="true"
-            android:orientation="horizontal"
-            android:visibility="invisible"/>
-
-        <ImageView
-            android:id="@+id/conversation_video_image_view"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:keepScreenOn="true"
-            android:scaleType="fitXY"
-            android:orientation="horizontal"
-            android:visibility="invisible"/>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/camera_view_card_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center">
-
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="200dp"
-            android:layout_height="240dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="15dp"
-            android:keepScreenOn="true"
-            android:orientation="horizontal"
-            android:visibility="gone">
-        </FrameLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/conversation_listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/pager_card_view"
-        android:scrollbars="vertical">
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/pager_card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/response_editText_layout"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp">
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            ></androidx.viewpager.widget.ViewPager>
-
-    </androidx.cardview.widget.CardView>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/response_editText_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true">
-
-        <EditText
-            android:id="@+id/response_editText"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/type_your_answer"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:layout_marginRight="40dp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"/>
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_conversation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/my_app_bar_height"
+                android:background="@color/primaryColor"
+                app:titleMarginStart="24dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/conversation_fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="@color/test_color"
-        android:clickable="true"
-        android:foregroundGravity="bottom|right"
-        android:src="@drawable/ic_plus"
-        android:tint="#ffffff"
-        app:fabSize="mini"/>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/video_view_card_view"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:elevation="52dp"
+            android:innerRadius="10dp"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
+            android:visibility="invisible"
+            app:cardCornerRadius="75dp"
+            app:layout_constraintBottom_toBottomOf="@+id/conversation_listView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/conversation_listView"
+            app:layout_constraintTop_toBottomOf="@+id/appbar_layout">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/conversation_fab_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/test_color"
-        android:clickable="true"
-        android:foregroundGravity="bottom|right"
-        android:src="@drawable/ic_minus"
-        android:tint="#ffffff"
-        app:fabSize="mini"/>
+            <VideoView
+                android:id="@+id/conversation_video_view"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:keepScreenOn="true"
+                android:orientation="horizontal"
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/conversation_fab_add_user_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="60dp"
-        android:backgroundTint="@color/test_color"
-        android:clickable="true"
-        android:foregroundGravity="bottom|right"
-        android:src="@drawable/ic_add_simple"
-        android:tint="#ffffff"
-        app:fabSize="mini"/>
+            <ImageView
+                android:id="@+id/conversation_video_image_view"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:keepScreenOn="true"
+                android:orientation="horizontal"
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/test_color"
-        android:clickable="true"
-        android:foregroundGravity="bottom|right"
-        android:src="@drawable/ic_help"
-        android:tint="#ffffff"
-        app:fabSize="mini"/>
+        </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/camera_view_card_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/pager_card_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/appbar_layout">
 
-    </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="200dp"
+                android:layout_height="240dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="15dp"
+                android:keepScreenOn="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/conversation_listView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/pager_card_view"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/pager_card_view"
+            app:layout_constraintTop_toBottomOf="@+id/appbar_layout"
+            app:layout_constraintVertical_bias="0.49"></androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/pager_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_above="@id/response_editText_layout"
+            app:layout_constraintBottom_toTopOf="@+id/buttonA"
+            >
+
+            <TextView
+                android:id="@+id/solution_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Solution"
+                android:textAlignment="center">
+            </TextView>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:visibility="gone"></androidx.viewpager.widget.ViewPager>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonA"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_above="@id/buttonB"
+            android:text="Button A"
+            android:textAllCaps="false"
+            android:visibility="visible"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonB" />
+
+        <Button
+            android:id="@+id/buttonB"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Button B"
+            android:textAllCaps="false"
+            android:visibility="visible"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonC" />
+
+        <Button
+            android:id="@+id/buttonC"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Button C"
+            android:textAllCaps="false"
+            android:visibility="visible"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/response_editText_layout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <EditText
+                android:id="@+id/response_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:hint="@string/type_your_answer"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/conversation_fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondaryColor"
+            android:clickable="true"
+            android:foregroundGravity="bottom|right"
+            android:src="@drawable/ic_plus"
+            android:tint="#ffffff"
+            app:fabSize="mini"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/conversation_fab_add_user_message" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/conversation_fab_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondaryColor"
+            android:clickable="true"
+            android:foregroundGravity="bottom|right"
+            android:src="@drawable/ic_minus"
+            android:tint="#ffffff"
+            app:fabSize="mini"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintBottom_toTopOf="@+id/conversation_fab_add"
+            app:layout_constraintEnd_toStartOf="@+id/fab_help" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/conversation_fab_add_user_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondaryColor"
+            android:clickable="true"
+            android:foregroundGravity="bottom|right"
+            android:src="@drawable/ic_add_simple"
+            android:tint="#ffffff"
+            app:fabSize="mini"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="7dp"
+            android:backgroundTint="@color/secondaryColor"
+            android:clickable="true"
+            android:foregroundGravity="bottom|right"
+            android:src="@drawable/ic_help"
+            android:tint="#ffffff"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/conversation_fab_add_user_message"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

@@ -122,7 +122,7 @@ public class ActivityDictionary extends AppCompatActivity {
         getIntents();
         setupActionBar();
         setupUserInputTextView();
-        setupKnownLanguageSpinner();
+  //      setupKnownLanguageSpinner();
         setupTranslationsRecyclerView();
 
 
@@ -331,7 +331,7 @@ public class ActivityDictionary extends AppCompatActivity {
         });
 
     }
-
+/*
     private void setupKnownLanguageSpinner() {
 
         Spinner knownLanguageSpinner = findViewById(R.id.dictionary_language_spinner);
@@ -378,7 +378,7 @@ public class ActivityDictionary extends AppCompatActivity {
         });
 
     }
-
+*/
     /**
      * Finds the position of a specific locale inside a List of locales
      * @param locale the locale which position is wanted

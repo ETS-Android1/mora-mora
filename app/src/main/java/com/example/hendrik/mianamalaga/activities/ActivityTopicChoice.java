@@ -62,26 +62,23 @@ import java.util.HashMap;
 
 
 
-public class ActivityTopicChoice extends AppCompatActivity  {
+public class ActivityTopicChoice extends ActivityBase  {
 
     private ArrayList<Topic> mTopicArrayList;
     private AdapterTopic mAdapter;
     private FloatingActionButton mNewTopicFab;
     private FloatingActionButton mSaveFab;
-    private boolean mEditMode;
     private Context mContext;
     private  RecyclerView mTopicRecyclerView;
-    private static File mApplicationDirectory;
-    private static File mTemporaryDirectory;
     private FrameLayout mCameraFrameLayout;
     private CardView mCameraCardView;
     private CoordinatorLayout mMainLayout;
     private RecyclerView.LayoutManager mLayoutManager;
     private DrawerLayout mDrawerLayout;
 
-    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
-    private static final int PERMISSION_REQUEST_CAMERA = 2;
-    private static final int PERMISSION_REQUEST_INTERNET = 3;
+ //   private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+ //   private static final int PERMISSION_REQUEST_CAMERA = 2;
+ //   private static final int PERMISSION_REQUEST_INTERNET = 3;
 
 
     @Override
@@ -89,7 +86,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic_choice);
         setupToolbar();
-        getIntents();
         setupFabs();
         setupNavigationDrawer();
         setupNavigationDrawerComponents();
@@ -109,8 +105,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         mLayoutManager = new LinearLayoutManager(this);
         mTopicRecyclerView.setLayoutManager(mLayoutManager);
 
-        //LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.item_animation_slide_from_right);
-        //mMainLayout.setLayoutAnimation(animationController);
         mTopicRecyclerView.setAlpha(0);
 
 
@@ -149,7 +143,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                 if (mEditMode){
                     deleteTopic(viewHolder);
                 } else {
-                    Toast.makeText(mContext, "Enable editor mode to remove topics!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, mContext.getString( R.string.EnableEditorModeToRemoveTopics ), Toast.LENGTH_LONG).show();
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -180,7 +174,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
             if( searchView != null ){
                 searchView.setVisibility(View.VISIBLE);
-                searchView.setQueryHint("Search Topics");
+                searchView.setQueryHint(getString(R.string.SearchTopics));
                 searchView.setSubmitButtonEnabled( true );
                 searchView.setQueryRefinementEnabled( true );
             }
@@ -306,7 +300,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                 DialogAddTopic dialogAddTopic = DialogAddTopic.newInstance(topic);
                 dialogAddTopic.show(getSupportFragmentManager(), Constants.TAG);
             } else {
-                Toast.makeText(mContext, "Enable editor mode to edit topics!", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getString( R.string.EnableEditorModeToEditTopics ), Toast.LENGTH_LONG).show();
             }
             return true;
         });
@@ -315,7 +309,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
     private void getDataFromDisk() {
         if( hasExternalStorageAccessPermission() ){
-            Utils.getTopicListFromFiles(mApplicationDirectory, mTopicArrayList, false );
+            Utils.getTopicListFromFiles(mFullTopicsDirectory, mTopicArrayList, false );
 
             File[] temporaryLanguageToLearnDirectories = mTemporaryDirectory.listFiles();
             for( File temporaryLanguageToLeanDirectory : temporaryLanguageToLearnDirectories ){
@@ -335,31 +329,14 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         }
     }
 
-    private void getIntents() {
-        if (getIntent().getExtras() != null){
-            mEditMode = getIntent().getExtras().getBoolean(Constants.EditMode);
-            String appDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
-            String languageDirectoryName = getIntent().getExtras().getString(Constants.LanguageToLearn);
-            String motherTongueDirectoryName = getIntent().getExtras().getString(Constants.MotherTongue);
-            String fullDirectoryString = appDirectoryPathString + File.separator + languageDirectoryName + File.separator + motherTongueDirectoryName;
-            String fullTemporaryDirectory = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
-            mApplicationDirectory = new File(fullDirectoryString);
-            mTemporaryDirectory = new File(fullTemporaryDirectory);
-
-            if( !Utils.prepareFileStructure(mApplicationDirectory.toString()) ){
-                finish();
-            }
-        }
-    }
-
     private void deleteTopic(RecyclerView.ViewHolder viewHolder) {
 
         int position = viewHolder.getAdapterPosition();
 
         Snackbar snackbar = Snackbar
-                .make(mMainLayout, "Topic is deleted!", Snackbar.LENGTH_LONG)
+                .make(mMainLayout, mContext.getString( R.string.TopicIsDeleted ), Snackbar.LENGTH_LONG)
                 .setAction("UNDO", view -> {
-                    Snackbar snackBarUndo = Snackbar.make(mMainLayout, "Topic is restored!", Snackbar.LENGTH_SHORT);
+                    Snackbar snackBarUndo = Snackbar.make(mMainLayout, R.string.TopicIsRestored, Snackbar.LENGTH_SHORT);
                     snackBarUndo.show();
                     mAdapter.notifyDataSetChanged();
                 });
@@ -384,7 +361,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         mAdapter.notifyItemRemoved(position);
         mAdapter.notifyDataSetChanged();
 
-        File topicFullPathFile = new File(mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
+        File topicFullPathFile = new File(mFullTopicsDirectory, Utils.convertTopicName( topic.getName() ) );
         File[] topicFiles = topicFullPathFile.listFiles();
         for (File file : topicFiles){
             file.delete();
@@ -396,8 +373,8 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     @Override
  public void onDestroy(){
     // clearTemporaryFolder();
-     if( mApplicationDirectory.isDirectory() && mApplicationDirectory.listFiles().length == 0){
-         mApplicationDirectory.delete();
+     if( mFullTopicsDirectory.isDirectory() && mFullTopicsDirectory.listFiles().length == 0){
+         mFullTopicsDirectory.delete();
      }
 
      super.onDestroy();
@@ -409,7 +386,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         intent.putExtra(Constants.EditMode, mEditMode);
         intent.putExtra(Constants.RelativeResourceDirectory,resourceDirectory);
-        intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
+        intent.putExtra(Constants.MoraMora, mFullTopicsDirectory.toString());
         intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
         startActivity(intent);
     }
@@ -443,21 +420,8 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkPermissionAndOpenLoginActivity() {
-        if ( hasExternalStorageAccessPermission() ){
-            if( hasInternetPermission() ){
-                Intent intent = new Intent(this, ActivityLogIntoCloud.class);
-                intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
-                intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
-                startActivity(intent);
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSION_REQUEST_INTERNET);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-        }
-    }
 
+/*
     private boolean hasExternalStorageAccessPermission(){
             return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)  == PackageManager.PERMISSION_GRANTED;
     }
@@ -485,7 +449,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             }
         }
     }
-
+*/
 
     private void setupToolbar(){
         Toolbar	toolbar	= findViewById(R.id.toolbar);
@@ -493,7 +457,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setIcon(R.drawable.ic_gecko_top_view_shape);
         actionBar.setDisplayHomeAsUpEnabled(true);
-    //    actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
     }
 
 
@@ -509,9 +472,11 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         if(!mEditMode){
             mNewTopicFab.hide();
             mSaveFab.hide();
+        } else {
+            mNewTopicFab.show();
+            mSaveFab.show();
         }
 
-        //if( !isDirectoryEmpty(new File(mApplicationDirectory, Constants.TemporaryFolder)) )
         if( !isDirectoryEmpty( mTemporaryDirectory ) )
             mSaveFab.show();
 
@@ -545,9 +510,9 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     private void saveTopicsToFilePressed() {
 
         Snackbar snackbar = Snackbar
-                .make(mMainLayout, "Save all topics and clear temporary folder!", Snackbar.LENGTH_LONG)
+                .make(mMainLayout, mContext.getString( R.string.SaveAllTopicsAndClearTemporaryolder ), Snackbar.LENGTH_LONG)
                 .setAction("UNDO", view -> {
-                    Snackbar snackBarUndo = Snackbar.make(mMainLayout, "Action is undone!", Snackbar.LENGTH_SHORT);
+                    Snackbar snackBarUndo = Snackbar.make(mMainLayout, R.string.ActionIsUndone, Snackbar.LENGTH_SHORT);
                     snackBarUndo.show();
                 });
 
@@ -567,7 +532,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
     private void saveTopicsToFile(){
 
-        File [] topicDirectories = mApplicationDirectory.listFiles();
+        File [] topicDirectories = mFullTopicsDirectory.listFiles();
         HashMap<String,File> fileHashMap = new HashMap<>();
 
         for (File topicDirectory : topicDirectories) {
@@ -582,13 +547,11 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
             if( topicDirectory == null ){
                 String topicDirectoryName = Utils.convertTopicName( topic.getName() );
-                File newTopicDirectory = new File( mApplicationDirectory, topicDirectoryName);
+                File newTopicDirectory = new File( mFullTopicsDirectory, topicDirectoryName);
                 if (!newTopicDirectory.exists())
                     newTopicDirectory.mkdir();
             }
 
-            //File resourceFile = new File(topicDirectory, Constants.InfoFileName);                   //TODO remove that line if everything is ready
-            //Utils.writeTopicToFile( resourceFile, topic);                                         //TODO remove that line if everything is ready
             File topicInfoFile = new File(topicDirectory, Constants.InfoFileNameNew);
             Utils.writeTopicToNewFile( topicInfoFile, topic);
         }
@@ -596,7 +559,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         copyTemporaryFolder();
     }
 
-    //Could not read /storage/emulated/0/MoraMora/mg/fr/à_la_plage/chatContent.txt
 
     private void copyTemporaryFolder() {
 
@@ -612,7 +574,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
                             for (File topicDirectory : topicDirectories) {
                                 if (new File(topicDirectory, Constants.ChatContentFileName).exists()) {
                                     Log.d(Constants.TAG, "Copying: " + topicDirectory.toString());
-                                    Utils.copyFileOrDirectory(topicDirectory.toString(), mApplicationDirectory.toString());
+                                    Utils.copyFileOrDirectory(topicDirectory.toString(), mFullTopicsDirectory.toString());
                                 }
                             }
                         }
@@ -625,8 +587,6 @@ public class ActivityTopicChoice extends AppCompatActivity  {
     }
 
     private void clearTemporaryFolder() {
-        //
-        // 89Log.e(Constants.TAG,"Deleting temp folder!");
         Utils.deleteFolder(mTemporaryDirectory);
     }
 
@@ -642,8 +602,8 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
             Topic oldTopic = mTopicArrayList.get(position);
             if (!topic.getName().toLowerCase().equals(oldTopic.getName().toLowerCase() ) ){
-                File oldFolder = new File( mApplicationDirectory, oldTopic.getName().trim().replaceAll("\\s", "_"));
-                File newFolder = new File( mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
+                File oldFolder = new File( mFullTopicsDirectory, oldTopic.getName().trim().replaceAll("\\s", "_"));
+                File newFolder = new File( mFullTopicsDirectory, Utils.convertTopicName( topic.getName() ) );
                 try {
                     oldFolder.renameTo(newFolder);
                 } catch (NullPointerException e){
@@ -656,11 +616,11 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             mAdapter.notifyDataSetChanged();
 
         } else {
-            File resourceDirectory = new File(mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );
+            File resourceDirectory = new File(mFullTopicsDirectory, Utils.convertTopicName( topic.getName() ) );
 
             if( resourceDirectory.exists() ){                                                       // TODO That modification has not yet been tested
                 Snackbar snackbar = Snackbar
-                        .make(mMainLayout, "A topic with that name already exists!", Snackbar.LENGTH_LONG);
+                        .make(mMainLayout, R.string.ATopicWithThatNameAlreadyxists, Snackbar.LENGTH_LONG);
                 snackbar.show();
                 return;
             }
@@ -677,7 +637,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
         if( imageFile != null ){
 
-            File resourceDirectory = new File( mApplicationDirectory, Utils.convertTopicName( topic.getName() ) );    //TODO compress image file if size is too big
+            File resourceDirectory = new File( mFullTopicsDirectory, Utils.convertTopicName( topic.getName() ) );    //TODO compress image file if size is too big
             Utils.copyFileOrDirectory( imageFile.toString(), resourceDirectory.toString() );
 
             File newTopicPictureFile = new File(resourceDirectory, imageFile.getName() );
@@ -694,7 +654,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
         }
 
         File relativeResourceFile = new File( Utils.convertTopicName( topic.getName() ), Constants.InfoFileNameNew);
-        File resourceFile = new File(mApplicationDirectory, relativeResourceFile.toString());
+        File resourceFile = new File(mFullTopicsDirectory, relativeResourceFile.toString());
 
         Utils.writeTopicToNewFile( resourceFile, topic);
 
@@ -714,7 +674,7 @@ public class ActivityTopicChoice extends AppCompatActivity  {
             mCameraCardView.setVisibility(View.VISIBLE);
             mCameraFrameLayout.setVisibility(View.VISIBLE);
 
-            File topicDirectory = new File(mApplicationDirectory, Utils.convertTopicName(topic.getName()));
+            File topicDirectory = new File(mFullTopicsDirectory, Utils.convertTopicName(topic.getName()));
             File pictureFile = new File(topicDirectory, Constants.TopicPictureFileName);
             getFragmentManager().beginTransaction()
                     .replace(R.id.activity_topic_choice_camera_container, FragmentVideoCamera.newInstance(pictureFile.toString()))
@@ -740,14 +700,3 @@ public class ActivityTopicChoice extends AppCompatActivity  {
 
 }
 
-/*
-private void runLayoutAnimation(final RecyclerView recyclerView) {
-    final Context context = recyclerView.getContext();
-    final LayoutAnimationController controller =
-            AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
-
-    recyclerView.setLayoutAnimation(controller);
-    recyclerView.getAdapter().notifyDataSetChanged();
-    recyclerView.scheduleLayoutAnimation();
-}
- */

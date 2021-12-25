@@ -13,6 +13,7 @@
         android:textAlignment="center"
         android:textSize="25dp"
         android:typeface="monospace"
-        android:id="@+id/language_listView_element_textView"/>
+        android:id="@+id/language_listView_element_textView"
+        android:gravity="center_horizontal" />
 
 </LinearLayout>

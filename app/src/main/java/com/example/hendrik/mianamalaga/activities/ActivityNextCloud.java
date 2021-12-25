@@ -14,7 +14,6 @@ import android.os.Bundle;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.tasks.RemoveFileAsyncTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
 
-import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -80,7 +77,7 @@ import java.util.List;
 // TODO when the download of topic files ( picture and info ) is aborded - may due to internet connection failure - display the downloaded topics in listView
 
 
-public class ActivityNextCloud extends AppCompatActivity {
+public class ActivityNextCloud extends ActivityBase {
 
     private String mAccessToken;
     private ArrayList<Topic> mTopicHomeArrayList;
@@ -95,8 +92,8 @@ public class ActivityNextCloud extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private long mTotalSize;
     private long mAccomplishedSize;
-    private File mApplicationDirectory;
-    private File mTemporaryDirectory;
+    //private File mApplicationDirectory;
+    //private File mTemporaryDirectory;
     private DrawerLayout mDrawerLayout;
     private CoordinatorLayout mMainLayout;
     private boolean mIsDownLoadMode;
@@ -115,6 +112,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     private SharedPreferences mSharedPreferences;
     private String mServerUri;
+    private Context mContext;
 
     private enum Status {
         DISPLAY_UNKNOWN_LANGUAGE,
@@ -131,13 +129,13 @@ public class ActivityNextCloud extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cloud);
         mIsDownLoadMode = true;
+        mContext = this;
 
         Log.e(Constants.TAG,"onCreate ActivityNextcloud!");
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setupUi();
         setupToolbar();
-        getIntents();
         setupNavigationDrawer();
 
         if (!tokenExists()) {                                                                            //No token Back to LoginActivity
@@ -192,18 +190,6 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     }
 
-    private void getIntents() {
-        if (getIntent().getExtras() != null) {
-            String AppDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
-            mApplicationDirectory = new File(AppDirectoryPathString);
-            String temporaryDirectoryPath = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
-            mTemporaryDirectory = new File(temporaryDirectoryPath);
-
-            if (!Utils.prepareFileStructure(AppDirectoryPathString)) {
-                finish();
-            }
-        }
-    }
 
 
     private void addOrRemoveTopicToUploadList(AdapterTopic.TopicViewHolder viewHolder) {
@@ -214,7 +200,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             viewHolder.mIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_upload));
             viewHolder.mIconImageView.setVisibility(View.VISIBLE);
             viewHolder.mBaseView.setBackgroundColor(Color.LTGRAY);
-            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mApplicationDirectory, Utils.convertTopicName(topic.getName())).toString()));
+            mTopicDirectoriesToUpload.put(topic.getName(), new File(new File(mFullTopicsDirectory, Utils.convertTopicName(topic.getName())).toString()));
         } else {
 
             viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
@@ -232,7 +218,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         if( mTopicDirectoriesToDownload.isEmpty() ){
             Toast.makeText(ActivityNextCloud.this,
-                    "You must select topics \n before you can download them!",
+                    this.getString( R.string.YouMustSelectTopicsBeforeYouCanDownloadThem ),
                     Toast.LENGTH_SHORT)
                     .show();
             return;
@@ -240,7 +226,7 @@ public class ActivityNextCloud extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(100);
-        mProgressDialog.setMessage("Downloading files. Please wait...");
+        mProgressDialog.setMessage(getString(R.string.DownloadingFilesPleaseWait));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
@@ -293,7 +279,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                             publishProgress(fileSize);
                         } else {
                             mProgressDialog.dismiss();
-                            handleError(result, "An Error occurred during download!");
+                            handleError(result, getString(R.string.AnErrorOccurredDuringDownload));
                         }
                     });
                     Object[] params = {mServerUri, ownCloudCredentials, remoteFile, mTemporaryDirectory};
@@ -317,7 +303,7 @@ public class ActivityNextCloud extends AppCompatActivity {
             mTotalSize = 0;
             mProgressDialog.dismiss();
             Toast.makeText(ActivityNextCloud.this,
-                    "Transaction complete!",
+                    this.getString( R.string.TransactionComplete ),
                     Toast.LENGTH_SHORT)
                     .show();
 
@@ -332,18 +318,14 @@ public class ActivityNextCloud extends AppCompatActivity {
         File[] downloadedLanguageToLearnDirectory = mTemporaryDirectory.listFiles();
         File[] downloadedLanguageKnownDirectory = downloadedLanguageToLearnDirectory[0].listFiles();
 
-        String languageDirectoryName = downloadedLanguageToLearnDirectory[0].getName();
-        String motherTongueDirectoryName = downloadedLanguageKnownDirectory[0].getName();
+        String languageToLearn = downloadedLanguageToLearnDirectory[0].getName();
+        String motherTongue = downloadedLanguageKnownDirectory[0].getName();
 
-        File languageToLearnDirectory = mApplicationDirectory.getParentFile();
-        mApplicationDirectory = languageToLearnDirectory.getParentFile();
-
+        File languageToLearnDirectory = new File( mApplicationDirectory, languageToLearn ) ;
 
         Intent intent = new Intent(ActivityNextCloud.this, ActivityTopicChoice.class);
-        intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirectory.toString());
-        intent.putExtra(Constants.MoraMora, mApplicationDirectory.toString());
-        intent.putExtra(Constants.MotherTongue, motherTongueDirectoryName);
-        intent.putExtra(Constants.LanguageToLearn, languageDirectoryName);
+        intent.putExtra(Constants.MotherTongue, motherTongue );
+        intent.putExtra(Constants.LanguageToLearnDirectoryName, languageToLearnDirectory.toString() );
         Log.d(Constants.TAG, " Starting topic choice!");
         startActivity(intent);
         finish();
@@ -460,7 +442,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         if( mTopicDirectoriesToUpload.isEmpty() ){
             Toast.makeText(ActivityNextCloud.this,
-                    "You must select topics \n before you can upload them!",
+                    this.getString( R.string.YouMustSelectTopicsBeforeYouCanUploadThem ),
                     Toast.LENGTH_SHORT)
                     .show();
             return;
@@ -475,7 +457,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             if (mTotalSize > 0) {
                 mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage("Uploading files. Please wait...");
+                mProgressDialog.setMessage(getString(R.string.UploadingFilesPleaseWait));
                 mProgressDialog.setIndeterminate(false);
                 mProgressDialog.setMax(100);
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -502,7 +484,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                             if (uploadResult.isSuccess()) {
                                                 publishProgress(fileSize);
                                             } else {
-                                                handleError(uploadResult, "Failed to upload file!");
+                                                handleError(uploadResult, getString(R.string.FailedToUploadFile));
                                                 mProgressDialog.dismiss();
                                             }
                                         });
@@ -512,7 +494,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            handleError(result, "Failed to create folder!");
+                            handleError(result, getString(R.string.FailedToCreateFolder));
                         }
                     });
                     Object[] params = {mServerUri, ownCloudCredentials};
@@ -522,8 +504,8 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         } else {
             Snackbar snackbar = Snackbar
-                    .make(mMainLayout, "For uploads use a custom cloud!", Snackbar.LENGTH_LONG)
-                    .setAction("Change cloud?", view -> {
+                    .make(mMainLayout, R.string.ForUploadsUseaCustomCloud, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.ChangeCloud, view -> {
                         startActivity(new Intent(this, ActivitySettings.class));
                     });
             snackbar.show();
@@ -614,11 +596,11 @@ public class ActivityNextCloud extends AppCompatActivity {
                     if (mIsDownLoadMode) {
                         mIsDownLoadMode = false;
                         menuItem.setIcon(R.drawable.ic_cloud_download);
-                        menuItem.setTitle("Switch to download mode");
+                        menuItem.setTitle(R.string.SwitchToDownloadMode);
                         switchToUploadMode();
                     } else {
                         menuItem.setIcon(R.drawable.ic_cloud_upload);
-                        menuItem.setTitle("Switch to upload mode");
+                        menuItem.setTitle(R.string.SwitchToUploadMode);
                         mIsDownLoadMode = true;
                         switchToDownLoadMode();
                     }
@@ -639,7 +621,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
     private void switchToUploadMode() {
         mTopicHomeArrayList = new ArrayList<>();
-        Utils.getTopicListFromFiles(mApplicationDirectory, mTopicHomeArrayList, false);
+        Utils.getTopicListFromFiles(mFullTopicsDirectory, mTopicHomeArrayList, false);
 
         mUpDownloadFab.show();
 
@@ -674,7 +656,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                     handleLoadedData(files, UNUSED_POSITION);
                 }
             } else {
-                handleError(result, "Failed to list folder!");
+                handleError(result, getString(R.string.FailedToListFolder));
             }
         });
         Object[] params = {mServerUri, ownCloudCredentials, path};
@@ -696,8 +678,9 @@ public class ActivityNextCloud extends AppCompatActivity {
 
                 if (cloudDeposedVersionCode > currentVersionCode) {
                     Snackbar snackbar = Snackbar
-                            .make(mMainLayout, "A new version of the app is available!", Snackbar.LENGTH_LONG)
-                            .setAction("Download", view -> {
+                            .make(mMainLayout, mContext.getString( R.string.ANewVersionOfTheAppIsAvailable ), Snackbar.LENGTH_INDEFINITE)
+                            .setDuration(10000)
+                            .setAction(R.string.Download, view -> {
                                 downloadApplicationFile(remoteFile);
                             });
                     snackbar.show();
@@ -715,7 +698,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMessage("Downloading application file. Please wait...");
+        mProgressDialog.setMessage(getString(R.string.DownloadingApplicationFilePleaseWait));
         mProgressDialog.setMax(100);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
@@ -760,11 +743,11 @@ public class ActivityNextCloud extends AppCompatActivity {
                     if (intent.resolveActivityInfo(this.getPackageManager(), 0) != null){
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(),"Can't find a suitable application for installation!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), mContext.getString( R.string.CantFindaSuitableApplicationForTheInstallationOfApps ),Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     mProgressDialog.dismiss();
-                    handleError(result, "An Error occurred during download!");
+                    handleError(result, getString(R.string.AnErrorOccurredDuringDownload));
                 }
             });
 
@@ -810,7 +793,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                         }
 
                                     } else {
-                                        handleError(result, "An error occurred!");
+                                        handleError(result, getString(R.string.AnErrorOccurred));
                                     }
 
                                 });
@@ -821,7 +804,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                     }
                 }
             } else {
-                handleError(result, "An error occurred!");
+                handleError(result, getString(R.string.AnErrorOccurred));
             }
         });
         Object[] params = {mServerUri, ownCloudCredentials, pathLower};
@@ -854,7 +837,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         mAdapterTopicCloud.setOnItemLongClickListener((position, viewHolder) -> {
             if (mSharedPreferences.getBoolean("useDefaultCloud", true)) {
-                Snackbar snackbar = Snackbar.make(mMainLayout, "You can only remove topics from your own cloud!", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(mMainLayout, R.string.YouCanOnlyRemoveTopicsFromYourOwnCloud, Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
                 removeTopicFromCloud(viewHolder);
@@ -876,7 +859,7 @@ public class ActivityNextCloud extends AppCompatActivity {
 
         mAdapterCloud.setOnItemClickListener((position, viewHolder) -> {
 
-            Toast.makeText(getApplicationContext(),"Be patient ... i am processing! ",Toast.LENGTH_SHORT ).show();
+            Toast.makeText(getApplicationContext(), mContext.getString( R.string.BePatientiAmProcessing ),Toast.LENGTH_SHORT ).show();
 
             LanguageElement languageElement = mCloudFolderArrayList.get(position);
 
@@ -896,8 +879,8 @@ public class ActivityNextCloud extends AppCompatActivity {
                 } else {
                     Log.e(Constants.TAG, "Failed to list folder " + remotePath);
                     Snackbar snackbar = Snackbar
-                            .make(mMainLayout, "An error occurred !", Snackbar.LENGTH_LONG)
-                            .setAction("Retry", view -> {
+                            .make(mMainLayout, R.string.AnErrorOccurred, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.Retry, view -> {
                                 recreate();
                             });
                     snackbar.show();
@@ -951,7 +934,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 mUpDownloadFab.show();
 
                 mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage("Downloading topics. Please wait...");
+                mProgressDialog.setMessage(getString(R.string.DownloadingTopicsPleaseWait));
                 mProgressDialog.setIndeterminate(false);
                 mProgressDialog.setMax(100);
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -1026,8 +1009,8 @@ public class ActivityNextCloud extends AppCompatActivity {
 
             if (hoursSinceLastTopicRemoval >= 24 || timeStampOfLastRemoval == null) {
                 Snackbar snackbar = Snackbar
-                        .make(mMainLayout, "Do you really want to remove that topic from cloud storage?", Snackbar.LENGTH_LONG)
-                        .setAction("Remove", view -> {
+                        .make(mMainLayout, mContext.getString( R.string.DoYouReallyWantToRemoveThatTopicFromCloudStorage ), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.Remove, view -> {
                             mRemoveTask = new RemoveFileAsyncTask(this, result -> {
                                 mRemoveTask = null;
                                 if (result.isSuccess()) {
@@ -1038,7 +1021,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                                     prefEditor.putString(Constants.TimeStampOfLastRemove, systemDateString);
                                     prefEditor.apply();
                                 } else {
-                                    handleError(result, "Failed to remove topic!");
+                                    handleError(result, getString(R.string.FailedToRemoveTopic));
                                 }
                                 mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
                             });
@@ -1058,7 +1041,7 @@ public class ActivityNextCloud extends AppCompatActivity {
                 snackbar.show();
             } else {
                 int hoursToWait = 24 - hoursSinceLastTopicRemoval;
-                Snackbar.make(mMainLayout, "You have to wait " + hoursToWait + " hour until you can remove that topic!", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mMainLayout, mContext.getString(R.string.YouHaveToWait) + hoursToWait + mContext.getString(R.string.HoursUntilYouCanRemoveThatTopic), Snackbar.LENGTH_LONG).show();
                 viewHolder.mIconImageView.setVisibility(View.INVISIBLE);
                 viewHolder.mBaseView.setBackgroundColor(Color.TRANSPARENT);
                 mUpDownloadFab.setImageResource(R.drawable.ic_cloud_upload);
@@ -1089,7 +1072,7 @@ public class ActivityNextCloud extends AppCompatActivity {
         Log.e(Constants.TAG, message + result.toString());
         Snackbar snackbar = Snackbar
                 .make(mMainLayout, message, Snackbar.LENGTH_LONG)
-                .setAction("Retry", view -> {
+                .setAction(R.string.Retry, view -> {
                     recreate();
                 });
         snackbar.show();

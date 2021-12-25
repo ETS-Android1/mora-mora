@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,17 +18,19 @@
         android:layout_marginRight="5dp"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_camera_picture"
-        android:tint="@color/test_color"
+        android:tint="@color/secondaryColor"
         app:layout_constraintEnd_toStartOf="@+id/dialog_add_change_message_file"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Picture"
+        android:gravity="center_horizontal"
+        android:text="@string/picture_button"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_add_change_message_picture"
         app:layout_constraintStart_toStartOf="@+id/dialog_add_change_message_picture"
         app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_picture" />
@@ -37,19 +42,20 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/ic_folder"
-        android:tint="@color/test_color"
         android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_folder"
+        android:tint="@color/secondaryColor"
         app:layout_constraintEnd_toStartOf="@+id/dialog_add_change_message_camera"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick File"
+        android:gravity="center_horizontal"
+        android:text="@string/pick_file"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_add_change_message_file"
         app:layout_constraintStart_toStartOf="@+id/dialog_add_change_message_file"
         app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_file" />
@@ -61,19 +67,20 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:tint="@color/test_color"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_video_cam_on"
+        android:tint="@color/secondaryColor"
         app:layout_constraintEnd_toStartOf="@+id/dialog_add_change_message_camera_app"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Simple\n Camera"
+        android:gravity="center_horizontal"
+        android:text="@string/simple_n_camera"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_add_change_message_camera"
         app:layout_constraintStart_toStartOf="@+id/dialog_add_change_message_camera"
         app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_camera" />
@@ -85,20 +92,21 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/ic_video_cam_on"
-        android:tint="@color/test_color"
         android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_video_cam_on"
+        android:tint="@color/secondaryColor"
         app:layout_constraintEnd_toStartOf="@id/dialog_add_change_message_mic_on"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Camera\n App"
         android:autoSizeTextType="uniform"
+        android:gravity="center_horizontal"
+        android:text="@string/camera_n_app"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_add_change_message_camera_app"
         app:layout_constraintStart_toStartOf="@+id/dialog_add_change_message_camera_app"
         app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_camera_app" />
@@ -108,24 +116,126 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:src="@drawable/ic_microphone"
-        android:tint="@color/test_color"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_microphone"
+        android:tint="@color/secondaryColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Microhone"
+        android:gravity="center_horizontal"
+        android:text="@string/microhone_button"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_add_change_message_mic_on"
         app:layout_constraintStart_toStartOf="@+id/dialog_add_change_message_mic_on"
         app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_mic_on" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="97dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/dialog_add_change_message_fab_A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_a_foreground"
+        android:tint="#ffffff"
+        app:backgroundTint="@color/secondaryColor"
+        app:fabSize="mini"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/dialog_add_change_message_fab_B"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_b_foreground"
+        android:tint="#ffffff"
+        app:backgroundTint="@color/secondaryLightColor"
+        app:fabSize="mini"
+        app:layout_constraintStart_toEndOf="@+id/dialog_add_change_message_fab_A"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/dialog_add_change_message_fab_C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_c_foreground"
+        android:tint="#ffffff"
+        app:backgroundTint="@color/secondaryLightColor"
+        app:fabSize="mini"
+        app:layout_constraintStart_toEndOf="@+id/dialog_add_change_message_fab_B"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/dialog_add_change_message_correct_answer_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/the_right_answer_is"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_change_message_fab_A"/>
+
+    <RadioGroup
+        android:id="@+id/dialog_add_change_message_radio_group_correct_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_change_message_correct_answer_textview">
+        <RadioButton
+            android:id="@+id/radio_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A   "/>
+        <RadioButton
+            android:id="@+id/radio_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B   "/>
+        <RadioButton
+            android:id="@+id/radio_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C"/>
+    </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_add_change_message_editText_layout"
@@ -133,23 +243,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_add_change_message_camera">
+        app:layout_constraintTop_toBottomOf="@+id/dialog_add_change_message_radio_group_correct_answer">
 
         <EditText
             android:id="@+id/dialog_add_change_message_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Native message"
-            android:imeOptions="actionDone"
-            android:minWidth="100dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginRight="8dp"
+            android:hint="Native message"
+            android:imeOptions="actionDone"
+            android:minWidth="100dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,15 +279,45 @@
             android:id="@+id/dialog_add_change_message_message_translation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Translated message"
-            android:imeOptions="actionDone"
-            android:minWidth="100dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp" />
+            android:layout_marginRight="8dp"
+            android:hint="Translated message"
+            android:imeOptions="actionDone"
+            android:minWidth="100dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_add_change_message_editText_layout_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_change_message_editText_native">
+
+        <EditText
+            android:id="@+id/dialog_add_change_message_editText_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="Optional info"
+            android:imeOptions="actionDone"
+            android:minWidth="100dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

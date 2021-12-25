@@ -1,5 +1,6 @@
 package com.example.hendrik.mianamalaga.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,8 +11,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.hendrik.mianamalaga.BuildConfig;
+import com.example.hendrik.mianamalaga.Constants;
 import com.example.hendrik.mianamalaga.R;
+import com.example.hendrik.mianamalaga.activities.ActivityDictionary;
+import com.example.hendrik.mianamalaga.activities.ActivityLanguageChoice;
 import com.example.hendrik.mianamalaga.dialogs.DialogFilePicker;
+import com.example.hendrik.mianamalaga.utilities.Utils;
 
 import java.io.File;
 import java.util.Objects;
@@ -29,6 +34,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         EditTextPreference cloudUrlPreference = findPreference( getResources().getString( R.string.cloudUrlCustom));
         EditTextPreference cloudUserNamePreference = findPreference( getResources().getString( R.string.cloudUserNameCustom ));
         EditTextPreference cloudPasswordPreference = findPreference(getResources().getString( R.string.cloudPasswordCustom ));
+        Preference resetButton = findPreference(getString(R.string.ResetMoraMora));
+
+
 
         PreferenceCategory versionCategory =  findPreference("version_number");
         if ( versionCategory != null ){
@@ -84,6 +92,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
 
         }
+
+        resetButton.setOnPreferenceClickListener(preference -> {
+            Toast.makeText(getContext(), getContext().getString( R.string.ResettingMoraMora ), Toast.LENGTH_SHORT ).show();
+            Utils.deleteFolder( getActivity().getExternalFilesDir(Constants.MoraMora) );
+            Intent intent = new Intent(getActivity(), ActivityLanguageChoice.class);
+            startActivity(intent);
+            return true;
+        });
 
     }
 

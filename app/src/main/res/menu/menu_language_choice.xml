@@ -5,7 +5,7 @@
 
     <item android:id="@+id/toolbar_help"
         android:icon="@drawable/ic_help"
-        android:title="Help" />
+        android:title="@string/help_menu" />
     <!--
     <item android:id="@+id/toolbar_login"
         android:icon="@drawable/ic_cloud_login"
@@ -14,11 +14,11 @@
         -->
     <item android:id="@+id/toolbar_editor_mode"
         android:icon="@drawable/ic_build"
-        android:title="Editing mode"
+        android:title="@string/editing_mode"
         android:checkable="true"/>
     <item android:id="@+id/toolbar_dictionary"
         android:icon="@drawable/ic_dvr"
-        android:title="Dictionary"/>
+        android:title="@string/dictionary_menu"/>
 </group>
 
 </menu>

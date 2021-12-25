@@ -1,0 +1,174 @@
+<resources>
+    <string name="app_name">" "Mora Mora</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="ndreky_button">Ndreky-Nochmal</string>
+    <string name="help">Hilfe!</string>
+    <string name="sektion_1_1_mbola_tsara">Sektion 1.1 Mbola Tsara!</string>
+    <string name="backwards">Afara</string>
+    <string name="forward">Aloha</string>
+    <string name="header">Abschnitt 1.</string>
+    <string name="title_activity_login">Anmelden</string>
+    <!-- Strings im Zusammenhang mit dem Login -->
+    <string name="prompt_email">E-Mail</string>
+    <string name="prompt_password">Passwort (optional)</string>
+    <string name="action_sign_in">Anmelden oder registrieren</string>
+    <string name="action_sign_in_short">Anmelden</string>
+    <string name="error_invalid_email">Diese E-Mail-Adresse ist ungültig</string>
+    <string name="error_invalid_password">Dieses Passwort ist zu kurz</string>
+    <string name="error_incorrect_password">Dieses Passwort ist falsch</string>
+    <string name="error_field_required">Dieses Feld ist erforderlich</string>
+    <string name="permission_rationale">"Kontaktberechtigungen sind für die Bereitstellung von E-Mails erforderlich
+        Fertigstellungen."
+    </string>
+    <string name="type_your_answer">Geben Sie Ihre Antwort ein!</string>
+    <string name="language_you_want_to_learn">Sprache, die du lernen möchtest:</string>
+    <string name="topic_name">Themenname:</string>
+    <string name="image_file_name">Bilddateiname</string>
+    <string name="short_info">Kurzinfo</string>
+    <string name="CancelButton">Abbrechen</string>
+    <string name="Add">Hinzufügen</string>
+    <string name="Change">Ändern</string>
+    <string name="could_not_rename">Verzeichnis konnte nicht umbenannt werden!</string>
+
+    <string name="APP_KEY">edmvozytadjrfgk</string>
+    <string name="CloudNotAvaiable">Kein Cloud-Zugriff!</string>
+    <string name="InternetConnectionOn">Ist deine Internetverbindung aktiv?</string>
+    <string name="chat_message">Chat-Nachricht</string>
+    <string name="explain_write_permission_reques">Sie müssen eine Schreibberechtigung erteilen, um heruntergeladene Dateien zu speichern!</string>
+    <string name="choose_source_for_the_topic_picture">Bildquelle des Themas:</string>
+
+    <string name="cloudUrlCustom">CloudUrlCustom</string>
+    <string name="cloudUserNameCustom">CloudUserNameCustom</string>
+    <string name="cloudPasswordCustom">CloudPasswordCustom</string>
+    <string name="lessonUserName">LessonUserName</string>
+    <string name="ActivityLanguageChoiceHelpText">Mora Mora befindet sich noch in einer sehr frühen Entwicklung. Die vorliegende Version enthält nur eine einzige Beispiellektion (fr-de), mit der Sie diese Sprache lernen können.\n\n
+                                                    Sie können Mora Mora weiterhin verwenden, um Ihre eigenen Lektionen zu erstellen und diese über Ihre eigene nextcloud-Speicher-Cloud zu teilen. Wenn Sie Ihre teilen möchten
+                                                    Unterricht mit der Welt, bitte kontaktieren Sie das Team: mora.mora@gmx.net.\n\n
+                                                    Verwenden Sie die Bildlaufansicht, um die Sprache auszuwählen, die Sie lernen möchten. In der oberen rechten Ecke kannst du die Sprache auswählen, die du bereits gut kennst
+                                                    genug z.B. deine Muttersprache. Dies ist die Sprache, in die die Dialoge übersetzt werden.\n\n
+                                                    Sie können in der Schublade, die Sie gerade geschlossen haben, auf "Bearbeitungsmodus" klicken, um weitere Sprachen hinzuzufügen und so dazu beizutragen, die Inhaltsdaten von Mora Mora zu vergrößern.\n\n
+                                                    Den Quellcode von Mora Mora finden Sie unter: https://github.com/hendric-git/mora-mora
+                                                    </string>
+
+    <string name="ApplicationInstallProblemHelpText">Beim Versuch, die heruntergeladene APK-Datei zu installieren, ist ein Problem aufgetreten. Bitte versuchen Sie, die neue Mora Mora-Version manuell zu installieren.\n\n
+                                                      Verwenden Sie Ihren bevorzugten Datei-Explorer und öffnen Sie den Speicherort:\n\\n
+                                                      Gerätespeicher -> MoraMora -> temporär \n\n
+                                                      und klicke auf die APK-Datei, um den Installationsvorgang abzuschließen.\n\n
+                                                    </string>
+
+    <string name="ActivityTopicChoiceHelpText">Mora Mora befindet sich noch in einer sehr frühen Entwicklung. Die vorliegende Version enthält keine Lektionen, mit denen Sie Sprachen lernen können.\n\n
+                                                Hier stehen Ihnen Offline-Lektionen zur Verfügung. Es werden auf Ihrem Gerät gespeichert. Wenn Sie noch keine Lektionen heruntergeladen haben, können Sie Ihre eigenen erstellen, indem Sie
+                                                Öffnen Sie die Schublade und klicken Sie auf - Bearbeitungsmodus - . Mit Hilfe der erscheinenden Schaltflächen kannst du ein neues Thema erstellen.\n\n
+                                                Sie können auch versuchen, Lektionen online zu finden. Verwenden Sie die Schublade und klicken Sie auf - Anmelden - .
+                                                    </string>
+
+    <string name="ActivitySettingsHelpText">Mora Mora befindet sich noch in einer sehr frühen Entwicklung. Die aktuelle Version enthält fast keine Lektionen, mit denen Sie Sprachen lernen können.\n\n
+        Sie können mit Mora Mora Lektionen erstellen und teilen, indem Sie das Team kontaktieren unter: mora.mora@gmx.net\n\n
+        Es gibt auch eine Telegramm-Chat-Gruppe Mora-Mora.\n\n
+        Der Quellcode der Anwendung sowie die neueste Binärdatei sind verfügbar unter: https://github.com/hendric-git/mora-mora
+    </string>
+    <string name="preference_customCloud_summary">Die benutzerdefinierte Cloud ist Ihre eigene nextcloud-Cloud oder die Cloud von jemandem, der Ihnen die Anmeldeinformationen gegeben hat. Derzeit ist nur die nextcloud-Schnittstelle implementiert, sodass keine anderen Cloud-Speicheranbieter unterstützt werden. Sie erhalten kostenlosen Cloud-Speicher von mehreren nextcloud-Anbietern.</string>
+    <string name="preference_defaultCloud_summary">Die Standard-Cloud ist das Haupt-Repository für den Sprachunterricht. Sie haben nur Lesezugriff darauf, sodass Sie den Inhalt nicht ändern oder eigene Lektionen hinzufügen können. Im Moment sind fast keine Lektionen vorhanden.</string>
+    <string name="preference_enableCloudSharing_summry">Dies gibt der Welt Zugriff auf Ihre benutzerdefinierte Cloud. Ein Zugriffstoken Ihrer Cloud wird in der Standard-Cloud gespeichert. Stellen Sie sicher, dass keine sensiblen Daten in dieser Cloud gespeichert sind</string>
+    <string name="preference_cloudUrl_summary">Nachdem Sie ein nextcloud-Speicherkonto erstellt haben, erhalten Sie vom Anbieter eine URL wie:\n\nhttps://yourusername.nextcloud.de</string>
+    <string name="prefrence_userName_summary">Der Benutzername Ihres nextcloud-Kontos.</string>
+    <string name="preference_nextcloudPassword_summary">Das Passwort Ihres nextcloud-Speicherkontos. Dieses Passwort wird nicht gespeichert, sondern das Zugriffstoken (Einweg-Hash Ihres Benutzernamens und Passworts).</string>
+    <string name="preference_lessonUserName_summary">Beim Erstellen einer Lektion wird automatisch ein Autorenname hinzugefügt. Sie können dieses Feld leer lassen oder einen Namen festlegen, falls Sie Feedback von anderen Benutzern wünschen.</string>
+    <string name="can_t_reach_the_cloud_please_wait">Kann die Cloud nicht erreichen!...Bitte warten!</string>
+    <string name="back_ground_picture">Hintergrundbild</string>
+    <string name="background_pic_summary">Dies ist der Hintergrund, der in Ihrer gesamten Anwendung sichtbar ist</string>
+    <string name="HelpConversation">\"Verwenden Sie die Schaltflächen, um die Fragen zu beantworten!\n\n
+                                      Du kannst auf die Blasen tippen, um die Übersetzungen anzuzeigen\n\n
+                                      Um die Medien wiederzugeben, tippe auf die Bilder\n\n
+                                      Im Modus Lektion bearbeiten können Sie lange auf die Sprechblasen tippen, um den Inhalt zu ändern.\"</string>
+    <string name="RecordingStopped">Aufnahme gestoppt!</string>
+    <string name="Recording">Aufnahme!</string>
+    <string name="Apply">Bewerben</string>
+    <string name="ThatFunctionalityIsUnderDevelopment">Diese Funktionalität befindet sich noch in der Entwicklung!</string>
+    <string name="youAlreadyHaveAddedAUserMessage">Sie haben bereits eine Benutzernachricht hinzugefügt!</string>
+    <string name="ContentAdded">Inhalt hinzugefügt!</string>
+    <string name="ConversationIsSaved">Konversation wird gespeichert!</string>
+    <string name="CongratulationYouDidIt">Herzlichen Glückwunsch!! Du hast es geschafft!</string>
+    <string name="Bravo">Bravo!!</string>
+    <string name="BravoBravoBravoYouGotIt">Bravo Bravo Bravo Du hast es!!</string>
+    <string name="Ups">Ups!!</string>
+    <string name="ChooseAnImageFileInstead">Wählen Sie stattdessen eine Bilddatei!</string>
+    <string name="SelectTheAvailableTranslations">Wählen Sie die verfügbaren Übersetzungen aus!</string>
+    <string name="EnableEditModeToRemoveLanguages">Aktiviere den Bearbeitungsmodus, um Sprachen zu entfernen!</string>
+    <string name="LanguageFolderIsDeleted">Sprachordner wurde gelöscht!</string>
+    <string name="LanguageFolderIsRestored">Sprachordner wird wiederhergestellt!</string>
+    <string name="TheApplicationNeedsWritePermissions">Die Anwendung benötigt Schreibrechte!</string>
+    <string name="SelectTheLanguageToLearn">Wählen Sie die zu lernende Sprache!</string>
+    <string name="FailedToCreateDirectories">Fehler beim Erstellen von Verzeichnissen!</string>
+    <string name="CantCopyBasicDataIHaveNoPermission">Kann Basisdaten nicht kopieren! Ich habe keine Erlaubnis!</string>
+    <string name="YouMustSelectTopicsBeforeYouCanDownloadThem">Sie müssen Themen auswählen, \n bevor Sie sie herunterladen können!</string>
+    <string name="DownloadingFilesPleaseWait">Dateien werden heruntergeladen. Bitte warten...</string>
+    <string name="TransactionComplete">Transaktion abgeschlossen!</string>
+    <string name="YouMustSelectTopicsBeforeYouCanUploadThem">Sie müssen Themen auswählen, \n bevor Sie sie hochladen können!</string>
+    <string name="UploadingFilesPleaseWait">Dateien werden hochgeladen. Bitte warten...</string>
+    <string name="FailedToUploadFile">Fehler beim Hochladen der Datei!</string>
+    <string name="FailedToCreateFolder">Fehler beim Erstellen des Ordners!</string>
+    <string name="ForUploadsUseaCustomCloud">Benutze für Uploads eine benutzerdefinierte Cloud!</string>
+    <string name="ChangeCloud">Wolke ändern?</string>
+    <string name="SwitchToDownloadMode">Wechseln Sie in den Download-Modus</string>
+    <string name="SwitchToUploadMode">In den Upload-Modus wechseln</string>
+    <string name="FailedToListFolder">Fehler beim Auflisten des Ordners!</string>
+    <string name="ANewVersionOfTheAppIsAvailable">Eine neue Version der App ist verfügbar!</string>
+    <string name="Download">Herunterladen</string>
+    <string name="DownloadingApplicationFilePleaseWait">Anwendungsdatei wird heruntergeladen. Bitte warten...</string>
+    <string name="CantFindaSuitableApplicationForTheInstallationOfApps">Keine passende Anwendung für die Installation von Apps gefunden!</string>
+    <string name="AnErrorOccurredDuringDownload">Beim Download ist ein Fehler aufgetreten!</string>
+    <string name="AnErrorOccurred">Ein Fehler ist aufgetreten!</string>
+    <string name="YouCanOnlyRemoveTopicsFromYourOwnCloud">Du kannst nur Themen aus deiner eigenen Cloud entfernen!</string>
+    <string name="BePatientiAmProcessing">\"Seien Sie geduldig ... ich bearbeite! \"</string>
+    <string name="Retry">Wiederholen</string>
+    <string name="DownloadingTopicsPleaseWait">Themen werden heruntergeladen. Bitte warten...</string>
+    <string name="DoYouReallyWantToRemoveThatTopicFromCloudStorage">Möchten Sie dieses Thema wirklich aus dem Cloud-Speicher entfernen?</string>
+    <string name="Remove">Entfernen</string>
+    <string name="FailedToRemoveTopic">Thema konnte nicht entfernt werden!</string>
+    <string name="YouHaveToWait">\"Du musst warten\"</string>
+    <string name="HoursUntilYouCanRemoveThatTopic">\" Stunden, bis du dieses Thema entfernen kannst!\"</string>
+    <string name="EnableEditorModeToRemoveTopics">Aktiviere den Editormodus, um Themen zu entfernen!</string>
+    <string name="SearchTopics">Suchthemen</string>
+    <string name="EnableEditorModeToEditTopics">Aktiviere den Editormodus zum Bearbeiten von Themen!</string>
+    <string name="TopicIsDeleted">Thema wurde gelöscht!</string>
+    <string name="TopicIsRestored">Thema wird wiederhergestellt!</string>
+    <string name="SaveAllTopicsAndClearTemporaryolder">Speichere alle Themen und lösche den temporären Ordner!</string>
+    <string name="ActionIsUndone">Aktion wurde rückgängig gemacht!</string>
+    <string name="ATopicWithThatNameAlreadyxists">Ein Thema mit diesem Namen existiert bereits!</string>
+    <string name="your_language">Ihre Sprache:</string>
+    <string name="use_the_following_for_the_cloud_login">Verwenden Sie Folgendes für die Cloud-Anmeldung:</string>
+    <string name="email_mora_mora_gmx_net">E-Mail: mora.mora@gmx.net</string>
+    <string name="password">Passwort:</string>
+    <string name="sign_in">Anmelden</string>
+    <string name="add_language">Sprache hinzufügen:</string>
+    <string name="picture_button">Bild</string>
+    <string name="pick_file">Datei auswählen</string>
+    <string name="simple_n_camera">Einfache\n Kamera</string>
+    <string name="camera_n_app">Kamera\n App</string>
+    <string name="microhone_button">Mikrohon</string>
+    <string name="the_right_answer_is">Die richtige Antwort lautet:</string>
+    <string name="folder_name">Ordnername</string>
+    <string name="beginner_button">Anfänger</string>
+    <string name="more_text">mehr...</string>
+    <string name="author_text">Autor:</string>
+    <string name="size_text">Größe:</string>
+    <string name="sort_by">Sortieren nach:</string>
+    <string name="save_changes_to_disk">Änderungen auf der Festplatte speichern?</string>
+    <string name="login_again">Erneut anmelden</string>
+    <string name="switch_to_upload">Zum Upload wechseln</string>
+    <string name="access_cloud">Auf Cloud zugreifen</string>
+    <string name="editing_mode">Bearbeitungsmodus</string>
+    <string name="restart_menu">Neustart</string>
+    <string name="dictionary_menu">Wörterbuch</string>
+    <string name="background_image">Hintergrundbild</string>
+    <string name="menu_menu">Menü</string>
+    <string name="settings_menu">Einstellungen</string>
+    <string name="help_menu">Hilfe</string>
+    <string name="AfterPressingThatButtonAllLessons">Nachdem Sie diese Taste drücken, werden alle auf Ihrem Gerät gespeicherten Lektionen gelöscht und die Standardlektionen werden wiederhergestellt.</string>
+    <string name="ResetMoraMora">Mora Mora zurücksetzen</string>
+    <string name="ResettingMoraMora">Mora Mora zurücksetzen!</string>
+    <string name="UsingThePlusButtonsYouCanAdd">Mit den + Schaltflächen können Sie zusätzliche Sprechblasen für den Computer bzw. den Benutzer hinzufügen.\n\n
+                                                Wenn Sie die letzte Sprechblase entfernen möchten, verwenden Sie die - Schaltfläche.\n\n
+                                                Um den Inhalt der Blasen, des Bildes oder des Videos zu #ndern, tippen Sie lange auf die Blasen. Es erscheint ein Dialog, in dem Sie ändern können, was Sie möchten.</string>
+</resources>

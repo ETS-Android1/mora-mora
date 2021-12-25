@@ -66,5 +66,18 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:key="general_category"
+        app:title="General Options">
+
+        <Preference
+        android:title="@string/ResetMoraMora"
+        android:key="@string/ResetMoraMora"
+        android:summary="@string/AfterPressingThatButtonAllLessons"
+        />
+
+    </PreferenceCategory>
+
+
 
 </PreferenceScreen>

@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar_dictionary"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/my_app_bar_height"
-                android:background="@color/color_toolbar"
+                android:background="@color/primaryColor"
                 app:titleMarginStart="24dp"
                 app:titleTextAppearance="@style/Toolbar.TitleText" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -54,19 +54,14 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="0.8"
-                    android:background="@color/test_color"
+                    android:background="@color/secondaryColor"
                     android:padding="4dp"
-                    android:text="Your language: "
+                    android:text="@string/your_language"
                     android:textAlignment="center"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/secondaryTextColor"
                     android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/dictionary_language_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/test_color"></Spinner>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -136,7 +131,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/test_color"
+            android:backgroundTint="@color/secondaryColor"
             android:clickable="true"
             android:foregroundGravity="bottom|right"
             android:src="@drawable/ic_file_save"
@@ -154,7 +149,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/test_color"
+            android:backgroundTint="@color/secondaryColor"
             android:clickable="true"
             android:foregroundGravity="bottom|right"
             android:src="@drawable/ic_volume_up"

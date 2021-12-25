@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hendrik.mianamalaga.Constants;
+import com.example.hendrik.mianamalaga.dialogs.DialogHelp;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.container.ChatContent;
 import com.example.hendrik.mianamalaga.R;
@@ -66,6 +69,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
         CardView mUserCardView;
         ImageView mAgentImageView;
         ImageView mUserImageView;
+        private ImageView mInfoImageButton;
 
         ChatMessageViewHolder(View baseView) {
             super(baseView);
@@ -75,6 +79,7 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
             mUserCardView = baseView.findViewById(R.id.user_card_view);
             mAgentImageView = baseView.findViewById(R.id.agent_image_view);
             mUserImageView = baseView.findViewById(R.id.user_image_view);
+            mInfoImageButton = baseView.findViewById(R.id.conversation_element_info_button);
             mBaseView = baseView;
         }
 
@@ -107,7 +112,6 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
             viewHolder.mUserTextView.setText(chatContent.getNativeMessages()[0]);
 
             String mediaPath = new File(mResourceDirectory, chatContent.getMediaFileNames()[0]).getPath();
-   //         viewHolder.mUserVideoView.setVideoPath(mediaPath);
             viewHolder.mBaseView.setTag(chatContent.getMediaFileNames());
 
             if (Utils.isVideoFile(mediaPath)) {
@@ -182,15 +186,15 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
 
         viewHolder.mAgentTextView.setOnClickListener(v -> {
             String messageInBubble = viewHolder.mAgentTextView.getText().toString();
-            String[] translatedMessages = mChatContentArrayList.get(position).getTranslatedMessages();
+            String translatedMessage = mChatContentArrayList.get(position).getTranslatedMessage();
             String[] nativeMessages = mChatContentArrayList.get(position).getNativeMessages();
 
-            for (int index = 0; index < translatedMessages.length; index++) {
-                if (translatedMessages[index].equals(messageInBubble))
-                    viewHolder.mAgentTextView.setText(nativeMessages[index]);
-                else if (nativeMessages[index].equals(messageInBubble))
-                    viewHolder.mAgentTextView.setText(translatedMessages[index]);
-            }
+            //for (int index = 0; index < nativeMessages.length; index++) {
+                if (translatedMessage.equals(messageInBubble))
+                    viewHolder.mAgentTextView.setText(nativeMessages[0]);
+                else //if (nativeMessages[index].equals(messageInBubble))
+                    viewHolder.mAgentTextView.setText(translatedMessage);
+            //}
 
         });
 
@@ -204,15 +208,22 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
 
         viewHolder.mUserTextView.setOnClickListener(v -> {
             String messageInBubble = viewHolder.mUserTextView.getText().toString();
-            String[] translatedMessages = mChatContentArrayList.get(position).getTranslatedMessages();
+            String translatedMessage = mChatContentArrayList.get(position).getTranslatedMessage();
             String[] nativeMessages = mChatContentArrayList.get(position).getNativeMessages();
 
-            for (int index = 0; index < translatedMessages.length; index++) {
-                if (translatedMessages[index].equals(messageInBubble))
-                    viewHolder.mUserTextView.setText(nativeMessages[index]);
-                else if (nativeMessages[index].equals(messageInBubble))
-                    viewHolder.mUserTextView.setText(translatedMessages[index]);
-            }
+            int index = 0;
+            
+            if (translatedMessage.startsWith("A")) index = 0;
+            else if (translatedMessage.startsWith("B")) index = 1;
+            else if (translatedMessage.startsWith("C")) index = 2;
+            
+            if (translatedMessage.length() > 2)
+                translatedMessage = translatedMessage.substring(2);
+            
+            if (translatedMessage.equals(messageInBubble))
+                viewHolder.mUserTextView.setText(nativeMessages[index]);
+            else 
+                viewHolder.mUserTextView.setText(translatedMessage);
 
         });
 
@@ -225,6 +236,12 @@ public class AdapterChatArray extends RecyclerView.Adapter<AdapterChatArray.Chat
         viewHolder.mUserTextView.setOnLongClickListener(v -> {
             mOnItemCLongClickListener.onItemLongClicked(position, viewHolder);
             return true;
+        });
+
+        if ( ! chatContent.getSupplementalInfoText().isEmpty() ) viewHolder.mInfoImageButton.setVisibility( View.VISIBLE );
+
+        viewHolder.mInfoImageButton.setOnClickListener( v -> {
+            ((ActivityConversation)mContext).onSupplementalInfoButtonPressed( chatContent.getSupplementalInfoText() );
         });
 
 

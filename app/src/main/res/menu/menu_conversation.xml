@@ -5,24 +5,24 @@
 
         <item android:id="@+id/toolbar_login"
             android:icon="@drawable/ic_cloud_login"
-            android:title="Access cloud"
+            android:title="@string/access_cloud"
             app:showAsAction="never"/>
         <item android:id="@+id/toolbar_help"
             android:icon="@drawable/ic_help"
-            android:title="Help" />
+            android:title="@string/help_menu" />
         <item android:id="@+id/toolbar_editor_mode"
             android:icon="@drawable/ic_build"
-            android:title="Editing mode"
+            android:title="@string/editing_mode"
             android:checkable="true"/>
         <item android:id="@+id/toolbar_restart"
             android:icon="@drawable/ic_refresh"
-            android:title="Restart"/>
+            android:title="@string/restart_menu"/>
         <item android:id="@+id/toolbar_dictionary"
             android:icon="@drawable/ic_dvr"
-            android:title="Dictionary"/>
+            android:title="@string/dictionary_menu"/>
         <item android:id="@+id/toolbar_background_image"
             android:icon="@drawable/ic_image"
-            android:title="Background Image"/>
+            android:title="@string/background_image"/>
     </group>
 
 </menu>

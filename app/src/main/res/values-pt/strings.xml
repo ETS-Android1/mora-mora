@@ -1,0 +1,167 @@
+<resources>
+    <string name = "app_name"> "" Mora Mora </string>
+    <string name = "action_settings"> Configurações </string>
+    <string name = "ndreky_button"> Ndreky-Nochmal </string>
+    <string name = "help"> Ajuda! </string>
+    <string name = "sektion_1_1_mbola_tsara"> Sektion 1.1 Mbola Tsara! </string>
+    <string name = "backwards"> Afara </string>
+    <string name = "forward"> Aloha </string>
+    <string name = "header"> Seção 1. </string>
+    <string name = "title_activity_login"> Faça login </string>
+    <!-- Strings related to login -->
+    <string name = "prompt_email"> Email </string>
+    <string name = "prompt_password"> Senha (opcional) </string>
+    <string name = "action_sign_in"> Faça login ou registre-se </string>
+    <string name = "action_sign_in_short"> Faça login </string>
+    <string name = "error_invalid_email"> Este endereço de e-mail é inválido </string>
+    <string name = "error_invalid_password"> Esta senha é muito curta </string>
+    <string name = "error_incorrect_password"> Esta senha está incorreta </string>
+    <string name = "error_field_required"> Este campo é obrigatório </string>
+    <string name = "permission_rationale"> "Permissões de contatos são necessárias para fornecer e-mail
+        conclusões. "
+    </string>
+    <string name = "type_your_answer"> Digite sua resposta! </string>
+    <string name = "language_you_want_to_learn"> Idioma que deseja aprender: </string>
+    <string name = "topic_name"> Nome do tópico: </string>
+    <string name = "image_file_name"> Nome do arquivo de imagem </string>
+    <string name = "short_info"> Informações curtas </string>
+    <string name = "CancelButton"> Cancelar </string>
+    <string name = "Add"> Adicionar </string>
+    <string name = "Change"> Alterar </string>
+    <string name = "could_not_rename"> Não foi possível renomear o diretório! </string>
+
+    <string name = "APP_KEY"> edmvozytadjrfgk </string>
+    <string name = "CloudNotAvaiable"> Sem acesso à nuvem! </string>
+    <string name = "InternetConnectionOn"> Sua conexão com a Internet está ativada? </string>
+    <string name = "chat_message"> Mensagem de bate-papo </string>
+    <string name = "explain_write_permission_reques"> Você precisa conceder permissão de gravação para armazenar arquivos baixados! </string>
+    <string name = "choose_source_for_the_topic_picture"> Fonte da imagem do tópico: </string>
+
+    <string name = "cloudUrlCustom"> CloudUrlCustom </string>
+    <string name = "cloudUserNameCustom"> CloudUserNameCustom </string>
+    <string name = "cloudPasswordCustom"> CloudPasswordCustom </string>
+    <string name = "ActivityLanguageChoiceHelpText"> Mora Mora ainda está em desenvolvimento. A versão atual contém apenas uma lição de exemplo (fr-de) que você pode usar para aprender esse idioma. \ N \ n
+                                                    Você ainda pode usar Mora Mora para criar suas próprias aulas e compartilhá-las por meio de sua própria nuvem de armazenamento nextcloud. Se você quiser compartilhar o seu
+                                                    aulas com o mundo, entre em contato com a equipe: mora.mora@gmx.net. \ n \ n
+                                                    Use a visualização de rolagem para selecionar o idioma que deseja aprender. No canto superior direito você pode selecionar o idioma que você já conhece bem
+                                                    suficiente, por exemplo sua língua materna. Este é o idioma para o qual os diálogos serão traduzidos. \ N \ n
+                                                    Você pode clicar em "Modo de edição" na gaveta que acabou de fechar para adicionar mais idiomas e, assim, contribuir para ampliar os dados de conteúdo de Mora Mora. \ N \ n
+                                                    O código-fonte de Mora Mora pode ser encontrado em: https://github.com/hendric-git/mora-mora
+                                                    </string>
+
+    <string name = "ApplicationInstallProblemHelpText"> Ocorreu um problema ao tentar instalar o arquivo apk baixado. Tente instalar a nova versão do Mora Mora manualmente. \ N \ n
+                                                      Use o seu explorador de arquivos preferido e abra o local: \ n \\ n
+                                                      Armazenamento do dispositivo -> MoraMora -> temporário \ n \ n
+                                                      e clique no arquivo apk para finalizar o processo de instalação. \ n \ n
+                                                    </string>
+
+    <string name = "ActivityTopicChoiceHelpText"> Mora Mora ainda está em desenvolvimento. A versão atual não contém nenhuma lição que você possa usar para aprender idiomas. \ N \ n
+                                                É aqui que as aulas off-line estão disponíveis. Eles estão armazenados no seu dispositivo. Se você ainda não baixou nenhuma lição, você pode criar a sua própria
+                                                abrindo a gaveta e clicando em - Modo de edição -. Com a ajuda dos botões que aparecem, você pode criar um novo tópico. \ N \ n
+                                                Você também pode tentar encontrar aulas online. Use a gaveta e clique em - Login -.
+                                                    </string>
+
+    <string name = "ActivitySettingsHelpText"> Mora Mora ainda está em desenvolvimento. A versão atual quase não contém nenhuma lição que você possa usar para aprender idiomas. \ N \ n
+                                            Você pode criar aulas usando Mora Mora e compartilhá-las entrando em contato com a equipe em: mora.mora@gmx.net \ n \ n
+                                            Há também um grupo de bate-papo por telegrama Mora-Mora. \ N \ n
+                                            O código-fonte do aplicativo, bem como o binário mais recente, estão disponíveis em: https://github.com/hendric-git/mora-mora
+                                            </string>
+    <string name = "prefrence_userName_summary"> O nome de usuário de sua conta nextcloud. </string>
+    <string name = "can_t_reach_the_cloud_please_wait"> Não é possível acessar a nuvem! ... Aguarde! </string>
+    <string name = "back_ground_picture"> BackgroundPicture </string>
+    <string name = "background_pic_summary"> Este é o fundo visível em toda a aplicação aéreantire </string>
+    <string name = "HelpConversation"> \ "Use os botões para responder às perguntas! \ n \ n
+                                      Você pode tocar nas bolhas para ver as traduções \ n \ n
+                                      Para reproduzir a mídia, toque nas fotos \ n \ n
+                                      No modo Editar lição, você pode tocar longamente nas bolhas para alterar o conteúdo. \ "</string>
+    <string name = "RecordingStopped"> Gravação interrompida! </string>
+    <string name = "Recording"> Gravação! </string>
+    <string name = "Apply"> Aplicar </string>
+    <string name = "ThatFunctionalityIsUnderDevelopment"> Essa funcionalidade ainda está em desenvolvimento! </string>
+    <string name = "youAlreadyHaveAddedAUserMessage"> Você já adicionou uma mensagem de usuário! </string>
+    <string name = "ContentAdded"> Conteúdo adicionado! </string>
+    <string name = "ConversationIsSaved"> A conversa foi salva! </string>
+    <string name = "CongratulationYouDidIt"> Parabéns !! Você conseguiu! </string>
+    <string name = "Bravo"> Bravo !! </string>
+    <string name = "BravoBravoBravoYouGotIt"> Bravo Bravo Bravo Você acertou !! </string>
+    <string name = "Ups"> Ups !! </string>
+    <string name = "ChooseAnImageFileInstead"> Escolha um arquivo de imagem! </string>
+    <string name = "SelectTheAvailableTranslations"> Selecione as traduções disponíveis! </string>
+    <string name = "EnableEditModeToRemoveLanguages"> Ative o modo de edição para remover idiomas! </string>
+    <string name = "LanguageFolderIsDeleted"> A pasta de idiomas foi excluída! </string>
+    <string name = "LanguageFolderIsRestored"> A pasta de idiomas foi restaurada! </string>
+    <string name = "TheApplicationNeedsWritePermissions"> O aplicativo precisa de permissões de gravação! </string>
+    <string name = "SelectTheLanguageToLearn"> Selecione o idioma para aprender! </string>
+    <string name = "FailedToCreateDirectories"> Falha ao criar diretórios! </string>
+    <string name = "CantCopyBasicDataIHaveNoPermission"> Não é possível copiar os dados básicos! Não tenho permissão! </string>
+    <string name = "YouMustSelectTopicsBeforeYouCanDownloadThem"> Você deve selecionar os tópicos \ n antes de fazer o download! </string>
+    <string name = "DownloadingFilesPleaseWait"> Baixando arquivos. Aguarde ... </string>
+    <string name = "TransactionComplete"> Transação concluída! </string>
+    <string name = "YouMustSelectTopicsBeforeYouCanUploadThem"> Você deve selecionar os tópicos \ n antes de enviá-los! </string>
+    <string name = "UploadingFilesPleaseWait"> Carregando arquivos. Aguarde ... </string>
+    <string name = "FailedToUploadFile"> Falha ao carregar o arquivo! </string>
+    <string name = "FailedToCreateFolder"> Falha ao criar pasta! </string>
+    <string name = "ForUploadsUseaCustomCloud"> Para uploads, use uma nuvem personalizada! </string>
+    <string name = "ChangeCloud"> Mudar nuvem? </string>
+    <string name = "SwitchToDownloadMode"> Alternar para o modo de download </string>
+    <string name = "SwitchToUploadMode"> Mudar para o modo de upload </string>
+    <string name = "FailedToListFolder"> Falha ao listar a pasta! </string>
+    <string name = "ANewVersionOfTheAppIsAvailable"> Uma nova versão do aplicativo está disponível! </string>
+    <string name = "Download"> Baixar </string>
+    <string name = "DownloadingApplicationFilePleaseWait"> Baixando o arquivo do aplicativo. Aguarde ... </string>
+    <string name = "CantFindaSuitableApplicationForTheInstallationOfApps"> Não é possível encontrar um aplicativo adequado para a instalação de aplicativos! </string>
+    <string name = "AnErrorOccurredDuringDownload"> Ocorreu um erro durante o download! </string>
+    <string name = "AnErrorOccurred"> Ocorreu um erro! </string>
+    <string name = "YouCanOnlyRemoveTopicsFromYourOwnCloud"> Você só pode remover tópicos de sua própria nuvem! </string>
+    <string name = "BePatientiAmProcessing"> \ "Seja paciente ... estou processando! \" </string>
+    <string name = "Retry"> Tentar novamente </string>
+    <string name = "DownloadingTopicsPleaseWait"> Baixando tópicos. Aguarde ... </string>
+    <string name = "DoYouReallyWantToRemoveThatTopicFromCloudStorage"> Deseja realmente remover esse tópico do armazenamento em nuvem? </string>
+    <string name = "Remove"> Remover </string>
+    <string name = "FailedToRemoveTopic"> Falha ao remover o tópico! </string>
+    <string name = "YouHaveToWait"> \ "Você tem que esperar \" </string>
+    <string name = "HoursUntilYouCanRemoveThatTopic"> \ "horas até que você possa remover esse tópico! \" </string>
+    <string name = "EnableEditorModeToRemoveTopics"> Habilite o modo de editor para remover tópicos! </string>
+    <string name = "SearchTopics"> Pesquisar tópicos </string>
+    <string name = "EnableEditorModeToEditTopics"> Habilite o modo de editor para editar tópicos! </string>
+    <string name = "TopicIsDeleted"> Tópico excluído! </string>
+    <string name = "TopicIsRestored"> Tópico restaurado! </string>
+    <string name = "SaveAllTopicsAndClearTemporaryolder"> Salvar todos os tópicos e limpar a pasta temporária! </string>
+    <string name = "ActionIsUndone"> Ação desfeita! </string>
+    <string name = "ATopicWithThatNameAlreadyxists"> Já existe um tópico com esse nome! </string>
+    <string name = "your_language"> Seu idioma: </string>
+    <string name = "use_the_following_for_the_cloud_login"> Use o seguinte para o login na nuvem: </string>
+    <string name = "email_mora_mora_gmx_net"> email: mora.mora@gmx.net </string>
+    <string name = "password"> senha: </string>
+    <string name = "sign_in"> Faça login </string>
+    <string name = "add_language"> Adicionar idioma: </string>
+    <string name = "picture_button"> Imagem </string>
+    <string name = "pick_file"> Selecionar arquivo </string>
+    <string name = "simple_n_camera"> Câmera \ n simples </string>
+    <string name = "camera_n_app"> Aplicativo de câmera \ n </string>
+    <string name = "microhone_button"> Microhone </string>
+    <string name = "the_right_answer_is"> A resposta certa é: </string>
+    <string name = "folder_name"> Nome da pasta </string>
+    <string name = "beginner_button"> Iniciante </string>
+    <string name = "more_text"> mais ... </string>
+    <string name = "author_text"> Autor: </string>
+    <string name = "size_text"> Tamanho: </string>
+    <string name = "sort_by"> Classificar por: </string>
+    <string name = "save_changes_to_disk"> Salvar alterações no disco? </string>
+    <string name = "login_again"> Faça login novamente </string>
+    <string name = "switch_to_upload"> Mudar para Upload </string>
+    <string name = "access_cloud"> Acesso à nuvem </string>
+    <string name = "editing_mode"> Modo de edição </string>
+    <string name = "restart_menu"> Reiniciar </string>
+    <string name = "dictionary_menu"> Dicionário </string>
+    <string name = "background_image"> Imagem de fundo </string>
+    <string name = "menu_menu"> Menu </string>
+    <string name = "settings_menu"> Configurações </string>
+    <string name = "help_menu"> Ajuda </string>
+    <string name = "AfterPressingThatButtonAllLessons"> Após pressionar esse botão, todas as aulas armazenadas em seu dispositivo serão excluídas e as aulas padrão serão restauradas. </string>
+    <string name = "ResetMoraMora"> Redefinir Mora Mora </string>
+    <string name = "ResettingMoraMora"> Redefinindo Mora Mora! </string>
+    <string name = "UsingThePlusButtonsYouCanAdd"> Usando os botões +, você pode adicionar balões de fala suplementares para o computador e o usuário, respectivamente. \n\n
+                                                   Se desejar remover o último balão, use o Botão -. \n\n
+                                                   Para mude o conteúdo das bolhas, a imagem ou o vídeo para mostrar toque longo nas bolhas. Uma caixa de diálogo aparecerá onde você pode modificar o que quiser. </string>
+</resources>

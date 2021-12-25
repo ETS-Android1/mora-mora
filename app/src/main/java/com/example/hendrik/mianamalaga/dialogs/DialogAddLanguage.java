@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.hendrik.mianamalaga.activities.ActivityBase;
 import com.example.hendrik.mianamalaga.utilities.Utils;
 import com.example.hendrik.mianamalaga.R;
 import com.example.hendrik.mianamalaga.activities.ActivityLanguageChoice;
@@ -30,15 +31,24 @@ public class DialogAddLanguage extends AppCompatDialogFragment {
     Locale mLanguageLocale;
 
 
-    public static DialogAddLanguage newInstance(){
+    public static DialogAddLanguage newInstance(String fullDirectory){
         DialogAddLanguage dialogAddLanguage = new DialogAddLanguage();
+        Bundle args = new Bundle();
+        args.putString("Full Directory Name",fullDirectory);
+        dialogAddLanguage.setArguments(args);
         return dialogAddLanguage;
     }
 
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String fullDirectory;
 
+        if(getArguments() != null){
+            fullDirectory = getArguments().getString("Full Directory Name");
+        } else {
+            fullDirectory = null;
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -78,7 +88,7 @@ public class DialogAddLanguage extends AppCompatDialogFragment {
 
         builder.setPositiveButton(R.string.Add, (dialog, which) -> {
             if( mLanguageLocale != null){
-                ((ActivityLanguageChoice)getActivity()).onDialogAddLanguagePosClick( mLanguageLocale );
+                ((ActivityBase)getActivity()).onDialogAddLanguagePosClick( mLanguageLocale, fullDirectory );
             } else {
                 mLanguageTextView.setText("You need to choose a language!");
             }

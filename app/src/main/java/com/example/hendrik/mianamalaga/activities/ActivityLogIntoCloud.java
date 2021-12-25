@@ -24,16 +24,13 @@ import java.io.File;
  * A login screen that offers login via email/password.
  */
 
-public class ActivityLogIntoCloud extends AppCompatActivity {
-    private static String mAppDirectoryPathString;
-    private static File mTemporaryDirecotry;
+public class ActivityLogIntoCloud extends ActivityBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupToolbar();
-        getIntents();
 
         Button SignInButton = findViewById(R.id.sign_in_button);
         SignInButton.setOnClickListener(view -> Auth.startOAuth2Authentication(ActivityLogIntoCloud.this, getString(R.string.APP_KEY)));
@@ -45,17 +42,6 @@ public class ActivityLogIntoCloud extends AppCompatActivity {
         getAccessToken();
     }
 
-    private void getIntents() {
-        if (getIntent().getExtras() != null){
-            mAppDirectoryPathString = getIntent().getExtras().getString(Constants.MoraMora);
-            String temporaryDirectory = getIntent().getExtras().getString(Constants.FullTemporaryDirectory);
-            mTemporaryDirecotry = new File(temporaryDirectory);
-
-            if( !Utils.prepareFileStructure(mAppDirectoryPathString) ){
-                finish();
-            }
-        }
-    }
 
     public void getAccessToken() {
 
@@ -91,8 +77,7 @@ public class ActivityLogIntoCloud extends AppCompatActivity {
         if (accessToken != null) {
 
             Intent intent = new Intent(ActivityLogIntoCloud.this, com.example.hendrik.mianamalaga.activities.ActivityNextCloud.class);     //TODO ActivityDropBoxCloud was there before
-            intent.putExtra(Constants.MoraMora, mAppDirectoryPathString);                                                                      //TODO These String should be defined in Preference Activity
-            intent.putExtra(Constants.FullTemporaryDirectory, mTemporaryDirecotry.toString());
+            intent.putExtra(Constants.FullTopicDirectoryName, mFullTopicsDirectory.toString());
             startActivity(intent);
 
         }

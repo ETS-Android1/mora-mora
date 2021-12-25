@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/toolbar_login"
         android:icon="@drawable/ic_cloud_login"
-        android:title="Login again"
+        android:title="@string/login_again"
         app:showAsAction="never"/>
     <item android:id="@+id/toolbar_help"
         android:icon="@drawable/ic_help"
-        android:title="Help" />
+        android:title="@string/help_menu" />
     <item android:id="@+id/switch_mode"
         android:icon="@drawable/ic_cloud_upload"
-        android:title="Switch to Upload" />
+        android:title="@string/switch_to_upload" />
 </menu>

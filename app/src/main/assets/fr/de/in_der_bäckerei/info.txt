@@ -1,1 +1,1 @@
-{"mImageFileString":"/storage/emulated/0/MoraMora/fr/de/in_der_bäckerei/topic_picture.jpg","mImageName":"topic_picture.jpg","mName":"In der Bäckerei","mPosition":0,"mShortInfo":"Zwei Freunde treffen sich und gehen zusammen Croissants kaufen."}
+{"mAuthor":"anonymous","mDifficulty":0,"mDislikes":0,"mFolderSize":0,"mImageFileString":"/storage/emulated/0/Android/data/com.example.hendrik.mianamalaga/files/MoraMora/fr/de/in_der_bäckerei/topic_picture.jpg","mImageName":"topic_picture.jpg","mLikes":0,"mName":"In der Bäckerei","mPosition":0,"mShortInfo":"","mSignature":""}

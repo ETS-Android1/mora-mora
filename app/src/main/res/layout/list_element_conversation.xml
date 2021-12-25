@@ -56,6 +56,18 @@
         app:layout_constraintWidth_max="wrap"
         app:layout_constraintWidth_percent="0.5" />
 
+    <ImageView
+        android:id="@+id/conversation_element_info_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_info_full"
+        android:tint="#BAAA1F"
+        android:backgroundTint="#ffffff"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_message_agent"
+        app:layout_constraintEnd_toStartOf="@id/text_message_user"/>
+
     <TextView
         android:id="@+id/text_message_user"
         android:layout_width="0dp"

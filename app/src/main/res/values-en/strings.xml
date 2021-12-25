@@ -1,11 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="your_language">Your language:</string>
+    <string name="app_name">"   "Mora Mora</string>
+    <string name="action_settings">Settings</string>
+    <string name="ndreky_button">Ndreky-Nochmal</string>
+    <string name="help">Help!</string>
+    <string name="sektion_1_1_mbola_tsara">Sektion 1.1 Mbola Tsara!</string>
+    <string name="backwards">Afara</string>
+    <string name="forward">Aloha</string>
+    <string name="header">Section 1.</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="type_your_answer">Type your answer!</string>
     <string name="language_you_want_to_learn">Language you want to learn:</string>
     <string name="topic_name">Topic Name:</string>
     <string name="image_file_name">Image File Name</string>
     <string name="short_info">Short Info</string>
-    <string name="Cancel">Cancel</string>
+    <string name="CancelButton">Cancel</string>
+    <string name="Add">Add</string>
     <string name="Change">Change</string>
     <string name="could_not_rename">Could not rename directory!</string>
+
+    <string name="APP_KEY">edmvozytadjrfgk</string>
+    <string name="CloudNotAvaiable">No Cloud Access!</string>
+    <string name="InternetConnectionOn">Is your internet connection on?</string>
+    <string name="chat_message">Chat Message</string>
+    <string name="explain_write_permission_reques">You need to grant write permission to store downloaded files!</string>
+    <string name="choose_source_for_the_topic_picture">Topic picture source:</string>
+
+    <string name="cloudUrlCustom">CloudUrlCustom</string>
+    <string name="cloudUserNameCustom">CloudUserNameCustom</string>
+    <string name="cloudPasswordCustom">CloudPasswordCustom</string>
+    <string name="lessonUserName">LessonUserName</string>
+    <string name="ActivityLanguageChoiceHelpText">Mora Mora is in very early development still. The present version only contains one single example lesson (fr-de) you can use to learn that language.\n\n
+                                                    You can still use Mora Mora to create your own lessons and share them through your own nextcloud storage cloud. If you want to share your
+                                                    lessons with the world, please contact the team: mora.mora@gmx.net.\n\n
+                                                    Use the scroll view to select the language you want to learn. In the top right corner you can select the language you already know good
+                                                    enough e.g. your mother tongue. This is the language the dialogs will be translated into.\n\n
+                                                    You can click on "Editing mode" in the drawer you just closed to add more languages and thereby contribute to enlarge the content data of Mora Mora.\n\n
+                                                    The source code of Mora Mora can be found under: https://github.com/hendric-git/mora-mora
+                                                    </string>
+
+    <string name="ApplicationInstallProblemHelpText">There was a problem when trying to install the downloaded apk file. Please try to install the new Mora Mora version manually.\n\n
+                                                      Use your preferred file explorer and open the location:\n\\n
+                                                      Device storage -> MoraMora -> temporary \n\n
+                                                      and click on the apk file to finish the installation process.\n\n
+                                                    </string>
+
+    <string name="ActivityTopicChoiceHelpText">Mora Mora is in very early development still. The present version does not contain any lessons you can use to learn languages.\n\n
+                                                This is where you offline lessons are available. There are stored on your device. If you haven\'t downloaded any lessons yet you can create your own by
+                                                opening the drawer and clicking on - Editing mode - . With the help of the appearing buttons you can create a new topic.\n\n
+                                                You can also try to find lessons online. Use the drawer and click on - Login - .
+                                                    </string>
+
+    <string name="ActivitySettingsHelpText">Mora Mora is in very early development still. The present version almost does not contain any lessons you can use to learn languages.\n\n
+                                            You can create lessons using Mora Mora and share them by contacting the team under: mora.mora@gmx.net\n\n
+                                            There is also a telegram chat group Mora-Mora.\n\n
+                                            The source code of the application as well as the most recent binary are available at: https://github.com/hendric-git/mora-mora
+                                            </string>
+    <string name="preference_customCloud_summary">The custom cloud is your own nextcloud cloud or the cloud of someone who gave you the credentials. Currently only the nextcloud interface is implemented so no other cloud storage providers are supported. You can get free cloud storage from several nextcloud providers.</string>
+    <string name="preference_defaultCloud_summary">The default cloud is the main repository for language lessons. You only have read access to it, so you won\'t be able to change the content or add your own lessons. Right now almost no lessons are present.</string>
+    <string name="preference_enableCloudSharing_summry">This gives the world access to your custom cloud. An access token of your cloud will be stored in the default cloud. Make sure that you don\'t have any sensible data stored on that cloud</string>
+    <string name="preference_cloudUrl_summary">After creating a nextcloud storage account the provider will give you an URL like:\n\nhttps://yourusername.nextcloud.de</string>
+    <string name="prefrence_userName_summary">The user name of you nextcloud account.</string>
+    <string name="preference_nextcloudPassword_summary">The password of your nextcloud storage account. That password won\'t be stored but the access token (one way hash of your user name and password).</string>
+    <string name="preference_lessonUserName_summary">When you create a lesson an author name is automatically added. You can leave that blank or set a name in case you want some feedback from other users.</string>
+    <string name="can_t_reach_the_cloud_please_wait">Can\'t reach the cloud!...Please wait!</string>
+    <string name="back_ground_picture">BackgroundPicture</string>
+    <string name="background_pic_summary">This is the background viisible throughout your aéntire application</string>
+    <string name="HelpConversation">\"Use the buttons to answer the questions!\n\n
+                                      You can tap on the bubbles to view the translations\n\n
+                                      In order to replay the media tap in the pictures\n\n
+                                      In Edit lesson mode you can long-tap the bubbles in order to change the content.\"</string>
+    <string name="RecordingStopped">Recording stopped!</string>
+    <string name="Recording">Recording!</string>
+    <string name="Apply">Apply</string>
+    <string name="ThatFunctionalityIsUnderDevelopment">That functionality is under development still!</string>
+    <string name="youAlreadyHaveAddedAUserMessage">You already have added a user message!</string>
+    <string name="ContentAdded">Content added!</string>
+    <string name="ConversationIsSaved">Conversation is saved!</string>
+    <string name="CongratulationYouDidIt">Congratulation!! You did it!</string>
+    <string name="Bravo">Bravo!!</string>
+    <string name="BravoBravoBravoYouGotIt">Bravo Bravo Bravo You got it!!</string>
+    <string name="Ups">Ups!!</string>
+    <string name="ChooseAnImageFileInstead">Choose an image file instead!</string>
+    <string name="SelectTheAvailableTranslations">Select the available translations!</string>
+    <string name="EnableEditModeToRemoveLanguages">Enable edit mode to remove languages!</string>
+    <string name="LanguageFolderIsDeleted">Language folder is deleted!</string>
+    <string name="LanguageFolderIsRestored">Language folder is restored!</string>
+    <string name="TheApplicationNeedsWritePermissions">The application needs write permissions!</string>
+    <string name="SelectTheLanguageToLearn">Select the language to learn!</string>
+    <string name="FailedToCreateDirectories">Failed to create directories!</string>
+    <string name="CantCopyBasicDataIHaveNoPermission">Can\'t copy basic data! I have no permission!</string>
+    <string name="YouMustSelectTopicsBeforeYouCanDownloadThem">You must select topics \n before you can download them!</string>
+    <string name="DownloadingFilesPleaseWait">Downloading files. Please wait...</string>
+    <string name="TransactionComplete">Transaction complete!</string>
+    <string name="YouMustSelectTopicsBeforeYouCanUploadThem">You must select topics \n before you can upload them!</string>
+    <string name="UploadingFilesPleaseWait">Uploading files. Please wait...</string>
+    <string name="FailedToUploadFile">Failed to upload file!</string>
+    <string name="FailedToCreateFolder">Failed to create folder!</string>
+    <string name="ForUploadsUseaCustomCloud">For uploads use a custom cloud!</string>
+    <string name="ChangeCloud">Change cloud?</string>
+    <string name="SwitchToDownloadMode">Switch to download mode</string>
+    <string name="SwitchToUploadMode">Switch to upload mode</string>
+    <string name="FailedToListFolder">Failed to list folder!</string>
+    <string name="ANewVersionOfTheAppIsAvailable">A new version of the app is available!</string>
+    <string name="Download">Download</string>
+    <string name="DownloadingApplicationFilePleaseWait">Downloading application file. Please wait...</string>
+    <string name="CantFindaSuitableApplicationForTheInstallationOfApps">Can\'t find a suitable application for the installation of apps!</string>
+    <string name="AnErrorOccurredDuringDownload">An Error occurred during download!</string>
+    <string name="AnErrorOccurred">An error occurred!</string>
+    <string name="YouCanOnlyRemoveTopicsFromYourOwnCloud">You can only remove topics from your own cloud!</string>
+    <string name="BePatientiAmProcessing">\"Be patient ... i am processing! \"</string>
+    <string name="Retry">Retry</string>
+    <string name="DownloadingTopicsPleaseWait">Downloading topics. Please wait...</string>
+    <string name="DoYouReallyWantToRemoveThatTopicFromCloudStorage">Do you really want to remove that topic from cloud storage?</string>
+    <string name="Remove">Remove</string>
+    <string name="FailedToRemoveTopic">Failed to remove topic!</string>
+    <string name="YouHaveToWait">\"You have to wait \"</string>
+    <string name="HoursUntilYouCanRemoveThatTopic">\" hours until you can remove that topic!\"</string>
+    <string name="EnableEditorModeToRemoveTopics">Enable editor mode to remove topics!</string>
+    <string name="SearchTopics">Search Topics</string>
+    <string name="EnableEditorModeToEditTopics">Enable editor mode to edit topics!</string>
+    <string name="TopicIsDeleted">Topic is deleted!</string>
+    <string name="TopicIsRestored">Topic is restored!</string>
+    <string name="SaveAllTopicsAndClearTemporaryolder">Save all topics and clear temporary folder!</string>
+    <string name="ActionIsUndone">Action is undone!</string>
+    <string name="ATopicWithThatNameAlreadyxists">A topic with that name already exists!</string>
+    <string name="your_language">Your language:</string>
+    <string name="use_the_following_for_the_cloud_login">Use the following for the cloud login:</string>
+    <string name="email_mora_mora_gmx_net">email: mora.mora@gmx.net</string>
+    <string name="password">password:</string>
+    <string name="sign_in">Sign in</string>
+    <string name="add_language">Add language:</string>
+    <string name="picture_button">Picture</string>
+    <string name="pick_file">Pick File</string>
+    <string name="simple_n_camera">Simple\n Camera</string>
+    <string name="camera_n_app">Camera\n App</string>
+    <string name="microhone_button">Microhone</string>
+    <string name="the_right_answer_is">The right answer is:</string>
+    <string name="folder_name">Folder name</string>
+    <string name="beginner_button">Beginner</string>
+    <string name="more_text">more...</string>
+    <string name="author_text">Author:</string>
+    <string name="size_text">Size:</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="save_changes_to_disk">Save changes to disk?</string>
+    <string name="login_again">Login again</string>
+    <string name="switch_to_upload">Switch to Upload</string>
+    <string name="access_cloud">Access cloud</string>
+    <string name="editing_mode">Editing mode</string>
+    <string name="restart_menu">Restart</string>
+    <string name="dictionary_menu">Dictionary</string>
+    <string name="background_image">Background Image</string>
+    <string name="menu_menu">Menu</string>
+    <string name="settings_menu">Settings</string>
+    <string name="help_menu">Help</string>
+    <string name="AfterPressingThatButtonAllLessons">After pressing that button all lessons stored on your device will be deleted an the default lessons will be restored.</string>
+    <string name="ResetMoraMora">Reset Mora Mora</string>
+    <string name="ResettingMoraMora">Resetting Mora Mora!</string>
+    <string name="UsingThePlusButtonsYouCanAdd">Using the + buttons you can add supplemental speech bubbles for the computer and the user respectively.\n\n If you want to remove the last bubble use the - Button.\n\n In order to change the content of the bubbles, the picture or the video to show tap long on the bubbles. A dialog will appear where you can modify what you like to.</string>
 </resources>
